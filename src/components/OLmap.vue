@@ -23,13 +23,13 @@ export default {
         new TileLayer({
           source: new XYZ({
             url: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}&scl=1',
-            wrapX: false
+            wrapX: true
           })
         }),
         new TileLayer({
           source: new XYZ({
             url: 'https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}&scl=1&ltype=4',
-            wrapX: false
+            wrapX: true
           })
         })
       ],

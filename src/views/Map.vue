@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <olmap />
+    <OLmap />
   </div>
 </template>
 
 <script>
-import olmap from '@/components/olmap.vue'
+import OLmap from '@/components/OLmap.vue'
 
 export default {
   name: 'app',
   components: {
-    olmap
+    OLmap
   }
 }
 </script>
