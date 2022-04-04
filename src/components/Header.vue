@@ -8,7 +8,7 @@
       @select="handleSelect"
       background-color="#2f3238"
       text-color="white"
-      active-text-color="#3F87DA">
+      active-text-color="#00ADB5">
       <h1>
         <a class="logo" :style="{backgroundImage: 'url(' + bg + ')'}" @click="$router.push({path:'/'})"></a>
       </h1>
@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 .header{
-  z-index: 5;
+  /*z-index: 5;*/
   /*opacity: 1;*/
   /*font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif !important;*/
 }
@@ -111,9 +111,12 @@ export default {
 /*}*/
 
 .header .el-menu-item:hover{
-  background: whitesmoke !important;
+  background: #2D4059 !important;
 }
 
+.el-menu-demo{
+  padding: -1px;
+}
 .el-menu-item{
   margin:0 10px !important;
   font-size: small !important;

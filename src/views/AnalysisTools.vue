@@ -53,7 +53,6 @@ import Header from '../components/Header'
 export default {
   name: 'AnalysisTools',
   components: { Header }
-
 }
 </script>
 
