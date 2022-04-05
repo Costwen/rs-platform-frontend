@@ -1,82 +1,48 @@
 <template>
   <div>
-    <el-upload
-      class="uploadPics"
-      action=""
-      list-type="picture-card"
-      multiple
-      :auto-upload="false"
-      :on-change="handleChange"
-      :file-list="fileList"
-      :limit="1"
-      :http-request="uploadPics"
-      :on-preview="PreviewPics"
-      :on-remove="handleRemove"
-      :on-exceed="handleExceed"
-    >
-      <i class="el-icon-plus"></i>
-    </el-upload>
-
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="" />
-    </el-dialog>
-
-    <el-button type="primary" @click="submitUpload" style="margin-top: 10px"
-      >上传服务器</el-button
-    >
+    <input name="file" type="file" accept="image/*" @change="update"/>
+    <el-button @click="submitUpload">上传图片</el-button>
+    <img :src="pic_preview" style="width: 200px" alt=""/>
+    <img :src="pic_result" alt="" />
   </div>
 </template>
 
 <script>
-import axois from "axios";
+import axios from 'axios'
 
 export default {
-  name: "UploadPics",
+  name: 'UploadPics',
   props: [],
-  data() {
+  data () {
     return {
-      dialogImageUrl: "",
-      dialogVisible: false,
-      imgUrl: "",
-      fileDate: "",
-      fileList: [],
-    };
+      pic: '',
+      pic_preview: '',
+      pic_result: ''
+    }
   },
   methods: {
-    // 上传之前只需要检查图片的大小, auto-upload=false时，此函数无效
-    beforeUpload(file) {
-      if (file.size > 1024 * 1024) {
-        this.$message.error("上传图片不能大于1M");
-        return false;
-      }
-      console.log(this.fileList);
-      return true;
-    },
-    // 处理变化
-    handleChange(file, fileList) {
-      this.fileList = fileList;
-    },
-    handleRemove(file, fileList) {
-      this.fileList = fileList;
-    },
-    handleExceed(files, fileList) {
-      this.$message.error("最多只能上传1张图片");
-    },
-    // 传给后端
-    submitUpload() {
-      let formData = new FormData();
-      console.log(this.fileList);
-      formData.append("file", this.fileList);
-      axois
-        .post("/image/retrieval/", {
-          img: this.fileList,
-        })
+    submitUpload () {
+      const formData = new FormData()
+      formData.append('img', this.pic)
+      console.log(formData)
+      axios
+        .post('/api/image/retrieval/', formData)
         .then((res) => {
-          console.log(res);
-        });
+          this.pic_result = res
+        })
     },
-  },
-};
+    update (e) { // 上传照片
+      this.pic = e.target.files[0]
+      const _this = this
+      const pic = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(pic)
+      reader.addEventListener('load', function () {
+        _this.pic_preview = this.result
+      })
+    }
+  }
+}
 </script>
 
 <style scoped></style>
