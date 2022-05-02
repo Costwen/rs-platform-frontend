@@ -8,7 +8,7 @@
     </div>
     <div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer">X</a>
-      <div id="popup-content" class="popup-content"></div>
+      <div id="popup-content" class="popup-content" @click="uploadCoordinate"></div>
     </div>
   </div>
 </template>
@@ -34,7 +34,8 @@ export default {
       overlay: null,
       container: null,
       draw: null,
-      source: null
+      source: null,
+      coordinate: null
     }
   },
   methods: {
@@ -51,18 +52,6 @@ export default {
       this.draw.on('drawstart', function (evt) {
         _that.source.clear()
       })
-      this.draw.on('drawend', function (e) {
-        var event = e.feature.getGeometry().getExtent()
-        var tl = [Math.min(event[0], event[2]), Math.min(event[1], event[3])]
-        var br = [Math.max(event[0], event[2]), Math.max(event[1], event[3])]
-        var coordinate = {
-          tl: tl,
-          br: br
-        }
-        _that.$api.map.uploadCoordinate(coordinate).then(res => {
-          console.log(res)
-        })
-      })
     },
     toRad (Value) {
     /** Converts numeric degrees to radians */
@@ -72,6 +61,12 @@ export default {
       var xtile = Math.floor((lon + 180) / 360 * (1 << zoom))
       var ytile = Math.floor((1 - Math.log(Math.tan(this.toRad(lat)) + 1 / Math.cos(this.toRad(lat))) / Math.PI) / 2 * (1 << zoom))
       return [xtile, ytile, zoom]
+    },
+    uploadCoordinate () {
+      console.log(111)
+      // this.$api.uploadCoordinate(coordinate).then(res => {
+      //   console.log(res)
+      // })
     },
     popUpInit () {
       // 获取到弹框的节点DOM
@@ -91,17 +86,19 @@ export default {
       this.map.addOverlay(this.overlay)
       const _that = this
       // 监听singleclick事件
-      this.map.on('singleclick', function (e) {
-        const coordinate = e.coordinate
-        const zoom = Math.floor(_that.map.getView().getZoom())
+      this.draw.on('drawend', function (e) {
+        var event = e.feature.getGeometry().getExtent()
+        const mid = [(event[0] + event[2]) / 2, (event[1] + event[3]) / 2]
         // get tile coordinate for click event
-        const xyz = _that.getTileURL(coordinate[1], coordinate[0], zoom)
-        content.innerHTML = `
-        <p>你点击了这里：</p>
-        <p>坐标：</p>X:${coordinate[0].toFixed(6)} &nbsp;&nbsp; Y: ${coordinate[1].toFixed(6)}
-        <p>瓦片坐标：</p>X:${xyz[0]} &nbsp;&nbsp; Y: ${xyz[1]} &nbsp;&nbsp; Z: ${xyz[2]}
-        `
-        _that.overlay.setPosition(coordinate) // 把 overlay 显示到指定的 x,y坐标
+        var tl = [Math.min(event[0], event[2]), Math.min(event[1], event[3])]
+        var br = [Math.max(event[0], event[2]), Math.max(event[1], event[3])]
+        var coordinate = {
+          tl: tl,
+          br: br
+        }
+        _that.coordinate = coordinate
+        content.innerHTML = '<span>上传</span>'
+        _that.overlay.setPosition(mid) // 把 overlay 显示到指定的 x,y坐标
       })
       closer.onclick = function () {
         _that.overlay.setPosition(undefined)
@@ -109,7 +106,7 @@ export default {
         return false
       }
       this.map.on('pointermove', (e) => {
-      // 获取瓦片坐标
+      // 获取瓦片坐标)
         var lonlat = this.map.getCoordinateFromPixel(e.pixel)
         this.lon = lonlat[0].toFixed(6)
         this.lat = lonlat[1].toFixed(6)
@@ -165,8 +162,8 @@ export default {
   },
   mounted () {
     this.mapInit()
-    this.popUpInit()
     this.drawInit()
+    this.popUpInit()
   }
 }
 </script>
@@ -176,23 +173,16 @@ export default {
   height: 100%;
 }
 /*隐藏ol的一些自带元素*/
-.ol-attribution,
-.ol-zoom {
-  display: none;
-}
 .ol-popup {
   position: absolute;
   background-color: white;
-  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-  padding: 15px;
-  border-radius: 10px;
   border: 1px solid #cccccc;
-  bottom: 12px;
-  left: -50px;
+  transform: translateX(-50%);
 }
 .popup-content {
-  width: 400px;
+  width: 100px;
+  cursor: pointer;
+
 }
 .ol-popup-closer {
   text-decoration: none;
