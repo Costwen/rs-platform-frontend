@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "before-after-slider": "^1.0.1",
     "core-js": "^3.6.5",
+    "echarts": "^5.1.2",
     "element-ui": "^2.15.6",
     "jquery": "^3.6.0",
     "js-base64": "^3.7.2",
