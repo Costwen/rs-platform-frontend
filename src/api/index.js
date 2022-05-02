@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import map from './map.js'
+
 axios.interceptors.request.use(function (config) {
   if (localStorage.getItem('access')) {
     const token = localStorage.getItem('access')
@@ -12,7 +14,6 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error)
 })
-
 export default {
-
+  map
 }
