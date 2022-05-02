@@ -4,6 +4,7 @@
     :before-upload="beforeUpload"
     :http-request="(params)=>uploadImage(params)"
     :on-remove="(file, fileList)=>removeImage(file, fileList)"
+
     list-type="picture"
     accept="image/*"
   >

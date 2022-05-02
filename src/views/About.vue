@@ -1,5 +1,29 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <BeforeAfterSlider>
+    </BeforeAfterSlider>
   </div>
 </template>
+
+<script>
+
+import BeforeAfterSlider from '../components/BeforeAfterSlider.vue'
+
+export default {
+  name: 'About',
+  components: {
+    BeforeAfterSlider
+  },
+  mounted () {
+
+  },
+  methods: {
+
+  }
+
+}
+</script>
+
+<style>
+
+</style>
