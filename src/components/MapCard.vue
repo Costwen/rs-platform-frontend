@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <div id="map" class="map">
       <div class="ol-mouse-position">
         <span> 经度: {{ lon }}</span>
@@ -25,7 +25,9 @@ import TileDebug from 'ol/source/TileDebug'
 import Draw, {
   createBox
 } from 'ol/interaction/Draw'
+
 export default {
+
   data () {
     return {
       lon: 0,
@@ -35,7 +37,8 @@ export default {
       container: null,
       draw: null,
       source: null,
-      coordinate: null
+      coordinate: null,
+      canvas: null
     }
   },
   methods: {
@@ -102,6 +105,7 @@ export default {
       })
       closer.onclick = function () {
         _that.overlay.setPosition(undefined)
+        _that.source.clear()
         closer.blur()
         return false
       }
@@ -158,7 +162,6 @@ export default {
       this.source = source
       this.addInteraction()
     }
-
   },
   mounted () {
     this.mapInit()
@@ -168,8 +171,8 @@ export default {
 }
 </script>
 
-<style>
-#map {
+<style scoped>
+.map {
   height: 100%;
 }
 /*隐藏ol的一些自带元素*/
@@ -184,6 +187,9 @@ export default {
   cursor: pointer;
 
 }
+.ol-viewport{
+  overflow: unset !important;
+}
 .ol-popup-closer {
   text-decoration: none;
   position: absolute;
@@ -197,5 +203,11 @@ export default {
   height: 20px;
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 9;
+}
+.ol-zoom ol-unselectable ol-control{
+  position: absolute;
+  bottom: 10px !important;
+  right: 10px !important;
+  z-index: 9 !important;
 }
 </style>

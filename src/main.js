@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import ol from 'openlayers'
 import 'openlayers/css/ol.css'
-
+import './assets/global.css'
 Vue.prototype.$ol = ol
 Vue.config.productionTip = false
 Vue.prototype.$api = api

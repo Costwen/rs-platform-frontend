@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #222831">
-    <Header/>
+
     <el-container class="main">
       <el-container>
         <el-aside width="23%" style="height: fit-content;">
@@ -50,11 +50,9 @@
 </template>
 
 <script>
-import Header from '../components/Header'
 
 export default {
   name: 'AnalysisTools',
-  components: { Header },
   methods: {
     genChart () {
       console.log('111')
@@ -120,7 +118,6 @@ export default {
 .main{
   /*background-color: #393E46;*/
   width: 90%;
-  margin: 40px auto 40px;
   height: 770px;
 }
 
