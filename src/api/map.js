@@ -1,8 +1,9 @@
 import axios from 'axios'
 
 export default {
-  async uploadCoordinate (coordinate) {
-    const data = await axios.post('/api/map/upload', coordinate)
+  async uploadCoordinate (uploadData) {
+    console.log(uploadData)
+    const data = await axios.post('/api/inference/new_task', uploadData)
     return data
   }
 }

@@ -10,24 +10,20 @@
       <a href="#" id="popup-closer" class="ol-popup-closer">X</a>
       <div id="popup-content" class="popup-content" @click="uploadCoordinate"></div>
     </div>
+    <el-button @click="show"> test</el-button>
   </div>
 </template>
 
 <script>
 import 'ol/ol.css'
-import Map from 'ol/Map'
 import Overlay from 'ol/Overlay'
-import View from 'ol/View'
-import XYZ from 'ol/source/XYZ'
 import { Vector as VectorSource } from 'ol/source'
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer'
-import TileDebug from 'ol/source/TileDebug'
+import { Vector as VectorLayer } from 'ol/layer'
 import Draw, {
   createBox
 } from 'ol/interaction/Draw'
-
+import { gaodeMapInit, userMapInit } from '@/utils/map'
 export default {
-
   data () {
     return {
       lon: 0,
@@ -38,10 +34,14 @@ export default {
       draw: null,
       source: null,
       coordinate: null,
-      canvas: null
+      imgA: null,
+      imgB: null,
+      mode: null
     }
   },
   methods: {
+    show () {
+    },
     addInteraction () {
       const value = 'Circle'
       const geometryFunction = createBox()
@@ -66,10 +66,15 @@ export default {
       return [xtile, ytile, zoom]
     },
     uploadCoordinate () {
-      console.log(111)
-      // this.$api.uploadCoordinate(coordinate).then(res => {
-      //   console.log(res)
-      // })
+      // img 转化为二进制文件
+      const data = {
+        mode: this.mode,
+        type: 1,
+        imageA: this.imgA,
+        coordinate: this.coordinate
+      }
+      this.$api.map.uploadCoordinate(data).then(res => {
+      })
     },
     popUpInit () {
       // 获取到弹框的节点DOM
@@ -116,43 +121,6 @@ export default {
         this.lat = lonlat[1].toFixed(6)
       })
     },
-    mapInit () {
-      const imgLayer = new TileLayer({
-        source: new XYZ({
-          url: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}&scl=1',
-          wrapX: true
-        })
-      })
-      const labelLayer = new TileLayer({
-        source: new XYZ({
-          url: 'https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}&scl=1&ltype=4',
-          wrapX: true
-        })
-      })
-      const debugLayer = new TileLayer({
-        source: new TileDebug({
-          template: 'x:{x} y:{y} z:{z}',
-          projection: imgLayer.getSource().getProjection(),
-          tileGrid: imgLayer.getSource().getTileGrid(),
-          zDirection: 1
-        })
-      })
-      var map = new Map({
-        target: 'map',
-        layers: [
-          imgLayer,
-          labelLayer,
-          debugLayer
-        ],
-        view: new View({
-          projection: 'EPSG:4326', // 使用这个坐标系
-          center: [116.397468, 39.908816], // 北京
-          maxZoom: 18,
-          zoom: 17
-        })
-      })
-      this.map = map
-    },
     drawInit () {
       const source = new VectorSource({ wrapX: false })
       const vector = new VectorLayer({
@@ -161,12 +129,20 @@ export default {
       this.map.addLayer(vector)
       this.source = source
       this.addInteraction()
+    },
+    userMapInit (file) {
+      this.imgA = file.raw
+      console.log(file)
+      this.map = userMapInit(this, file.url)
     }
   },
   mounted () {
-    this.mapInit()
-    this.drawInit()
-    this.popUpInit()
+    this.mode = this.$route.path.split('/')[1]
+    if (this.mode === 'map') {
+      this.map = gaodeMapInit()
+      this.drawInit()
+      this.popUpInit()
+    }
   }
 }
 </script>

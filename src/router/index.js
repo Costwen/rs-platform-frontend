@@ -27,6 +27,11 @@ const routes = [
     path: '/map',
     name: 'Map',
     component: () => import('../views/OLMap.vue')
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () => import('../views/OLMap.vue')
   }
 ]
 

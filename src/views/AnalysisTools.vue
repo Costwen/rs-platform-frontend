@@ -22,7 +22,7 @@
         </el-aside>
         <el-main>
             <el-container class="body">
-              <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
+              <div @click="$router.push({path: '/map'})" style=" margin-left: 0px">
                 <p>目标提取</p>
               </div>
             </el-container>
