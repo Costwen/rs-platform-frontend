@@ -1,13 +1,15 @@
 <template>
   <div class="home">
-    <el-button>test</el-button>
-    <el-button>hello</el-button>
+    <UploadPics></UploadPics>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import UploadPics from '../components/UploadPics.vue'
 export default {
-  name: 'Home'
+  name: 'Home',
+  components: {
+    UploadPics
+  }
 }
 </script>

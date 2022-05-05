@@ -1,33 +1,35 @@
 <template>
   <div>
-
+    <input name="file" type="file" accept="image/*" @change="update"/>
+    <el-button @click="submitUpload">上传图片</el-button>
+    <img :src="pic_preview" style="width: 200px" alt=""/>
+    <img :src="pic_result" alt="" />
   </div>
 </template>
 
 <script>
-import axois from 'axios'
+
 export default {
   name: 'UploadPics',
   props: [],
   data () {
     return {
-
+      pic_preview: '',
+      pic_result: ''
     }
   },
   methods: {
-    // 处理变化
-    // 传给后端
     submitUpload () {
-      const formData = new FormData()
-      console.log(this.fileList)
-      formData.append('file', this.fileList)
-      axois
-        .post('/image/retrieval/', {
-          img: this.fileList
-        })
-        .then((res) => {
-          console.log(res)
-        })
+    },
+    update (e) { // 上传照片
+      this.pic = e.target.files[0]
+      const _this = this
+      const pic = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(pic)
+      reader.addEventListener('load', function () {
+        _this.pic_preview = this.result
+      })
     }
   }
 }
