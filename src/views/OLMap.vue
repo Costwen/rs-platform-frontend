@@ -66,7 +66,7 @@ export default {
     },
     handlePreview (file) {
       this.url = file.url
-      this.$refs.map.userMapInit(file)
+      this.$refs.map.userMapInit(file, 'imgA')
     },
     handleUpload (param) {
       console.log(param)

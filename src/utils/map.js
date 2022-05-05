@@ -35,7 +35,7 @@ export function gaodeMapInit () {
     })
   })
   const map = new Map({
-    target: 'map',
+    target: 'imgA',
     layers: [
       imgLayer,
       labelLayer,
@@ -51,9 +51,10 @@ export function gaodeMapInit () {
   return map
 }
 
-export function userMapInit (obj, url) {
+export function userMapInit (obj, url, target) {
   const img = new Image()
   img.src = url
+  obj.img_count += 1
   img.onload = () => {
     const extent = [0, 0, img.width, img.height]
     const projection = new Projection({
@@ -61,6 +62,18 @@ export function userMapInit (obj, url) {
       units: 'pixels',
       extent: extent
     })
+    var view
+    if (target === 'imgA') {
+      view = new View({
+        projection: projection,
+        center: getCenter(extent),
+        zoom: 2,
+        maxZoom: 8
+      })
+      obj.view = view
+    } else {
+      view = obj.view
+    }
     const map = new Map({
       layers: [
         new ImageLayer({
@@ -71,13 +84,8 @@ export function userMapInit (obj, url) {
           })
         })
       ],
-      target: 'map',
-      view: new View({
-        projection: projection,
-        center: getCenter(extent),
-        zoom: 2,
-        maxZoom: 8
-      })
+      target: target,
+      view: view
     })
     obj.map = map
     obj.drawInit()

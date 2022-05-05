@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div id="map" class="map">
+    <div class="contain">
       <div class="ol-mouse-position">
         <span> 经度: {{ lon }}</span>
         <span> 维度: {{ lat }}</span>
+      </div>
+      <div id="imgA" :class="img_count===2?'imgA1':'imgA2'">
+      </div>
+      <div id="mask" class="mask">
       </div>
     </div>
     <div id="popup" class="ol-popup">
       <a href="#" id="popup-closer" class="ol-popup-closer">X</a>
       <div id="popup-content" class="popup-content" @click="uploadCoordinate"></div>
     </div>
-    <el-button @click="show"> test</el-button>
   </div>
 </template>
 
@@ -36,7 +39,9 @@ export default {
       coordinate: null,
       imgA: null,
       imgB: null,
-      mode: null
+      mode: null,
+      view: null,
+      img_count: 0
     }
   },
   methods: {
@@ -66,20 +71,16 @@ export default {
       return [xtile, ytile, zoom]
     },
     uploadCoordinate () {
-      // img 转化为二进制文件
-
-      // const data = {
-      //   mode: this.mode,
-      //   type: 1,
-      //   imageA: this.imgA,
-      //   coordinate: this.coordinate
-      // }
       var data = new FormData()
       data.append('mode', this.mode)
-      data.append('type', 1)
+      data.append('type', 'sort')
       data.append('imageA', this.imgA)
       data.append('coordinate', JSON.stringify(this.coordinate))
+      const _that = this
       this.$api.map.uploadCoordinate(data).then(res => {
+        _that.url = res.data.mask
+        _that.userMapInit(res.data.mask, 'mask')
+        // 刷新地图
       })
     },
     popUpInit () {
@@ -136,25 +137,47 @@ export default {
       this.source = source
       this.addInteraction()
     },
-    userMapInit (file) {
-      this.imgA = file.raw
-      this.map = userMapInit(this, file.url)
+    userMapInit (file, target) {
+      if (target === 'imgA') {
+        this.imgA = file.raw
+        this.map = userMapInit(this, file.url, target)
+      }
+      if (target === 'mask') {
+        this.map = userMapInit(this, file, target)
+      }
+    },
+    gaodeMapInit () {
+      this.map = gaodeMapInit()
+      this.drawInit()
+      this.popUpInit()
     }
   },
   mounted () {
     this.mode = this.$route.path.split('/')[1]
     if (this.mode === 'map') {
-      this.map = gaodeMapInit()
-      this.drawInit()
-      this.popUpInit()
+      this.gaodeMapInit()
     }
   }
 }
 </script>
 
 <style scoped>
-.map {
+.imgA1 {
+  width: 100%;
   height: 100%;
+}
+.imgA2 {
+  width: 50%;
+  height: 100%;
+}
+.mask{
+  width: 50%;
+  height: 100%;
+}
+.contain{
+  display: flex;
+  height: 100%;
+  width: 100%;
 }
 /*隐藏ol的一些自带元素*/
 .ol-popup {
