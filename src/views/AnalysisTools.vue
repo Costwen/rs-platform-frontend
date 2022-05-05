@@ -1,5 +1,4 @@
 <template>
-  <div>
   <div style="background-color: #222831">
 
     <el-container class="main">

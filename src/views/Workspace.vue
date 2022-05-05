@@ -1,6 +1,5 @@
 <template>
   <div >
-    <Header/>
       <el-row>
         <el-col>
           <el-container class="body">
@@ -30,11 +29,9 @@
 </template>
 
 <script>
-import Header from '../components/Header'
 
 export default {
   name: 'Workspace',
-  components: { Header },
   data () {
     return {
       originalUrl: require('../assets/original.png'),
