@@ -67,12 +67,18 @@ export default {
     },
     uploadCoordinate () {
       // img 转化为二进制文件
-      const data = {
-        mode: this.mode,
-        type: 1,
-        imageA: this.imgA,
-        coordinate: this.coordinate
-      }
+
+      // const data = {
+      //   mode: this.mode,
+      //   type: 1,
+      //   imageA: this.imgA,
+      //   coordinate: this.coordinate
+      // }
+      var data = new FormData()
+      data.append('mode', this.mode)
+      data.append('type', 1)
+      data.append('imageA', this.imgA)
+      data.append('coordinate', JSON.stringify(this.coordinate))
       this.$api.map.uploadCoordinate(data).then(res => {
       })
     },
@@ -132,7 +138,6 @@ export default {
     },
     userMapInit (file) {
       this.imgA = file.raw
-      console.log(file)
       this.map = userMapInit(this, file.url)
     }
   },

@@ -8,14 +8,17 @@
     <div class="right" v-if="rightshow">
       <el-upload
         action=""
+        ref="upload"
         list-type="picture-card"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :auto-upload="false"
         :file-list="fileList"
+        :http-request="handleUpload"
         >
         <i class="el-icon-plus"></i>
       </el-upload>
+      <el-button @click="upload">上传</el-button>
     </div>
   </div>
 </template>
@@ -62,8 +65,14 @@ export default {
       this.url = null
     },
     handlePreview (file) {
-      this.url = file
+      this.url = file.url
       this.$refs.map.userMapInit(file)
+    },
+    handleUpload (param) {
+      console.log(param)
+    },
+    upload () {
+      this.$refs.upload.submit()
     }
   },
   mounted () {

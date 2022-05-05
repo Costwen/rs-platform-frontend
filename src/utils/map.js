@@ -80,7 +80,6 @@ export function userMapInit (obj, url) {
       })
     })
     obj.map = map
-    obj.imgA = img
     obj.drawInit()
     obj.popUpInit()
   }
