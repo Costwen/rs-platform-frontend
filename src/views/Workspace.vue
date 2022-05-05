@@ -1,59 +1,48 @@
 <template>
-  <div>
-  <div style="background-color: #222831">
-
-    <el-container class="main">
-      <el-container>
-        <el-aside width="23%" style="height: fit-content;">
-
-          <el-container class="class">
-            <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
-<!--              <el-button class="button" circle>-->
-<!--                <i class="el-icon-edit"></i>-->
-<!--              </el-button>-->
-              <p>分析工具</p>
+  <div >
+    <Header/>
+      <el-row>
+        <el-col>
+          <el-container class="body">
+            <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
+              <p>类型：地物分类</p>
             </div>
           </el-container>
-
-          <el-container class="class">
-            <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
-              <p>历史项目</p>
+        </el-col>
+      </el-row>
+      <el-row>
+          <img id="original" :src="originalUrl" style="max-width: 600px; margin-right: 3%" alt="">
+          <img id="processed" :src=processedUrl style="max-width: 600px" alt="">
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-container class="body">
+            <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
+              <p>图斑统计</p>
             </div>
           </el-container>
-        </el-aside>
-        <el-main>
-            <el-container class="body">
-              <div @click="$router.push({path: '/map'})" style=" margin-left: 0px">
-                <p>目标提取</p>
-              </div>
-            </el-container>
-            <el-container class="body">
-              <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
-                <p>变化检测</p>
-              </div>
-            </el-container>
-            <el-container class="body">
-              <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
-                <p>目标检测</p>
-              </div>
-            </el-container>
-            <el-container class="body">
-              <div @click="$router.push({path: '/create'})" style=" margin-left: 0px">
-                <p>地物分类</p>
-              </div>
-            </el-container>
-<!--          <router-view/>-->
-        </el-main>
-      </el-container>
-    </el-container>
-    <div id="chart-1" style="width: 600px;height:400px;"></div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <div id="chart-1" style="width: 600px;height:400px; margin: auto"></div>
+      </el-row>
   </div>
 </template>
 
 <script>
+import Header from '../components/Header'
 
 export default {
-  name: 'AnalysisTools',
+  name: 'Workspace',
+  components: { Header },
+  data () {
+    return {
+      originalUrl: require('../assets/original.png'),
+      processedUrl: require('../assets/processed.png'),
+      imc: null,
+      img_ctx: null
+    }
+  },
   methods: {
     genChart () {
       console.log('111')
@@ -75,10 +64,10 @@ export default {
           {
             name: 'Access From',
             type: 'pie',
-            radius: ['40%', '70%'],
+            radius: ['50%', '70%'],
             avoidLabelOverlap: false,
             itemStyle: {
-              borderRadius: 10,
+              borderRadius: 5,
               fontColor: '#FFF',
               borderWidth: 2
             },
@@ -97,11 +86,14 @@ export default {
               show: false
             },
             data: [
-              { value: 1048, name: 'Search Engine' },
-              { value: 735, name: 'Direct' },
-              { value: 580, name: 'Email' },
-              { value: 484, name: 'Union Ads' },
-              { value: 300, name: 'Video Ads' }
+              { value: 2080, name: '未知' },
+              { value: 293, name: '耕地' },
+              { value: 276, name: '园地' },
+              { value: 1072, name: '林地' },
+              { value: 1891, name: '草地' },
+              { value: 1316, name: '房屋建筑' },
+              { value: 120, name: '道路' },
+              { value: 135, name: '水域' }
             ]
           }
         ]
@@ -128,12 +120,11 @@ export default {
 </script>
 
 <style scoped>
-
 .main{
   /*background-color: #393E46;*/
   width: 90%;
   margin: 40px auto 40px;
-  /*height: 770px;*/
+  height: 770px;
 }
 
 .el-icon-reading, .el-icon-edit{
@@ -221,11 +212,13 @@ body > .el-container {
   border-radius: 10px;
   padding: 25px 0px 20px;
   margin-top: 20px;
-  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
   text-align: center;
   justify-content: center;
-  width: 22%;
-  float: left;
+  width: 16%;
+  /*float: right;*/
+  color: #e6e6e6;
   /*display: inline;*/
   /*height: 100%;*/
 }
