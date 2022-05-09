@@ -80,6 +80,7 @@ export default {
   },
   mounted () {
     // 获取url的最后一个
+    this.$refs.map.mapInit(require('../assets/original.png'), 'move')
   }
 }
 </script>

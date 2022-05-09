@@ -1,37 +1,37 @@
 <template>
-  <div >
-      <el-row>
-        <el-col>
-          <el-container class="body">
-            <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
-              <p>类型：地物分类</p>
-            </div>
-          </el-container>
-        </el-col>
-      </el-row>
-      <el-row>
-          <img id="original" :src="originalUrl" style="max-width: 600px; margin-right: 3%" alt="">
-          <img id="processed" :src=processedUrl style="max-width: 600px" alt="">
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-container class="body">
-            <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
-              <p>图斑统计</p>
-            </div>
-          </el-container>
-        </el-col>
-      </el-row>
-      <el-row>
-        <div id="chart-1" style="width: 600px;height:400px; margin: auto"></div>
-      </el-row>
+  <div>
+    <div>
+      <el-container class="body">
+        <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
+          <p>类型：地物分类</p>
+        </div>
+      </el-container>
+    </div>
+    <div style="display: inline-block">
+      <map-card id="original" ref="original" class="mid" />
+      <map-card id="processed" ref="processed" class="mid" />
+    </div>
+    <div>
+        <el-container class="body">
+          <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
+            <p>图斑统计</p>
+          </div>
+        </el-container>
+    </div>
+      <div id="chart-1" style="width: 600px;height:400px; margin: auto"></div>
   </div>
 </template>
 
 <script>
-
+import MapCard from '../components/MapCard.vue'
+import View from 'ol/View'
+import { getCenter } from 'ol/extent'
+import Projection from 'ol/proj/Projection'
 export default {
   name: 'Result',
+  components: {
+    MapCard
+  },
   data () {
     return {
       originalUrl: require('../assets/original.png'),
@@ -41,6 +41,26 @@ export default {
     }
   },
   methods: {
+    changeImg () {
+      this.$refs.original.isResult = true
+      this.$refs.processed.isResult = true
+      const extent = [0, 0, 600, 400]
+      const projection = new Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+      })
+      var view = new View({
+        projection: projection,
+        center: getCenter(extent),
+        zoom: 2,
+        maxZoom: 8
+      })
+      this.$refs.original.view = view
+      this.$refs.processed.view = view
+      this.$refs.original.mapInit(this.originalUrl)
+      this.$refs.processed.mapInit(this.processedUrl)
+    },
     genChart () {
       console.log('111')
       var myChart = this.$echarts.init(document.getElementById('chart-1'))
@@ -102,6 +122,7 @@ export default {
   },
   mounted () {
     this.genChart()
+    this.changeImg()
   },
   beforeRouteEnter (to, from, next) {
     // 添加背景色 style="background-color: #222831"
@@ -117,6 +138,12 @@ export default {
 </script>
 
 <style scoped>
+.mid{
+  /*z-index: -1;*/
+  width: 400px;
+  height: 300px;
+  /*display: inline-block !important;*/
+}
 .main{
   /*background-color: #393E46;*/
   width: 90%;
