@@ -31,7 +31,7 @@
 <script>
 
 export default {
-  name: 'Workspace',
+  name: 'Result',
   data () {
     return {
       originalUrl: require('../assets/original.png'),

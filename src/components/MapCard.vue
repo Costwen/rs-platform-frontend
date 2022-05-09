@@ -194,7 +194,7 @@ export default {
 .ol-mouse-position {
   position: absolute;
   bottom: 10px;
-  right: 10ppx;
+  right: 10px;
   height: 20px;
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 9;

@@ -24,9 +24,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AnalysisTools.vue')
   },
   {
-    path: '/workspace',
-    name: 'Workspace',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Workspace.vue')
+    path: '/result',
+    name: 'Result',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Result.vue')
   },
   {
     path: '/map',
