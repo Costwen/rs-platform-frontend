@@ -1,16 +1,16 @@
 <template>
   <el-container v-loading="is_loading">
     <div class="contain">
-<!--      <div class="ol-mouse-position" v-if="!isResult">-->
-<!--        <span> 经度: {{ lon }}</span>-->
-<!--        <span> 维度: {{ lat }}</span>-->
-<!--      </div>-->
+     <div class="ol-mouse-position">
+       <span> 经度: {{ lon }}</span>
+       <span> 维度: {{ lat }}</span>
+      </div>
       <div id="map" class="map">
       </div>
     </div>
     <div id="popup" class="ol-popup" v-show="map">
-      <!-- <div id="popup-content" class="popup-content"></div> -->
-      <div id="popup-closer" class="ol-popup-closer" v-if="!isResult">
+       <div id="popup-content" class="popup-content"></div>
+      <div id="popup-closer" class="ol-popup-closer">
         <el-button size="small" type="primary">取消</el-button>
       </div>
     </div>
@@ -34,7 +34,6 @@ import Static from 'ol/source/ImageStatic'
 export default {
   data () {
     return {
-      isResult: false,
       view: null,
       lon: 0,
       lat: 0,
@@ -139,17 +138,12 @@ export default {
           units: 'pixels',
           extent: extent
         })
-        var view
-        if (this.isResult) {
-          view = this.view
-        } else {
-          view = new View({
-            projection: projection,
-            center: getCenter(extent),
-            zoom: 2,
-            maxZoom: 8
-          })
-        }
+        var view = new View({
+          projection: projection,
+          center: getCenter(extent),
+          zoom: 2,
+          maxZoom: 8
+        })
         _that.map = new Map({
           layers: [
             new ImageLayer({
