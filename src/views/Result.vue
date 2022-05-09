@@ -7,9 +7,13 @@
         </div>
       </el-container>
     </div>
+<!--    <div>-->
+<!--      <img :src="this.originalUrl" alt="">-->
+<!--      <img :src="this.processedUrl" alt="">-->
+<!--    </div>-->
     <div style="display: inline-block">
-      <map-card id="original" ref="original" class="mid" />
-      <map-card id="processed" ref="processed" class="mid" />
+        <map-card id="original" ref="original" class="mid" />
+        <map-card id="processed" ref="processed" class="mid" />
     </div>
     <div>
         <el-container class="body">
@@ -140,7 +144,8 @@ export default {
 <style scoped>
 .mid{
   /*z-index: -1;*/
-  width: 400px;
+  /*display: inline-block !important;*/
+  width: calc(50vw);
   height: 300px;
   /*display: inline-block !important;*/
 }

@@ -1,10 +1,10 @@
 <template>
   <el-container v-loading="is_loading">
     <div class="contain">
-      <div class="ol-mouse-position" v-if="!isResult">
-        <span> 经度: {{ lon }}</span>
-        <span> 维度: {{ lat }}</span>
-      </div>
+<!--      <div class="ol-mouse-position" v-if="!isResult">-->
+<!--        <span> 经度: {{ lon }}</span>-->
+<!--        <span> 维度: {{ lat }}</span>-->
+<!--      </div>-->
       <div id="map" class="map">
       </div>
     </div>
