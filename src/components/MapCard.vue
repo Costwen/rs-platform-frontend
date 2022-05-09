@@ -5,14 +5,16 @@
         <span> 经度: {{ lon }}</span>
         <span> 维度: {{ lat }}</span>
       </div>
-      <div id="imgA" :class="img_count===2?'imgA1':'imgA2'">
-      </div>
-      <div id="mask" class="mask">
+      <div id="map" class="map">
       </div>
     </div>
+    <div>
     <div id="popup" class="ol-popup">
-      <a href="#" id="popup-closer" class="ol-popup-closer">X</a>
-      <div id="popup-content" class="popup-content" @click="uploadCoordinate"></div>
+      <!-- <div id="popup-content" class="popup-content"></div> -->
+      <div id="popup-closer" class="ol-popup-closer">
+        <el-button size="small" type="primary">取消</el-button>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -25,28 +27,27 @@ import { Vector as VectorLayer } from 'ol/layer'
 import Draw, {
   createBox
 } from 'ol/interaction/Draw'
-import { gaodeMapInit, userMapInit } from '@/utils/map'
+import Map from 'ol/Map'
+import View from 'ol/View'
+import Projection from 'ol/proj/Projection'
+import { getCenter } from 'ol/extent'
+import ImageLayer from 'ol/layer/Image'
+import Static from 'ol/source/ImageStatic'
 export default {
   data () {
     return {
       lon: 0,
       lat: 0,
       map: null,
-      overlay: null,
       container: null,
       draw: null,
       source: null,
       coordinate: null,
-      imgA: null,
-      imgB: null,
-      mode: null,
-      view: null,
-      img_count: 0
+      overlay: null,
+      is_loading: true
     }
   },
   methods: {
-    show () {
-    },
     addInteraction () {
       const value = 'Circle'
       const geometryFunction = createBox()
@@ -60,15 +61,6 @@ export default {
       this.draw.on('drawstart', function (evt) {
         _that.source.clear()
       })
-    },
-    toRad (Value) {
-    /** Converts numeric degrees to radians */
-      return Value * Math.PI / 180
-    },
-    getTileURL (lat, lon, zoom) {
-      var xtile = Math.floor((lon + 180) / 360 * (1 << zoom))
-      var ytile = Math.floor((1 - Math.log(Math.tan(this.toRad(lat)) + 1 / Math.cos(this.toRad(lat))) / Math.PI) / 2 * (1 << zoom))
-      return [xtile, ytile, zoom]
     },
     uploadCoordinate () {
       var data = new FormData()
@@ -86,7 +78,6 @@ export default {
     popUpInit () {
       // 获取到弹框的节点DOM
       var container = document.getElementById('popup')
-      var content = document.getElementById('popup-content')
       var closer = document.getElementById('popup-closer')
 
       // 创建一个弹窗 Overlay 对象
@@ -112,7 +103,6 @@ export default {
           br: br
         }
         _that.coordinate = coordinate
-        content.innerHTML = '<span>上传</span>'
         _that.overlay.setPosition(mid) // 把 overlay 显示到指定的 x,y坐标
       })
       closer.onclick = function () {
@@ -137,41 +127,50 @@ export default {
       this.source = source
       this.addInteraction()
     },
-    userMapInit (file, target) {
-      if (target === 'imgA') {
-        this.imgA = file.raw
-        this.map = userMapInit(this, file.url, target)
+    mapInit (url) {
+      const img = new Image()
+      img.src = url
+      const _that = this
+      img.onload = () => {
+        // 睡眠一秒
+
+        const extent = [0, 0, img.width, img.height]
+        const projection = new Projection({
+          code: 'xkcd-image',
+          units: 'pixels',
+          extent: extent
+        })
+        var view = new View({
+          projection: projection,
+          center: getCenter(extent),
+          zoom: 2,
+          maxZoom: 8
+        })
+        _that.map = new Map({
+          layers: [
+            new ImageLayer({
+              source: new Static({
+                url: url,
+                projection: projection,
+                imageExtent: extent
+              })
+            })
+          ],
+          target: 'map',
+          view: view
+        })
+        _that.drawInit()
+        _that.popUpInit()
+        _that.is_loading = false
       }
-      if (target === 'mask') {
-        this.map = userMapInit(this, file, target)
-      }
-    },
-    gaodeMapInit () {
-      this.map = gaodeMapInit()
-      this.drawInit()
-      this.popUpInit()
-    }
-  },
-  mounted () {
-    this.mode = this.$route.path.split('/')[1]
-    if (this.mode === 'map') {
-      this.gaodeMapInit()
     }
   }
 }
 </script>
 
 <style scoped>
-.imgA1 {
+.map {
   width: 100%;
-  height: 100%;
-}
-.imgA2 {
-  width: 50%;
-  height: 100%;
-}
-.mask{
-  width: 50%;
   height: 100%;
 }
 .contain{
@@ -180,25 +179,18 @@ export default {
   width: 100%;
 }
 /*隐藏ol的一些自带元素*/
-.ol-popup {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #cccccc;
-  transform: translateX(-50%);
-}
 .popup-content {
   width: 100px;
   cursor: pointer;
-
 }
 .ol-viewport{
   overflow: unset !important;
 }
+.ol-popup{
+  display: flex;
+}
 .ol-popup-closer {
-  text-decoration: none;
-  position: absolute;
-  top: 2px;
-  right: 8px;
+  transform: translate(-50%, -50%);
 }
 .ol-mouse-position {
   position: absolute;

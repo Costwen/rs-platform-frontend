@@ -2,8 +2,8 @@
   <div class="olmap">
     <el-button @click="leftdisappear">切换</el-button>
     <el-button @click="rightdisappear">切换</el-button>
-    <div class="left" v-if="leftshow">
-    </div>
+    <!-- <div class="left" v-if="leftshow">
+    </div> -->
     <map-card v-if="isShow" ref="map" class="mid" />
     <div class="right" v-if="rightshow">
       <el-upload
