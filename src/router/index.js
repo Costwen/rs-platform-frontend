@@ -34,9 +34,9 @@ const routes = [
     component: () => import('../views/OLMap.vue')
   },
   {
-    path: '/user',
-    name: 'User',
-    component: () => import('../views/User.vue')
+    path: '/project',
+    name: 'Project',
+    component: () => import('../views/Project.vue')
   }
 ]
 

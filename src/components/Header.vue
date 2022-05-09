@@ -104,8 +104,6 @@ export default {
   /*z-index: 5;*/
   /*opacity: 1;*/
   /*font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif !important;*/
-  position: absolute;
-  width: 100%;
 }
 
 /*.header .el-menu-item.is-active{*/

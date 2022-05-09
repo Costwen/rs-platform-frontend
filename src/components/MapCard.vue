@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-container v-loading="is_loading">
     <div class="contain">
       <div class="ol-mouse-position">
         <span> 经度: {{ lon }}</span>
@@ -8,15 +8,13 @@
       <div id="map" class="map">
       </div>
     </div>
-    <div>
-    <div id="popup" class="ol-popup">
+    <div id="popup" class="ol-popup" v-show="map">
       <!-- <div id="popup-content" class="popup-content"></div> -->
       <div id="popup-closer" class="ol-popup-closer">
         <el-button size="small" type="primary">取消</el-button>
       </div>
     </div>
-    </div>
-  </div>
+  </el-container>
 </template>
 
 <script>
@@ -127,13 +125,12 @@ export default {
       this.source = source
       this.addInteraction()
     },
-    mapInit (url) {
+    mapInit (url, mode) {
       const img = new Image()
       img.src = url
       const _that = this
       img.onload = () => {
         // 睡眠一秒
-
         const extent = [0, 0, img.width, img.height]
         const projection = new Projection({
           code: 'xkcd-image',
@@ -159,8 +156,11 @@ export default {
           target: 'map',
           view: view
         })
-        _that.drawInit()
-        _that.popUpInit()
+        // 是否能够裁剪
+        if (mode === 'move') {
+          _that.drawInit()
+          _that.popUpInit()
+        }
         _that.is_loading = false
       }
     }
@@ -174,7 +174,6 @@ export default {
   height: 100%;
 }
 .contain{
-  display: flex;
   height: 100%;
   width: 100%;
 }
