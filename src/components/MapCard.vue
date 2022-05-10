@@ -1,11 +1,11 @@
 <template>
   <el-container v-loading="is_loading">
     <div class="contain">
-     <div class="ol-mouse-position">
-       <span> 经度: {{ lon }}</span>
-       <span> 维度: {{ lat }}</span>
-      </div>
       <div id="map" class="map">
+        <div class="ol-mouse-position">
+        <span> 经度: {{ lon }}</span>
+        <span> 维度: {{ lat }}</span>
+        </div>
       </div>
     </div>
     <div id="popup" class="ol-popup" v-show="map">
@@ -173,6 +173,7 @@ export default {
 .map {
   width: 100%;
   height: 100%;
+    overflow: hidden;
 }
 .contain{
   height: 100%;
@@ -193,7 +194,9 @@ export default {
   transform: translate(-50%, -50%);
 }
 .ol-mouse-position {
-  position: absolute;
+  position: relative;
+
+  float: right;
   bottom: 10px;
   right: 10px;
   height: 20px;
