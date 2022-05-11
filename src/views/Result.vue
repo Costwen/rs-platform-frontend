@@ -1,7 +1,7 @@
 <template>
   <el-container class="contain">
-      <el-header class="body">
-        <div style=" margin-left: 0px; text-decoration-color: #e6e6e6">
+      <el-header class="header">
+        <div style="display:inline-block ;text-decoration-color: #e6e6e6">
           <p>类型：地物分类</p>
         </div>
       </el-header>
@@ -193,6 +193,22 @@ export default {
   background: #e6e6e6;
   border-radius: 15px;
 }
+.header {
+  background-color: #393E46;
+  /*color: #e6e6e6;*/
+  opacity: 0.9;
+  border-radius: 10px;
+  /*padding: 25px 0px 20px;*/
+  margin-top: 20px;
+  /*margin-left: 20px;*/
+  margin-bottom: 20px;
+  /*text-align: center;*/
+  /*justify-content: center;*/
+  display: inline-block;
+  width: 16%;
+  /*float: right;*/
+  color: #e6e6e6;
+}
 .body {
   background-color: #393E46;
   /*color: #e6e6e6;*/
@@ -204,10 +220,9 @@ export default {
   margin-bottom: 20px;
   text-align: center;
   justify-content: center;
-  width: 16%;
+  width: 40%;
   /*float: right;*/
   color: #e6e6e6;
-
 }
 .map1{
   width: 49%;
