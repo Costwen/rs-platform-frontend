@@ -29,9 +29,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Result.vue')
   },
   {
-    path: '/map',
-    name: 'Map',
-    component: () => import('../views/OLMap.vue')
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/Search.vue')
   },
   {
     path: '/project',
