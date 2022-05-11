@@ -167,11 +167,13 @@ export default {
   beforeRouteEnter (to, from, next) {
     // 添加背景色 style="background-color: #222831"
     document.querySelector('body').setAttribute('style', 'background-color:#222831')
+    document.title = '创建项目'
     next()
   },
   beforeRouteLeave (to, from, next) {
     // 去除背景色
     document.querySelector('body').setAttribute('style', '')
+    document.title = 'rs-platform'
     next()
   }
 }
