@@ -1,5 +1,5 @@
 <template>
-    <el-container class="contain">
+  <el-container class="contain">
     <el-header class="header">
 
       <div class="title">
@@ -7,6 +7,7 @@
         <span>项目名称</span>
         <span>创建时间</span>
       </div>
+
       <div class="right">
         <el-dropdown @command="handleCommand" trigger="click">
           <span class="el-dropdown-link">
@@ -19,6 +20,7 @@
         </el-dropdown>
       </div>
     </el-header>
+
     <el-container>
         <el-aside class="left" v-if="leftshow">
             <el-upload
@@ -42,16 +44,20 @@
         <el-main>
             <map-card ref="map" class="mid" />
         </el-main>
+
         <div @click="rightdisappear" class="button-right">
             <i :class="rightshow ? 'el-icon-caret-right' : 'el-icon-caret-left'"></i>
         </div>
+
         <el-aside class="right" v-if="rightshow">
             <div>
                 暂无任务
             </div>
         </el-aside>
+
     </el-container>
-    </el-container>
+
+  </el-container>
 </template>
 <script>
 import MapCard from '../components/MapCard.vue'
