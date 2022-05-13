@@ -1,6 +1,9 @@
 import axios from 'axios'
+import authorization from './authorization'
+import map from './map'
 
-import map from './map.js'
+import user from './user'
+import project from './project'
 
 axios.interceptors.request.use(function (config) {
   if (localStorage.getItem('access')) {
@@ -14,6 +17,29 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error)
 })
+
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  console.log(error)
+  const { response: { data: { detail: apiDetail } = {} } = {} } = error
+  error.api_detail = apiDetail || ''
+  return Promise.reject(error)
+})
+
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  const { response: { status: apiStatus } = {} } = error
+  if (apiStatus === 401) {
+    location.href = '/login'
+  }
+  return Promise.reject(error)
+})
+
 export default {
-  map
+  authorization,
+  map,
+  user,
+  project
 }

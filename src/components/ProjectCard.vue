@@ -3,7 +3,7 @@
   <div>
     <div class="container" >
       <div class="left">
-          <img src="../assets/original.png" alt="" class="project_image" />
+          <img :src="project.imageA" alt="" class="project_image" />
       </div>
 
       <div class="middle">
@@ -11,23 +11,25 @@
         <div>项目类型：{{project.type}}</div>
         <div>任务数量：{{project.task_num}}</div>
         <div>创建时间：{{project.create_time}}</div>
-        <div>最后编辑时间：{{project.last_edit_time}}</div>
+        <div>最后编辑时间：{{project.modify_time}}</div>
       </div>
 
       <div class="right">
-        <div v-if="project.status === 'normal' " style="margin-top: 5px" @click="edit(project.id)">
-          <el-button class="button" type="primary" icon="el-icon-edit" size="medium">编辑</el-button>
+        <div v-if="project.status === 'normal' " @click="projectEdit(project.id)">
+          <el-button  type="primary" icon="el-icon-edit" size="medium">编辑</el-button>
         </div>
-        <div v-if="project.status === 'normal' " style="margin-top: 5px">
-          <el-button class="button" type="danger" icon="el-icon-delete" size="medium">删除</el-button>
+        <div v-if="project.status === 'normal' " @click="projectDelete(project.id)">
+          <el-button type="danger" icon="el-icon-delete" size="medium">删除</el-button>
         </div>
 
-        <div v-if="project.status === 'deleted' " style="margin-top: 5px">
-          <el-button class="button" type="primary" icon="el-icon-success" size="medium">恢复</el-button>
+        <div v-if="project.status === 'delete' " style="rab" @click="projectRecovery(project.id)">
+          <el-button type="primary" icon="el-icon-success" size="medium">恢复</el-button>
         </div>
-        <div v-if="project.status === 'deleted' " style="margin-top: 5px">
-          <el-button class="button" type="danger" icon="el-icon-delete" size="medium">删除</el-button>
+
+        <div v-if="project.status === 'delete' " style="rab" @click="projectRecovery(project.id)">
+          <el-button type="danger" icon="el-icon-delete" size="medium">彻底删除</el-button>
         </div>
+
       </div>
     </div>
 
@@ -38,26 +40,66 @@
 </template>
 
 <script>
+// TODO  添加等待动画
 export default {
-  props: { project: { type: Object, required: true } },
+  props: {
+    project: { type: Object, required: true },
+    idx: { type: Number, required: true }
+  },
   data () {
     return {
-      imageA: 'C:\\Users\\Zhouxt\\Desktop\\SoftwareCup\\rs-platform-frontend\\src\\assets\\original.png'
+      status: 'normal'
     }
   },
   methods: {
-    edit (id) {
-      this.$prompt('项目名称', '编辑项目', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-        // inputErrorMessage: '邮箱格式不正确'
-      }).then(({ value }) => {
-        // TODO: post
-        this.$message({
-          type: 'success',
-          message: '编辑成功: ' + value
-        })
+    projectEdit (id) {
+      this.$router.push({
+        name: 'Project',
+        params: { id: id }
       })
+    },
+    projectDelete (id) {
+      this.$api.project.deleteProject(id).then(res => {
+        this.$emit('remove', this.idx)
+        this.$notify.success({
+          title: '已加入回收站'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          title: '删除失败'
+        })
+      }
+      )
+    },
+    projectRecovery (id) {
+      this.$api.project.recoveryProject(id).then(res => {
+        this.$emit('remove', this.idx)
+        this.$notify.success({
+          title: '恢复成功'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          title: '恢复失败'
+        })
+      }
+      )
+    },
+    entireDelete (id) {
+      this.$api.project.entireDelete(id).then(
+        res => {
+          this.$emit('remove', this.idx)
+          this.$notify.success({
+            title: '彻底删除成功'
+          })
+        }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          title: '删除失败'
+        })
+      }
+      )
     }
   }
 }
@@ -72,6 +114,7 @@ export default {
   border-bottom: 1px solid grey;
   padding-top: 10px;
   padding-right: 10px;
+  justify-content: space-between;
 }
 
 .container:hover {
@@ -87,8 +130,6 @@ export default {
 .middle {
   font-size: 17px;
   text-align: left;
-  margin-left: 1%;
-  min-width: 70%;
   /* display: flex; */
 }
 
@@ -97,10 +138,13 @@ export default {
   margin: 0 auto;
 }
 
-.button {
-  /* width: 100px; */
-  /* border-radius: 30px; */
-  /* margin-top: 10px; */
+.rab{
+  margin-top: 5px
+}
+
+.el-button{
+  width:110px;
+  margin: 8px;
 }
 
 </style>

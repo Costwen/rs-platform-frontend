@@ -14,7 +14,7 @@
             <el-avatar size="small">用户名</el-avatar>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>
+            <el-dropdown-item command="toHome">个人空间</el-dropdown-item>
             <el-dropdown-item command="logout">注销登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -41,7 +41,7 @@
                 <i :class="leftshow ? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
             </div>
 
-        <el-main>
+        <el-main v-loading="!midshow">
             <map-card ref="map" class="mid" />
         </el-main>
 
@@ -68,9 +68,10 @@ export default {
   },
   data () {
     return {
+      project: null,
       leftshow: true,
-      midshow: true,
       rightshow: true,
+      midshow: false,
       mode: null,
       fileList: [],
       url: null
@@ -97,7 +98,6 @@ export default {
     },
     handlePreview (file) {
       this.url = file.url
-      this.midshow = false
       this.$refs.map.mapInit(this.url, 'move')
     },
     handleUpload (param) {
@@ -108,11 +108,27 @@ export default {
     },
     back () {
       this.$router.push('/')
+    },
+    handleCommand (command) {
+      switch (command) {
+        case 'toHome':
+          this.$router.push('/home')
+          break
+        case 'logout':
+          this.$router.push('/login')
+          break
+      }
     }
   },
   mounted () {
     // 获取url的最后一个
-    this.$refs.map.mapInit(require('../assets/original.png'), 'move')
+    var id = this.$route.params.id
+    this.$api.project.getProject(id).then(res => {
+      var project = res.data.project
+      this.project = project
+      this.midshow = true
+      this.$refs.map.mapInit(project.imageA, 'move')
+    })
   }
 }
 </script>

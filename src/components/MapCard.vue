@@ -1,5 +1,5 @@
 <template>
-  <el-container v-loading="is_loading">
+  <el-container>
     <div class="contain">
       <div id="map" class="map">
         <div class="ol-mouse-position">
@@ -42,8 +42,7 @@ export default {
       draw: null,
       source: null,
       coordinate: null,
-      overlay: null,
-      is_loading: true
+      overlay: null
     }
   },
   methods: {
@@ -162,7 +161,6 @@ export default {
           _that.drawInit()
           _that.popUpInit()
         }
-        _that.is_loading = false
       }
     }
   }

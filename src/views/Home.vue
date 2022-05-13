@@ -1,16 +1,15 @@
 <template>
   <div class="home">
     <div class="aside">
-
-      <div class="create-project">
+      <div class="create-project" @click="createProject">
         <i class="el-icon-folder-add"></i>
         创建项目
       </div>
-      <div @click="showProjects = true" class="history-project">
+      <div @click="getNormal" class="history-project">
         <i class="el-icon-folder-opened"></i>
         历史项目
       </div>
-      <div @click="showProjects = false" class="trash-can" >
+      <div @click="getDelete" class="trash-can" >
         <i class="el-icon-delete"></i>
         回收站
       </div>
@@ -24,17 +23,16 @@
             选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command = '-create_date'>创建时间</el-dropdown-item>
+          <el-dropdown-item command = '-create_time'>创建时间</el-dropdown-item>
           <el-dropdown-item command = '-task_num'>任务数量</el-dropdown-item>
-          <el-dropdown-item command = '-last_edit_time'>最后编辑时间</el-dropdown-item>
+          <el-dropdown-item command = '-modify_time'>最后编辑时间</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
 
-      <div v-if="showProjects" class="title">项目列表</div>
+      <div v-if="status === 'normal'" class="title">项目列表</div>
       <div v-else class="title" >回收站</div>
-      <div v-for="item in projectList" :key="item.id" class="project">
-        <project-card :project="item" v-if="showProjects && item.status === 'normal' " />
-        <project-card :project="item" v-if="!showProjects && item.status === 'deleted' " />
+      <div v-for=" item, idx in projects" :key="item.id" class="project">
+        <project-card @remove="remove" :project="item" :idx="idx"/>
       </div>
     </div>
 
@@ -52,64 +50,55 @@ export default {
   },
   data () {
     return {
-      showProjects: true, // 显示项目列表 or 回收站
-      projectList: [
-        {
-          id: 0,
-          name: '项目0',
-          imageA: '../assets/original.png',
-          imageB: '',
-          create_time: '2019-01-01',
-          type: '目标检测',
-          status: 'normal', // normal, deleted,
-          task_num: 10,
-          last_edit_time: '2019-01-04'
-        },
-        {
-          id: 1,
-          name: '项目1',
-          imageA: '../assets/original.png',
-          imageB: '',
-          create_time: '2019-01-02',
-          type: '地物分类',
-          status: 'deleted',
-          task_num: 2,
-          last_edit_time: '2019-01-04'
-        },
-        {
-          id: 2,
-          name: '项目2',
-          imageA: '../assets/original.png',
-          imageB: '',
-          create_time: '2019-01-04',
-          type: '目标检测',
-          status: 'normal', // normal, deleted,
-          task_num: 3,
-          last_edit_time: '2019-01-03'
-        }
-      ]
+      projects: [],
+      status: 'normal'
     }
   },
   mounted () {
-
+    this.init()
   },
   methods: {
-    sort (command) {
-      const _this = this
-      _this.projectList.sort(function (a, b) {
-        if (command === '-create_date') {
-          var date1 = new Date(a.create_time)
-          var date2 = new Date(b.create_time)
-          return date1 - date2
-        }
-        if (command === '-task_num') return a.task_num - b.task_num
-        if (command === '-last_edit_time') {
-          var date3 = new Date(a.last_edit_time)
-          var date4 = new Date(b.last_edit_time)
-          return date3 - date4
+    init () {
+      const _that = this
+      var _status
+      if (this.$route.query.status) {
+        _status = this.$route.query.status
+      } else {
+        _status = 'normal'
+      }
+      this.status = _status
+      this.$api.project.getProjects(_status).then(res => {
+        _that.projects = res.data.projects
+      })
+    },
+    remove (idx) {
+      this.projects.splice(idx, 1)
+    },
+    getNormal () {
+      this.$router.push({
+        path: '/home',
+        query: {
+          status: 'normal',
+          t: new Date().getTime()
         }
       })
-      console.log(_this.projectList[0])
+    },
+    getDelete () {
+      this.$router.push({
+        path: '/home',
+        query: {
+          status: 'delete',
+          t: new Date().getTime()
+        }
+      })
+    },
+    sort (command) {
+      console.log(command)
+    },
+    createProject () {
+      this.$router.push({
+        name: 'Create'
+      })
     }
   }
 }
