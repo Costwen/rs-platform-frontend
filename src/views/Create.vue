@@ -80,7 +80,6 @@
 // import { Base64 } from 'js-base64'
 // import Header from '@/components/Header'
 export default {
-  inject: ['reload'],
   data () {
     return {
       type: [
