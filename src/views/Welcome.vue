@@ -4,7 +4,7 @@
     <v-app>
       <v-carousel
         cycle
-        height="400"
+        height="400px"
         hide-delimiter-background
         show-arrows-on-hover
       >
@@ -27,8 +27,8 @@
       </v-carousel>
       <h1 class="title"> 🦈🐬🐳🐋🐟🐠🐡 </h1>
       <p class="subContent" style="max-width: 568px;">
-        <strong>摸鱼问卷平台</strong> 拥有简洁轻量的界面，问卷发布快捷方便，无需人工处理问卷数据，大大节省调研成本。
-        目前向所有用户免费开放，志在做一款用户喜爱的在线问卷调查服务平台✊
+        <strong>摸鱼遥感平台</strong> 拥有简洁轻量的界面，问卷发布快捷方便，无需人工处理问卷数据，大大节省调研成本。
+        目前向所有用户免费开放，志在做一款用户喜爱的在线遥感服务平台✊
       </p>
       <v-container style="margin-bottom: 40px">
         <v-row justify="center">
@@ -185,13 +185,13 @@ export default {
       btnWidth: 228,
       items: [
         {
-          src: 'https://z3.ax1x.com/2021/06/17/2juuz6.jpg',
-          title: '简约好用的问卷系统',
+          src: 'https://img.alicdn.com/imgextra/i1/O1CN01KT6iWh1zJRaNMoEFE_!!6000000006693-0-tps-2393-1347.jpg',
+          title: '简约好用的遥感系统',
           subtitle: '简约好用，轻松开启在线调试',
           img: 'https://wj.qq.com/image/index_slider_p1.png?v=@version'
         },
         {
-          src: 'https://z3.ax1x.com/2021/06/17/2ju6Fs.jpg',
+          src: 'https://img.alicdn.com/imgextra/i3/O1CN01BoXywB1owru1FG5CX_!!6000000005290-0-tps-1989-1306.jpg',
           title: '数据实时统计在线分析',
           subtitle: '回收数据实时在线统计，图表化展示，清晰直观',
           img: 'https://wj.qq.com/image/index_slider_p2.png?v=@version'
