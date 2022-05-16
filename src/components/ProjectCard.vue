@@ -60,12 +60,15 @@ export default {
       this.$api.project.deleteProject(id).then(res => {
         this.$emit('remove', this.idx)
         this.$notify.success({
-          title: '已加入回收站'
+          title: '已加入回收站',
+          message: '已加入回收站',
+          duration: 2000
         })
       }).catch(err => {
         console.log(err)
         this.$notify.error({
-          title: '删除失败'
+          title: '删除失败',
+          duration: 2000
         })
       }
       )
@@ -74,12 +77,14 @@ export default {
       this.$api.project.recoveryProject(id).then(res => {
         this.$emit('remove', this.idx)
         this.$notify.success({
-          title: '恢复成功'
+          title: '恢复成功',
+          duration: 2000
         })
       }).catch(err => {
         console.log(err)
         this.$notify.error({
-          title: '恢复失败'
+          title: '恢复失败',
+          duration: 2000
         })
       }
       )
@@ -89,12 +94,14 @@ export default {
         res => {
           this.$emit('remove', this.idx)
           this.$notify.success({
-            title: '彻底删除成功'
+            title: '彻底删除成功',
+            duration: 2000
           })
         }).catch(err => {
         console.log(err)
         this.$notify.error({
-          title: '删除失败'
+          title: '删除失败',
+          duration: 2000
         })
       }
       )

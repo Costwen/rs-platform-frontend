@@ -4,6 +4,7 @@ import map from './map'
 
 import user from './user'
 import project from './project'
+import image from './image'
 
 axios.interceptors.request.use(function (config) {
   if (localStorage.getItem('access')) {
@@ -36,10 +37,10 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error)
 })
-
 export default {
   authorization,
   map,
   user,
-  project
+  project,
+  image
 }

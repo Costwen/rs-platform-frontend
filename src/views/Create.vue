@@ -125,39 +125,6 @@ export default {
     },
     Create (item) {
       this.$router.push({ path: '/project' })
-      // const that = this
-      // authorization()
-      //   .then(function (response) {
-      //     if (response[0]) {
-      //       axios
-      //         .post('api/questionnaire/', {
-      //           title: item.title + '标题',
-      //           content: item.title + '描述',
-      //           type: item.type
-      //         }, {
-      //           headers: { Authorization: 'Bearer ' + localStorage.getItem('access.myblog') }
-      //         })
-      //         .then(function (response) {
-      //           // console.log(response.data);
-      //           // that.dialog=false;
-      //           const s1 = Base64.encode('moyu' + response.data.id + 'wenjuan')
-      //           that.$router.push({ path: '/edit/' + s1 })
-      //         })
-      //         // .catch(function (error) {
-      //         // // that.dialog=false;
-      //         //   that.$notify.error({
-      //         //     title: '出错啦',
-      //         //     message: '创建问卷失败'
-      //         //   })
-      //         // })
-      //     } else {
-      //       // that.dialog=false;
-      //       that.$notify.error({
-      //         title: '创建问卷失败',
-      //         message: '请先登录！'
-      //       })
-      //     }
-      //   })
     }
   },
   mounted () {

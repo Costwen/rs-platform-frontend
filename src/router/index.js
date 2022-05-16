@@ -56,7 +56,7 @@ const routes = [
     component: () => import('../views/Register.vue')
   },
   {
-    path: '/image',
+    path: '/dataset',
     name: 'Image',
     component: () => import('../views/Image.vue')
   }

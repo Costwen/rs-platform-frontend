@@ -50,7 +50,7 @@
         </el-container>
             <div id="popup" class="ol-popup" v-show="show">
                 <div id="popup-content" class="popup-content">
-                    <el-button>上传</el-button>
+                    <el-button @click="uploadCoordinate">上传</el-button>
                     <el-button type="primary" @click="cancle">取消</el-button>
                 </div>
 
@@ -124,15 +124,12 @@ export default {
     },
     uploadCoordinate () {
       var data = new FormData()
-      data.append('mode', this.mode)
-      data.append('type', 'sort')
-      data.append('imageA', this.imgA)
       data.append('coordinate', JSON.stringify(this.coordinate))
-      const _that = this
-      this.$api.map.uploadCoordinate(data).then(res => {
-        _that.url = res.data.mask
-        _that.userMapInit(res.data.mask, 'mask')
-        // 刷新地图
+      this.$api.image.postImage(data).then(res => {
+        this.$notify.success('上传成功')
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error('上传失败')
       })
     },
     popUpInit () {
