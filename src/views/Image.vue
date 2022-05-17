@@ -1,8 +1,8 @@
 <template>
-
+  <div>
   <el-container class="main">
 
-    <el-aside>
+    <el-aside class="aside">
         <v-btn @click="upload" color="primary">
           <v-icon >mdi-image-size-select-actual</v-icon>
           <span>选取文件</span>
@@ -31,7 +31,8 @@
     </el-aside>
     <v-divider vertical style="margin: 2px"></v-divider>
 
-    <el-main class="content">
+    <el-main class="mid">
+      <div  class="content">
       <v-card class="image"  v-for="item, idx in imageList" :key="item.id" >
       <v-card  @click="chooseImage">
         <v-img
@@ -72,6 +73,8 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      </div>
+      <v-divider></v-divider>
           <v-pagination
       v-model="page"
       :length="4"
@@ -81,6 +84,7 @@
     </el-main>
   <upload-dialog ref="dialog" @upload="getImages"></upload-dialog>
   </el-container>
+  </div>
 </template>
 
 <script>
@@ -143,11 +147,12 @@ export default {
 
 <style>
 
+.mid{
+  height: 100%;
+}
 .main {
   margin: 0 auto;
-  position: fixed;
   width: 95%;
-  height: 100%;
   background-color: whitesmoke;
 }
 
@@ -157,13 +162,16 @@ export default {
   padding-bottom: 3px;
   border-bottom: 1.5px solid gray;
 }
-
+.aside{
+  width: 200px;
+}
 .subtitle{
   text-align: left;
 }
 
 .content {
   /* overflow-y: scroll; */
+  align-items: center;
   display: -webkit-box;
   justify-content: center;
   flex-wrap: wrap;
@@ -174,7 +182,10 @@ export default {
 .image {
   position: absoulte;
   width: 30%;
+  min-width: 300px;
+  min-height: 300px;
   margin: 1%;
+  height: 40%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
