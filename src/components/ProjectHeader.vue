@@ -1,0 +1,123 @@
+<template>
+  <div class="header">
+    <div class="left">
+        <img src="../assets/logo2.png" class="logo" @click="toHome"/>
+      <v-tabs v-model="tab" @change="change" class="item">
+      <v-tab>
+          我的项目
+      </v-tab>
+      <v-tab>
+        检索数据
+      </v-tab>
+      <v-tab>
+        我的数据
+      </v-tab>
+    </v-tabs>
+  </div>
+      <div class="user">
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            <el-avatar>{{username}}</el-avatar>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>
+            <el-dropdown-item command="logout">注销登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ProjectHeader',
+  data () {
+    return {
+      bg: require('../assets/logo2.png'),
+      activeIndex: 1,
+      hasLogin: false,
+      username: 'admin',
+      avatar: '',
+      id: '',
+      tab: -1
+    }
+  },
+  methods: {
+    toHome () {
+      this.$router.push('/')
+    },
+    handleSelect (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    change (command) {
+      var cur = this.$router.currentRoute.path
+      var to
+      switch (command) {
+        case 0:
+          to = '/home'
+          break
+        case 1:
+          to = '/search'
+          break
+        case 2:
+          to = '/dataset'
+          break
+      }
+      if (cur !== to) {
+        this.$router.push(to)
+      }
+    },
+    goLogin () {
+      this.$router.push({ path: '/login', query: { from: this.$route.path } })
+    },
+    logout () {
+      localStorage.clear()
+      // window.location.reload(false);
+      this.$router.push({ path: '/login' })
+      this.$notify.success({
+        title: '登出成功',
+        message: '欢迎下次光临'
+      })
+    },
+    handleCommand (command) {
+      switch (command) {
+        case 'toHome':
+          this.$router.push('/home')
+          break
+        case 'logout':
+          this.$router.push('/login')
+          break
+      }
+    }
+  },
+  mounted () {
+  }
+}
+</script>
+
+<style scoped>
+.header{
+  z-index: 5;
+  background-color: white;
+  height: 50px !important;
+  justify-content: space-between;
+  display: flex;
+  ;
+}
+.logo{
+  margin-right: 20px;
+}
+.left{
+  margin-left: 50px;
+  display: flex;
+}
+.user{
+  padding: 5px;
+  margin-right: 10px;
+    align-items: center;
+}
+
+.el-dropdown-link{
+  cursor: pointer;
+}
+</style>

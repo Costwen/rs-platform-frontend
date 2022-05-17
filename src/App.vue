@@ -1,24 +1,18 @@
 <template>
-  <v-app id="app" class="app">
+  <v-app>
+    <project-header></project-header>
     <router-view :key="$route.fullPath"/>
   </v-app>
 </template>
 <script>
+import ProjectHeader from './components/ProjectHeader.vue'
 export default {
+  components: { ProjectHeader },
   methods: {
   }
 }
 </script>
 <style>
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  overflow: hidden;
-}
 #nav a {
   font-weight: bold;
   color: #2c3e50;

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <v-app>
-      <Header style="height: 75px"/>
+
       <v-carousel
         cycle
         height="400px"
@@ -153,12 +152,10 @@
           {{ new Date().getFullYear() }} — <strong>Group No.19</strong> FISHING QUESTIONNAIRE
         </v-col>
       </v-footer>
-    </v-app>
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header'
 const createData = () => ({
   threshold: 0,
   headerClass: 'vue-fixed-header',
@@ -166,8 +163,8 @@ const createData = () => ({
   hideScrollUp: false
 })
 export default {
+
   name: 'Welcome',
-  components: { Header },
   data () {
     return {
       fixedStatus: {

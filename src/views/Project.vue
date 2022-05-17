@@ -1,7 +1,7 @@
 <template>
   <el-container class="contain">
     <el-header class="header">
-
+      <project-header></project-header>
       <div class="title">
         <i class="el-icon-back" @click="back"></i>
         <span>项目名称</span>
@@ -60,11 +60,14 @@
   </el-container>
 </template>
 <script>
+
 import MapCard from '../components/MapCard.vue'
+import ProjectHeader from '../components/ProjectHeader.vue'
 export default {
   name: 'Project',
   components: {
-    MapCard
+    MapCard,
+    ProjectHeader
   },
   data () {
     return {

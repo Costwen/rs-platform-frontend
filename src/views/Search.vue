@@ -1,24 +1,5 @@
 <template>
 <el-container class="contain">
-    <el-header class="header">
-
-      <div class="title">
-        <i class="el-icon-back" @click="back"></i>
-        <span>项目名称</span>
-        <span>创建时间</span>
-      </div>
-      <div class="right">
-        <el-dropdown trigger="click">
-          <span class="el-dropdown-link">
-            <el-avatar>用户名</el-avatar>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>
-            <el-dropdown-item command="logout">注销登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-header>
 
         <el-container v-loading="is_loading">
             <el-card class="card">
@@ -277,23 +258,11 @@ export default {
     width: 100%;
     height: 100%;
 }
-.header {
-    position: fixed;
-  display: flex;
-  height: 50px !important;
-  justify-content: space-between;
-  padding-right: 0;
-  background: #2f3238;
-  color: aliceblue;
-  align-items: center;
-  width: 100%;
-    z-index: 1;
-}
-
 .contain{
   height: 100%;
   width: 100%;
-  background-color: aqua;
+  z-index: 0;
+  position: fixed;
 }
 .popup{
     position: fixed;
@@ -330,5 +299,6 @@ export default {
     z-index: 1;
     margin-left: 10px;
     background-color: rgba(255, 255, 255, 0.95);
+    width: 300px;
 }
 </style>

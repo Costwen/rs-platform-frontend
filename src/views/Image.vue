@@ -3,10 +3,12 @@
   <el-container class="main">
 
     <el-aside class="aside">
+      <div class="up">
         <v-btn @click="upload" color="primary">
           <v-icon >mdi-image-size-select-actual</v-icon>
           <span>选取文件</span>
           </v-btn>
+      </div>
     <v-tabs vertical>
           <v-tab>
             <v-icon left>
@@ -31,7 +33,7 @@
     </el-aside>
     <v-divider vertical style="margin: 2px"></v-divider>
 
-    <el-main class="mid">
+    <el-main class="mid" v-loading="show">
       <div  class="content">
       <v-card class="image"  v-for="item, idx in imageList" :key="item.id" >
       <v-card  @click="chooseImage">
@@ -96,7 +98,8 @@ export default {
       srcList: [],
       imageList: [],
       page: 1,
-      fileList: []
+      fileList: [],
+      show: true
     }
   },
   methods: {
@@ -106,7 +109,7 @@ export default {
     getImages () {
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images
-        console.log(this.imageList)
+        this.show = false
       })
     },
     deleteImage (id, idx) {
@@ -146,7 +149,10 @@ export default {
 </script>
 
 <style>
-
+.up{
+  text-align: center;
+  margin: 50px 0 20px 0 ;
+}
 .mid{
   height: 100%;
 }
