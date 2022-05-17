@@ -19,6 +19,7 @@
     "openlayers": "^4.6.5",
     "sass-loader": "^12.6.0",
     "vue": "^2.6.11",
+    "vue-fixed-header": "^3.2.15",
     "vue-router": "^3.2.0",
     "vuetify": "^2.6.5"
   },
