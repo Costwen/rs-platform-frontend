@@ -42,7 +42,7 @@
         <v-card-title>
          {{item.name}}
         </v-card-title>
-        <v-card-subtitle>
+        <v-card-subtitle class="subtitle">
             <span>创建时间:</span>
             <span>{{item.create_time}}</span>
           </v-card-subtitle>
@@ -145,7 +145,9 @@ export default {
 
 .main {
   margin: 0 auto;
-  width: 90%;
+  position: fixed;
+  width: 95%;
+  height: 100%;
   background-color: whitesmoke;
 }
 
@@ -154,6 +156,10 @@ export default {
   font-size: 30px;
   padding-bottom: 3px;
   border-bottom: 1.5px solid gray;
+}
+
+.subtitle{
+  text-align: left;
 }
 
 .content {
@@ -166,9 +172,9 @@ export default {
 }
 
 .image {
-  width: 22%;
+  position: absoulte;
+  width: 30%;
   margin: 1%;
-  height: 40%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -176,7 +182,6 @@ export default {
 .image_time{
   font-size: 12px;
   color: #8c8c8c;
-  margin-top: 5px;
   text-align: left;
 }
 .actions{
@@ -189,5 +194,7 @@ export default {
 .btn2{
   color: #a2741d !important;
 }
-
+.v-card__subtitle, .v-card__text, .v-card__title{
+  padding: 10px;
+}
 </style>

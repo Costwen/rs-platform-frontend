@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" class="app">
     <router-view :key="$route.fullPath"/>
   </v-app>
 </template>
@@ -17,8 +17,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  overflow: hidden;
 }
-
 #nav a {
   font-weight: bold;
   color: #2c3e50;
