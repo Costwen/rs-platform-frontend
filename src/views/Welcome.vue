@@ -1,7 +1,7 @@
 <template>
   <div>
-<!--    <Header/>-->
     <v-app>
+      <Header style="height: 75px"/>
       <v-carousel
         cycle
         height="400px"
@@ -88,22 +88,6 @@
         项目团队精心设计和打造多种不同类型的问卷以适应不同场合需求。 做到创建发布收集一条龙 — 查看👀相应的类型介绍👇，以便更好地做出选择。
       </p>
 
-<!--      <div class="all_block">-->
-<!--        <div class="block" style="width: 100% !important;">-->
-<!--          <img src="https://www.wjx.cn/images/newimg/pic-2/survey@2x.png"-->
-<!--               width="200px"-->
-<!--               height="200px"-->
-<!--               class="img"-->
-<!--          />-->
-<!--          <div style="margin-left: 10%; display: inline-block">-->
-<!--            <p class="sub" style="font-size: 2rem; font-weight: 400">-->
-<!--              调查问卷<br/>-->
-<!--            </p>-->
-<!--            <p class="sub">最基础的问卷类型，包含单选、多选、填空及评分题型。简约好用是我们的初衷，能够满足大部分问卷的需求</p>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
       <div  class="all_block" style="background-color: #fdfbfb">
         <div class="block"  style="border-right: 1px solid #eff2f6;">
           <img src="https://img.alicdn.com/imgextra/i2/O1CN01yUuD2623wbuKi994q_!!6000000007320-55-tps-48-48.svg"
@@ -174,12 +158,23 @@
 </template>
 
 <script>
-// import Header from '@/components/Header'
+import Header from '@/components/Header'
+const createData = () => ({
+  threshold: 0,
+  headerClass: 'vue-fixed-header',
+  fixedClass: 'vue-fixed-header--isFixed',
+  hideScrollUp: false
+})
 export default {
   name: 'Welcome',
-  // components: { Header },
+  components: { Header },
   data () {
     return {
+      fixedStatus: {
+        headerIsFixed: false
+      },
+      propsData: { ...createData() },
+      formData: { ...createData() },
       show: false,
       expand: false,
       btnWidth: 228,
@@ -211,11 +206,37 @@ export default {
       ]
 
     }
+  },
+  methods: {
+    updateFixedStatus (next) {
+      this.fixedStatus.headerIsFixed = next
+    }
   }
 }
 </script>
 
 <style scoped>
+nav {
+  display: flex;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  border-bottom: solid 1px #e5e5e5;
+}
+
+nav.vue-fixed-header--isFixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+.navbar.vue-fixed-header--isFixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+}
 .all_block{
   padding: 40px 0;
 }

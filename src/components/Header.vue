@@ -6,31 +6,31 @@
       class="el-menu-demo"
       mode="horizontal"
       @select="handleSelect"
-      background-color="#2f3238"
-      text-color="white"
-      active-text-color="#00ADB5">
+      background-color="#fff"
+      text-color="#333"
+      active-text-color="#3F87DA">
       <h1>
         <a class="logo" :style="{backgroundImage: 'url(' + bg + ')'}" @click="$router.push({path:'/'})"></a>
       </h1>
       <!--      <el-menu-item index="/">首页</el-menu-item>-->
-      <el-menu-item index="/">数据检索</el-menu-item>
-      <el-menu-item index="/AnalysisTools">处理分析</el-menu-item>
+      <el-menu-item index="/home">我的项目</el-menu-item>
+      <el-menu-item index="/create">创建项目</el-menu-item>
       <el-menu-item index="/AnalysisTools">模型训练</el-menu-item>
-<!--      <div class="user">-->
-<!--        <span class="el-dropdown-link" @click="goLogin" v-if="!hasLogin">-->
-<!--          <el-avatar>登录</el-avatar>-->
-<!--        </span>-->
-<!--        <el-dropdown @command="handleCommand"  v-else>-->
-<!--          <span class="el-dropdown-link">-->
-<!--            <el-avatar>{{username}}</el-avatar>-->
-<!--          </span>-->
-<!--          <el-dropdown-menu slot="dropdown">-->
-<!--            &lt;!&ndash;            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>&ndash;&gt;-->
-<!--            &lt;!&ndash;            <el-dropdown-item command="messageList">消息中心</el-dropdown-item>&ndash;&gt;-->
-<!--            <el-dropdown-item command="logout">注销登录</el-dropdown-item>-->
-<!--          </el-dropdown-menu>-->
-<!--        </el-dropdown>-->
-<!--      </div>-->
+      <div class="user">
+        <span class="el-dropdown-link" @click="goLogin" v-if="!hasLogin">
+          <el-avatar>登录</el-avatar>
+        </span>
+        <el-dropdown @command="handleCommand"  v-else>
+          <span class="el-dropdown-link">
+            <el-avatar>{{username}}</el-avatar>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <!--            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>-->
+            <!--            <el-dropdown-item command="messageList">消息中心</el-dropdown-item>-->
+            <el-dropdown-item command="logout">注销登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </el-menu>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
   name: 'Header',
   data () {
     return {
-      bg: require('../assets/ali.png'),
+      bg: require('../assets/logo2.png'),
       activeIndex: 1,
       hasLogin: false,
       search: '',
@@ -119,13 +119,13 @@ export default {
 }
 .el-menu-item{
   margin:0 10px !important;
-  font-size: small !important;
+  font-size: 16px !important;
 }
 
 h1{
   float: left;
-  height: 60px;
-  width: 100px;
+  height: 75px;
+  width: 160px;
   cursor: pointer;
   margin-left: 20px;
   margin-top: 14px;
@@ -145,7 +145,7 @@ h1 a:hover{
 
 .logo{
   /*background-image: url("../assets/logo2.png");*/
-  background-size: 80px;
+  background-size: 140px;
   /*background-position: center;*/
   background-repeat: no-repeat;
   transition: 0.1s linear opacity;
@@ -185,11 +185,11 @@ h1 a:hover{
   font-size: large !important;
 }
 .el-menu.el-menu--horizontal {
-  height: 60px !important;
+  height: 75px !important;
   border-bottom: solid 0px #e6e6e6 !important;
 }
 .el-menu--horizontal>.el-menu-item {
-  height: 60px !important;
-  line-height: 60px !important;
+  height: 75px !important;
+  line-height: 75px !important;
 }
 </style>
