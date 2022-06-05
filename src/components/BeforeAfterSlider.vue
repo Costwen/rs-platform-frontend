@@ -2,9 +2,9 @@
   <div class="container">
     <div class="slider-wrap">
       <div class="before-img">
-        <img src="../assets/before.jpg" alt="">
+        <img src="../assets/before.png" alt="">
       </div>
-      <img src="../assets/after.jpg" alt="">
+      <img src="../assets/after.png" alt="">
       <span class="handler"></span>
     </div>
   </div>
