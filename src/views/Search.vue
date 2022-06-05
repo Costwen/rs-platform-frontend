@@ -1,6 +1,7 @@
 <template>
-<el-container class="contain">
-
+  <div>
+    <project-header></project-header>
+  <el-container class="contain">
         <el-container v-loading="is_loading">
             <el-card class="card">
                 <el-form ref="form" :model="center" label-width="50px" class="form">
@@ -37,6 +38,7 @@
 
             </div>
     </el-container>
+  </div>
 </template>
 <script>
 import Map from 'ol/Map'
@@ -50,7 +52,9 @@ import Draw, {
   createBox
 } from 'ol/interaction/Draw'
 import TileDebug from 'ol/source/TileDebug'
+import ProjectHeader from '../components/ProjectHeader.vue'
 export default {
+  components: { ProjectHeader },
   data () {
     return {
       view: null,

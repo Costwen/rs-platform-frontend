@@ -1,6 +1,5 @@
 <template>
   <div>
-
       <v-carousel
         cycle
         height="400px"

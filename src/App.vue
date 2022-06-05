@@ -1,13 +1,10 @@
 <template>
   <v-app>
-    <project-header></project-header>
     <router-view :key="$route.fullPath"/>
   </v-app>
 </template>
 <script>
-import ProjectHeader from './components/ProjectHeader.vue'
 export default {
-  components: { ProjectHeader },
   methods: {
   }
 }

@@ -1,52 +1,52 @@
 <template>
-  <div class="home">
-    <div class="aside">
-      <div class="create-project" @click="createProject">
-        <i class="el-icon-folder-add"></i>
-        创建项目
+  <div>
+    <project-header></project-header>
+    <div class="home">
+      <div class="aside">
+        <div class="create-project" @click="createProject">
+          <i class="el-icon-folder-add"></i>
+          创建项目
+        </div>
+        <div @click="getNormal" class="history-project">
+          <i class="el-icon-folder-opened"></i>
+          历史项目
+        </div>
+        <div @click="getDelete" class="trash-can" >
+          <i class="el-icon-delete"></i>
+          回收站
+        </div>
       </div>
-      <div @click="getNormal" class="history-project">
-        <i class="el-icon-folder-opened"></i>
-        历史项目
+      <div class="main">
+        <el-dropdown @command="sort" style="float: right; margin-right: 7px; margin-top: 7px">
+            <span class="el-dropdown-link" style="color: grey; float: left; font-size: 15px">
+              选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command = '-create_time'>创建时间</el-dropdown-item>
+            <el-dropdown-item command = '-task_num'>任务数量</el-dropdown-item>
+            <el-dropdown-item command = '-modify_time'>最后编辑时间</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div v-if="status === 'normal'" class="title">项目列表</div>
+        <div v-else class="title" >回收站</div>
+        <div v-for=" item, idx in projects" :key="item.id" class="project">
+          <project-card @remove="remove" :project="item" :idx="idx"/>
+        </div>
       </div>
-      <div @click="getDelete" class="trash-can" >
-        <i class="el-icon-delete"></i>
-        回收站
-      </div>
-
-    </div>
-
-    <div class="main">
-
-      <el-dropdown @command="sort" style="float: right; margin-right: 7px; margin-top: 7px">
-          <span class="el-dropdown-link" style="color: grey; float: left; font-size: 15px">
-            选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command = '-create_time'>创建时间</el-dropdown-item>
-          <el-dropdown-item command = '-task_num'>任务数量</el-dropdown-item>
-          <el-dropdown-item command = '-modify_time'>最后编辑时间</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-
-      <div v-if="status === 'normal'" class="title">项目列表</div>
-      <div v-else class="title" >回收站</div>
-      <div v-for=" item, idx in projects" :key="item.id" class="project">
-        <project-card @remove="remove" :project="item" :idx="idx"/>
-      </div>
-    </div>
-
+  </div>
   </div>
 </template>
 
 <script>
 
 import ProjectCard from '../components/ProjectCard.vue'
+import ProjectHeader from '../components/ProjectHeader.vue'
 
 export default {
   name: 'Home',
   components: {
-    ProjectCard
+    ProjectCard,
+    ProjectHeader
   },
   data () {
     return {
@@ -56,6 +56,7 @@ export default {
   },
   mounted () {
     this.init()
+    this.$emit('show', 'home')
   },
   methods: {
     init () {

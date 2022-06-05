@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" v-if="pathMatch">
     <div class="left">
         <img src="../assets/logo2.png" class="logo" @click="toHome"/>
       <v-tabs v-model="tab" @change="change" class="item">
@@ -31,6 +31,12 @@
 <script>
 export default {
   name: 'ProjectHeader',
+  props: {
+    tab: {
+      type: Number,
+      default: 0
+    }
+  },
   data () {
     return {
       bg: require('../assets/logo2.png'),
@@ -39,10 +45,13 @@ export default {
       username: 'admin',
       avatar: '',
       id: '',
-      tab: -1
+      paths: ['/home', '/search', '/dataset']
     }
   },
   methods: {
+    pathMatch () {
+      console.log(this.$route.path)
+    },
     toHome () {
       this.$router.push('/')
     },
@@ -50,7 +59,7 @@ export default {
       console.log(key, keyPath)
     },
     change (command) {
-      var cur = this.$router.currentRoute.path
+      var cur = this.$route.path
       var to
       switch (command) {
         case 0:
@@ -91,6 +100,9 @@ export default {
     }
   },
   mounted () {
+    var path = this.$route.path
+    this.tab = this.paths.indexOf(path)
+    console.log(this.tab)
   }
 }
 </script>

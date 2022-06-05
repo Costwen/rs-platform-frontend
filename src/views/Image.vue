@@ -1,5 +1,6 @@
 <template>
   <div>
+    <project-header></project-header>
   <el-container class="main">
 
     <el-aside class="aside">
@@ -90,9 +91,10 @@
 </template>
 
 <script>
+import ProjectHeader from '../components/ProjectHeader.vue'
 import UploadDialog from '../components/UploadDialog.vue'
 export default {
-  components: { UploadDialog },
+  components: { UploadDialog, ProjectHeader },
   data () {
     return {
       srcList: [],
