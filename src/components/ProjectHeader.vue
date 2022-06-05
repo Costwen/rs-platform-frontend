@@ -31,14 +31,9 @@
 <script>
 export default {
   name: 'ProjectHeader',
-  props: {
-    tab: {
-      type: Number,
-      default: 0
-    }
-  },
   data () {
     return {
+      tab: 0,
       bg: require('../assets/logo2.png'),
       activeIndex: 1,
       hasLogin: false,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <project-header></project-header>
+  <project-header></project-header>
   <el-container class="contain">
         <el-container v-loading="is_loading">
             <el-card class="card">
@@ -258,6 +258,15 @@ export default {
 </script>
 
 <style scoped>
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  z-index: 100;
+}
 .map{
     width: 100%;
     height: 100%;
