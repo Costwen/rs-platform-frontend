@@ -36,7 +36,7 @@
 
     <el-main class="mid" v-loading="show">
       <div  class="content">
-      <v-card class="image"  v-for="item, idx in imageList" :key="item.id" >
+      <v-card class="image"  v-for="item, idx in imageList.slice(page_size*(page-1), page_size*page)" :key="item.id" >
       <v-card  @click="chooseImage">
         <v-img
         src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
@@ -80,7 +80,7 @@
       <v-divider></v-divider>
           <v-pagination
       v-model="page"
-      :length="4"
+      :length="page_num"
       prev-icon="mdi-menu-left"
       next-icon="mdi-menu-right"
     ></v-pagination>
@@ -101,7 +101,9 @@ export default {
       imageList: [],
       page: 1,
       fileList: [],
-      show: true
+      show: true,
+      page_num: 1,
+      page_size: 6
     }
   },
   methods: {
@@ -112,6 +114,7 @@ export default {
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images
         this.show = false
+        this.page_num = Math.round(this.imageList.length / this.page_size) + 1
       })
     },
     deleteImage (id, idx) {

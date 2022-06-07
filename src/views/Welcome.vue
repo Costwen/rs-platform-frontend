@@ -1,5 +1,16 @@
 <template>
   <div>
+      <div class="header">
+        <div class="left">
+            <img src="../assets/logo2.png" class="logo" @click="toHome"/>
+        </div>
+          <div class="right">
+              <span class="item" @click="toLogin">现在开始</span>
+              <span class="item" @click="toDown">平台简介</span>
+          </div>
+      </div>
+  <div>
+
       <v-carousel
         cycle
         height="400px"
@@ -25,7 +36,7 @@
       </v-carousel>
       <h1 class="title"> 🦈🐬🐳🐋🐟🐠🐡 </h1>
       <p class="subContent" style="max-width: 568px;">
-        <strong>摸鱼遥感平台</strong> 拥有简洁轻量的界面，问卷发布快捷方便，无需人工处理问卷数据，大大节省调研成本。
+        <strong>摸鱼遥感平台</strong> 拥有简洁轻量的界面，算法高效。
         目前向所有用户免费开放，志在做一款用户喜爱的在线遥感服务平台✊
       </p>
       <v-container style="margin-bottom: 40px">
@@ -82,8 +93,8 @@
         </v-row>
       </v-container>
       <v-divider style="width: 50%; margin: 0 auto"></v-divider>
-      <p class="subContent" style="max-width: 568px; margin-top: 40px">
-        项目团队精心设计和打造多种不同类型的问卷以适应不同场合需求。 做到创建发布收集一条龙 — 查看👀相应的类型介绍👇，以便更好地做出选择。
+      <p id="content" class="subContent" style="max-width: 568px; margin-top: 40px">
+        项目团队精心实现了多种不同类型的功能以适应不同场合需求。 做到创建分析历史一条龙 — 查看👀相应的类型介绍👇，以便更好地做出选择。
       </p>
 
       <div  class="all_block" style="background-color: #fdfbfb">
@@ -152,6 +163,7 @@
         </v-col>
       </v-footer>
   </div>
+</div>
 </template>
 
 <script>
@@ -187,18 +199,6 @@ export default {
           subtitle: '回收数据实时在线统计，图表化展示，清晰直观',
           img: 'https://wj.qq.com/image/index_slider_p2.png?v=@version'
         }
-        // {
-        //   src: 'https://z3.ax1x.com/2021/06/17/2juLSx.jpg',
-        //   title: '跨终端跨平台自适应？',
-        //   subtitle: 'PC、手机、平板不同终端自适应，调研随时随地',
-        //   img: 'https://wj.qq.com/image/index_slider_p3.png?v=@version'
-        // },
-        // {
-        //   src: 'https://z3.ax1x.com/2021/06/17/2jKZnS.jpg',
-        //   title: '多方式创建编辑问卷？',
-        //   subtitle: '自由创建、导入问卷、使用模板三种方式随意选择',
-        //   img: 'https://wj.qq.com/image/index_slider_p0.png?v=@version'
-        // },
       ]
 
     }
@@ -206,12 +206,58 @@ export default {
   methods: {
     updateFixedStatus (next) {
       this.fixedStatus.headerIsFixed = next
+    },
+    toHome () {
+      this.$router.push('/')
+    },
+    toLogin () {
+      this.$router.push({ path: '/login' })
+    },
+    toDown () {
+      console.log('toDown')
+      var el = document.getElementById('content')
+      this.$nextTick(
+        () => {
+          el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          })
+        }
+      )
     }
   }
 }
 </script>
 
 <style scoped>
+.header{
+  margin-top: 5px;
+  background-color: transparent;
+  height: 50px !important;
+  justify-content: space-between;
+  display: flex;
+  position: fixed;
+  z-index: 5;
+  width: 100%;
+}
+.item{
+  margin-right: 40px;
+  vertical-align: -webkit-baseline-middle;
+  cursor: pointer;
+}
+.logo{
+  margin-right: 20px;
+}
+.left{
+  margin-left: 50px;
+  display: flex;
+}
+.right{
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+}
 nav {
   display: flex;
   width: 100vw;
@@ -220,7 +266,6 @@ nav {
   background: #fff;
   border-bottom: solid 1px #e5e5e5;
 }
-
 nav.vue-fixed-header--isFixed {
   position: fixed;
   left: 0;
@@ -295,12 +340,4 @@ h3{
   margin-left: auto;
   max-width: 568px;
 }
-
-/*.theme--light.v-application{*/
-/*  background: transparent !important;*/
-/*}*/
-</style>
-
-<style>
-
 </style>
