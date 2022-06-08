@@ -47,7 +47,8 @@ export default {
       },
       view: null,
       is_loading: true,
-      rightshow: true
+      rightshow: true,
+      task: null
     }
   },
   methods: {
@@ -162,16 +163,11 @@ export default {
     this.mapInit(this.map1url, 'map1')
     this.mapInit(this.map2url, 'map2')
     this.genChart()
-  },
-  beforeRouteEnter (to, from, next) {
-    // 添加背景色 style="background-color: #222831"
-    document.querySelector('body').setAttribute('style', 'background-color:#222831')
-    next()
-  },
-  beforeRouteLeave (to, from, next) {
-    // 去除背景色
-    document.querySelector('body').setAttribute('style', '')
-    next()
+    var id = this.$route.params.id
+    this.$api.task.getTask(id).then(res => {
+      this.task = res.data.data
+      console.log(this.task)
+    })
   }
 }
 </script>

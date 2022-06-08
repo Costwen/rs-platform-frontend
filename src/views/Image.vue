@@ -29,6 +29,12 @@
             </v-icon>
             <span>个人图片</span>
           </v-tab>
+          <v-tab>
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            <span>分析结果</span>
+          </v-tab>
     </v-tabs>
 
     </el-aside>

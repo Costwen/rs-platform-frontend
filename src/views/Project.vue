@@ -1,7 +1,7 @@
 <template>
   <el-container class="contain">
     <el-header class="header">
-      <div class="title" v-if="project">
+      <div v-if="project">
         <i class="el-icon-back" @click="back"></i>
       </div>
 
@@ -98,14 +98,17 @@
         </div>
       </el-aside>
     </el-container>
+    <choose-dialog ref="choose"></choose-dialog>
   </el-container>
 </template>
 <script>
+import ChooseDialog from '../components/ChooseDialog.vue'
 import MapCard from '../components/MapCard.vue'
 export default {
   name: 'Project',
   components: {
-    MapCard
+    MapCard,
+    ChooseDialog
   },
   data () {
     return {
@@ -132,10 +135,10 @@ export default {
       })
     },
     choose () {
-      console.log(this.project.tasks)
+      this.$refs.choose.init()
     },
     back () {
-      this.$router.push('/')
+      this.$router.push('/home')
     },
     handleCommand (command) {
       switch (command) {

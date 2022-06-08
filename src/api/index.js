@@ -5,6 +5,7 @@ import map from './map'
 import user from './user'
 import project from './project'
 import image from './image'
+import task from './task'
 
 axios.interceptors.request.use(function (config) {
   if (localStorage.getItem('access')) {
@@ -42,5 +43,6 @@ export default {
   map,
   user,
   project,
-  image
+  image,
+  task
 }

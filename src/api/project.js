@@ -8,6 +8,9 @@ export default {
       }
     })
   },
+  async putProject (id, data) {
+    return axios.put('/api/project/' + id + '/', data)
+  },
   async deleteProject (id) {
     return axios.post('/api/project/' + id + '/', {
       status: 'delete'

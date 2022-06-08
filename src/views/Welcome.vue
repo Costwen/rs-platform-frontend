@@ -196,7 +196,7 @@ export default {
         {
           src: 'https://img.alicdn.com/imgextra/i3/O1CN01BoXywB1owru1FG5CX_!!6000000005290-0-tps-1989-1306.jpg',
           title: '数据实时统计在线分析',
-          subtitle: '回收数据实时在线统计，图表化展示，清晰直观',
+          subtitle: '数据实时在线统计，图表化展示，清晰直观',
           img: 'https://wj.qq.com/image/index_slider_p2.png?v=@version'
         }
       ]
@@ -211,7 +211,7 @@ export default {
       this.$router.push('/')
     },
     toLogin () {
-      this.$router.push({ path: '/login' })
+      this.$router.push({ path: '/home' })
     },
     toDown () {
       console.log('toDown')
