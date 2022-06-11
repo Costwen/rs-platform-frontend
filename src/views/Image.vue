@@ -43,12 +43,12 @@
     <el-main class="mid" v-loading="show">
       <div  class="content">
       <v-card class="image"  v-for="item, idx in imageList.slice(page_size*(page-1), page_size*page)" :key="item.id" >
-      <v-card  @click="chooseImage">
-        <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-        class="image-item"
-        ></v-img>
-      </v-card>
+      <div class="image-item">
+          <el-image
+            :src="item.url"
+            :preview-src-list="srcList.slice(page_size*(page-1), page_size*page)">
+          </el-image>
+      </div>
         <v-card-title>
          {{item.name}}
         </v-card-title>
@@ -60,6 +60,7 @@
           <v-btn
           color="orange"
             text
+            @click=postProject(item.id)
           >
           <v-icon>mdi-pencil-outline</v-icon>
             创建项目
@@ -113,14 +114,14 @@ export default {
     }
   },
   methods: {
-    chooseImage () {
-      console.log('chooseImage')
-    },
     getImages () {
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images
         this.show = false
         this.page_num = Math.round(this.imageList.length / this.page_size) + 1
+        for (let i = 0; i < this.imageList.length; i++) {
+          this.srcList.push(this.imageList[i].url)
+        }
       })
     },
     deleteImage (id, idx) {
@@ -146,11 +147,22 @@ export default {
     upload () {
       this.$refs.dialog.dialog = true
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
+    postProject (id) {
+      var data = {
+        imageA: id
+      }
+      console.log(data)
+      this.$api.project.postProject(data).then(res => {
+        console.log(res)
+        this.$notify.success({
+          message: '创建成功'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          message: '创建失败'
+        })
+      })
     }
   },
   mounted () {
@@ -207,10 +219,13 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
-.image_time{
-  font-size: 12px;
-  color: #8c8c8c;
-  text-align: left;
+.image-item{
+  display: flex;
+  height: 168px;
+  margin: 10px;
+  border: 1.5px solid rgb(126, 12, 12);
+  padding: 2px;
+  justify-content: center;
 }
 .actions{
   display: flex;

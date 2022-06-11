@@ -47,12 +47,14 @@
         <v-divider class="divider"></v-divider>
         <v-card class="left-image">
           <v-img
-          :src="project.imageA"
+          width="300px"
+          height="200px"
+          :src="project.imageA.url"
           ></v-img>
         </v-card>
         <div class="subtitle">
           <span>图像尺寸: &nbsp;</span>
-          <span>H: 0&nbsp; W: 1 </span>
+          <span>H: {{project.imageA.H}}&nbsp; W: {{project.imageA.W}} </span>
         </div>
       </div>
         </div>
@@ -77,6 +79,9 @@
         <div class="right-data" v-if="project">
         <span class="right-title">任务信息</span>
         <v-divider class="divider"></v-divider>
+        <div class="no-task" v-if="len(project.tasks)===0">
+          暂无任务
+        </div>
         <div v-for="(item, index) in project.tasks" :key="index">
           <div class="task">
           <div class="task-id" @click="toTask(item)">
@@ -98,7 +103,7 @@
         </div>
       </el-aside>
     </el-container>
-    <choose-dialog ref="choose"></choose-dialog>
+    <choose-dialog ref="choose" @save="refresh"></choose-dialog>
   </el-container>
 </template>
 <script>
@@ -161,6 +166,10 @@ export default {
           params: { id: item.id }
         })
       }
+    },
+    refresh () {
+      // 重新刷新页面
+      window.location.reload()
     }
   },
   mounted () {
@@ -170,7 +179,7 @@ export default {
       var project = res.data.project
       this.project = project
       this.midshow = true
-      this.$refs.map.mapInit(project.imageA, 'move')
+      this.$refs.map.mapInit(project.imageA.url, 'move')
     })
   }
 }
@@ -202,6 +211,9 @@ export default {
   background: #2f3238;
   color: aliceblue;
   align-items: center;
+}
+.no-task{
+  text-align: center;
 }
 .header-right{
   margin-right: 30px;

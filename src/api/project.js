@@ -8,6 +8,9 @@ export default {
       }
     })
   },
+  async postProject (data) {
+    return axios.post('/api/project/', data)
+  },
   async putProject (id, data) {
     return axios.put('/api/project/' + id + '/', data)
   },

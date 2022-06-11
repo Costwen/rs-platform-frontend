@@ -58,15 +58,15 @@
                 </template>
                 </el-table-column>
               <el-table-column
-                prop="url"
+                prop="imageA"
                 label="图片预览"
                 width="180">
                  <template slot-scope="scope">
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                  <el-image
+                      :src="scope.row.url"
                       class="image-item"
-                      @click="chooseImage(scope.row.url)"
-                    ></v-img>
+                    >
+                    </el-image>
                 </template>
               </el-table-column>
               <el-table-column
@@ -105,7 +105,8 @@ export default {
       imageList: [],
       dialog: false,
       show: true,
-      radio: null
+      radio: null,
+      srcList: []
     }
   },
   methods: {
@@ -130,6 +131,7 @@ export default {
           message: '保存成功'
         })
         this.close()
+        this.$emit('save')
       }).catch(err => {
         console.log(err)
         this.$notify.error({
@@ -181,5 +183,9 @@ export default {
 .table{
   border-left: 1px solid #e8e8e8;
   border-right: 1px solid #e8e8e8;
+}
+.image-item{
+  width: 180px;
+  height: 120px;
 }
 </style>

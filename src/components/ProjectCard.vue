@@ -3,7 +3,7 @@
   <div>
     <div class="container" >
       <div class="left">
-          <img :src="project.imageA" alt="" class="project_image" />
+          <img :src="project.imageA.url" alt="" class="project_image" />
       </div>
 
       <div class="middle">
