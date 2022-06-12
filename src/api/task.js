@@ -6,5 +6,8 @@ export default {
   },
   async getTasks () {
     return axios.get('/api/task/')
+  },
+  async postTask (data) {
+    return axios.post('/api/task/', data)
   }
 }

@@ -79,12 +79,12 @@
         <div class="right-data" v-if="project">
         <span class="right-title">任务信息</span>
         <v-divider class="divider"></v-divider>
-        <div class="no-task" v-if="len(project.tasks)===0">
+        <div class="no-task" v-if="project.tasks.length===0">
           暂无任务
         </div>
         <div v-for="(item, index) in project.tasks" :key="index">
           <div class="task">
-          <div class="task-id" @click="toTask(item)">
+          <div class="task-id">
             <span>任务序号: &nbsp;</span>
             <span>{{ index+1 }}</span>
           </div>
@@ -96,10 +96,14 @@
             </span>
           </div>
           </div>
+              <el-switch
+              v-model="visible[index]"
+              @change="setVisible(index)">
+          </el-switch>
         </div>
         </div>
         <div class="right-bottom">
-          <v-btn class="submit" color="primary" @click="choose">提交任务</v-btn>
+          <v-btn class="submit" color="primary" @click="submit">提交任务</v-btn>
         </div>
       </el-aside>
     </el-container>
@@ -123,7 +127,8 @@ export default {
       midshow: false,
       mode: null,
       fileList: [],
-      url: null
+      url: null,
+      visible: []
     }
   },
   methods: {
@@ -155,21 +160,23 @@ export default {
           break
       }
     },
+    setVisible (index) {
+      this.$refs.map.setVisibility(index, this.visible[index])
+    },
     toTask (item) {
       if (item.status === 'pending') {
         this.$notify.error({
           message: '该任务尚未完成'
         })
       } else {
-        this.$router.push({
-          name: 'Task',
-          params: { id: item.id }
-        })
       }
     },
     refresh () {
       // 重新刷新页面
       window.location.reload()
+    },
+    submit () {
+      this.$refs.map.submit(this.$route.params.id)
     }
   },
   mounted () {
@@ -179,7 +186,10 @@ export default {
       var project = res.data.project
       this.project = project
       this.midshow = true
-      this.$refs.map.mapInit(project.imageA.url, 'move')
+      this.$refs.map.mapInit(project, 'move')
+      for (var i = 0; i < project.tasks.length; i++) {
+        this.visible.push(true)
+      }
     })
   }
 }
@@ -264,6 +274,7 @@ export default {
   margin: 10px;
 }
 .right {
+  text-align: center;
   width: 180px !important;
   background-color: #2f3238;
   color: skyblue;
@@ -284,9 +295,6 @@ export default {
   margin-top: 30px;
   cursor: pointer;
   margin-right: 10px;
-}
-.task-id{
-  cursor: pointer;
 }
 .button-right {
   background-color: #2f3238;

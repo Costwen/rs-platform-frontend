@@ -15,12 +15,12 @@ export default {
     return axios.put('/api/project/' + id + '/', data)
   },
   async deleteProject (id) {
-    return axios.post('/api/project/' + id + '/', {
+    return axios.put('/api/project/' + id + '/', {
       status: 'delete'
     })
   },
   async recoveryProject (id) {
-    return axios.post('/api/project/' + id + '/', {
+    return axios.put('/api/project/' + id + '/', {
       status: 'normal'
     })
   },

@@ -42,10 +42,24 @@ export default {
       draw: null,
       source: null,
       coordinate: null,
-      overlay: null
+      overlay: null,
+      task_image_list: [],
+      task_image_extent: [],
+      layers: {}
     }
   },
   methods: {
+    submit (id) {
+      var data = {
+        project_id: id,
+        coordinate: this.coordinate
+      }
+      this.$api.task.postTask(data).then(res => {
+        this.$notify.success('提交成功')
+      }).catch(_ => {
+        this.$notify.error('提交失败')
+      })
+    },
     addInteraction () {
       const value = 'Circle'
       const geometryFunction = createBox()
@@ -125,42 +139,58 @@ export default {
       this.source = source
       this.addInteraction()
     },
-    mapInit (url, mode) {
-      const img = new Image()
-      img.src = url
-      const _that = this
-      img.onload = () => {
-        // 睡眠一秒
-        const extent = [0, 0, img.width, img.height]
-        const projection = new Projection({
-          code: 'xkcd-image',
-          units: 'pixels',
-          extent: extent
-        })
-        var view = new View({
+    setVisibility (idx, visible) {
+      this.layers['mask' + idx].setVisible(visible)
+    },
+    mapInit (project, mode) {
+      var image = project.imageA
+      const extent = [0, 0, image.H, image.W]
+      console.log(project)
+      const projection = new Projection({
+        code: 'xkcd-image',
+        units: 'pixels',
+        extent: extent
+      })
+      var view = new View({
+        projection: projection,
+        center: getCenter(extent),
+        zoom: 2,
+        maxZoom: 8
+      })
+      for (var i = 0; i < project.tasks.length; i++) {
+        this.task_image_list.push(project.tasks[i].mask.url)
+        var coordinate = project.tasks[i].coordinate
+        var tl = [coordinate.tl[0], coordinate.tl[1]]
+        var br = [coordinate.br[0], coordinate.br[1]]
+        var _extent = [tl[0], tl[1], br[0], br[1]]
+        this.task_image_extent.push(_extent)
+      }
+      this.map = new Map({
+        target: 'map',
+        view: view
+      })
+      this.map.addLayer(new ImageLayer({
+        source: new Static({
+          url: image.url,
           projection: projection,
-          center: getCenter(extent),
-          zoom: 2,
-          maxZoom: 8
+          imageExtent: extent
         })
-        _that.map = new Map({
-          layers: [
-            new ImageLayer({
-              source: new Static({
-                url: url,
-                projection: projection,
-                imageExtent: extent
-              })
-            })
-          ],
-          target: 'map',
-          view: view
+      }))
+      for (i = 0; i < this.task_image_list.length; i++) {
+        this.layers['mask' + i] = new ImageLayer({
+          source: new Static({
+            url: this.task_image_list[i],
+            projection: projection,
+            imageExtent: this.task_image_extent[i]
+          }),
+          opacity: 0.5
         })
-        // 是否能够裁剪
-        if (mode === 'move') {
-          _that.drawInit()
-          _that.popUpInit()
-        }
+        this.map.addLayer(this.layers['mask' + i])
+      }
+      // 是否能够裁剪
+      if (mode === 'move') {
+        this.drawInit()
+        this.popUpInit()
       }
     }
   }

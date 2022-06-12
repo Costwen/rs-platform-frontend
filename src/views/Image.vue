@@ -151,7 +151,6 @@ export default {
       var data = {
         imageA: id
       }
-      console.log(data)
       this.$api.project.postProject(data).then(res => {
         console.log(res)
         this.$notify.success({
@@ -178,6 +177,8 @@ export default {
 }
 .mid{
   height: 100%;
+  margin: 0px !important;
+  padding: 0px !important;
 }
 .main {
   margin: 0 auto;
