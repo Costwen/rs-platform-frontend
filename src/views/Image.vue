@@ -41,7 +41,10 @@
     <v-divider vertical style="margin: 2px"></v-divider>
 
     <el-main class="mid" v-loading="show">
-      <div  class="content">
+    <div v-if="page_num===0" class="no-image">
+        暂无图片
+    </div>
+    <div class="content">
       <v-card class="image"  v-for="item, idx in imageList.slice(page_size*(page-1), page_size*page)" :key="item.id" >
       <div class="image-item">
           <el-image
@@ -60,7 +63,7 @@
           <v-btn
           color="orange"
             text
-            @click=postProject(item.id)
+            @click=create(item.id)
           >
           <v-icon>mdi-pencil-outline</v-icon>
             创建项目
@@ -85,23 +88,27 @@
       </v-card>
       </div>
       <v-divider></v-divider>
-          <v-pagination
+      <v-pagination
       v-model="page"
       :length="page_num"
       prev-icon="mdi-menu-left"
       next-icon="mdi-menu-right"
+      v-if="page_num !== 0"
     ></v-pagination>
+
     </el-main>
   <upload-dialog ref="dialog" @upload="getImages"></upload-dialog>
+  <image-create-project-dialog ref="create" @upload="toProject"></image-create-project-dialog>
   </el-container>
   </div>
 </template>
 
 <script>
+import ImageCreateProjectDialog from '../components/ImageCreateProjectDialog.vue'
 import ProjectHeader from '../components/ProjectHeader.vue'
 import UploadDialog from '../components/UploadDialog.vue'
 export default {
-  components: { UploadDialog, ProjectHeader },
+  components: { UploadDialog, ProjectHeader, ImageCreateProjectDialog },
   data () {
     return {
       srcList: [],
@@ -118,7 +125,7 @@ export default {
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images
         this.show = false
-        this.page_num = Math.round(this.imageList.length / this.page_size) + 1
+        this.page_num = Math.ceil(this.imageList.length / this.page_size)
         for (let i = 0; i < this.imageList.length; i++) {
           this.srcList.push(this.imageList[i].url)
         }
@@ -127,25 +134,29 @@ export default {
     deleteImage (id, idx) {
       this.$api.image.deleteImage(id).then(res => {
         this.$notify.success({
-          title: '成功',
-          message: '删除成功',
-          duration: 2000
+          message: '删除成功'
         })
         this.imageList.splice(idx, 1)
+        this.page_num = Math.ceil(this.imageList.length / this.page_size)
       }).catch(err => {
         console.log(err)
         this.$notify.error({
-          title: '失败',
-          message: '删除失败',
-          duration: 2000
+          message: '删除失败'
         })
       })
     },
     putImage (data) {
       this.imageList.push(data)
     },
+    toProject (data) {
+      console.log(data)
+      this.$router.push({
+        name: 'Project',
+        params: { id: data.id }
+      })
+    },
     upload () {
-      this.$refs.dialog.dialog = true
+      this.$refs.dialog.init()
     },
     postProject (id) {
       var data = {
@@ -162,6 +173,9 @@ export default {
           message: '创建失败'
         })
       })
+    },
+    create (id) {
+      this.$refs.create.init(id)
     }
   },
   mounted () {
@@ -170,7 +184,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .up{
   text-align: center;
   margin: 50px 0 20px 0 ;
@@ -181,11 +195,15 @@ export default {
   padding: 0px !important;
 }
 .main {
-  margin: 0 auto;
+  margin: 20px auto;
   width: 95%;
   background-color: whitesmoke;
 }
-
+.no-image{
+    font-size: 22px;
+  text-align: center;
+  margin: 95px;
+}
 .title {
   text-align: left;
   font-size: 30px;
@@ -207,6 +225,7 @@ export default {
   flex-wrap: wrap;
   margin-top: 30px;
   margin: 0 auto;
+  min-height: 300px;
 }
 
 .image {

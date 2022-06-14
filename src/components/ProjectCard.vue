@@ -26,7 +26,7 @@
           <el-button type="primary" icon="el-icon-success" size="medium">恢复</el-button>
         </div>
 
-        <div v-if="project.status === 'delete' " style="rab" @click="projectRecovery(project.id)">
+        <div v-if="project.status === 'delete' " style="rab" @click="entireDelete(project.id)">
           <el-button type="danger" icon="el-icon-delete" size="medium">彻底删除</el-button>
         </div>
 
@@ -116,15 +116,16 @@ export default {
   display: flex;
   /* justify-content: flex-start; */
   min-height: 140px;
-  border-bottom: 1px solid grey;
   padding-top: 10px;
   padding-right: 10px;
   justify-content: space-between;
+  background-color: #fff;
+  box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1);
 }
 
 .container:hover {
   cursor: pointer;
-  background-color: ivory;
+  background-color: #ecf5ff
 }
 
 .left {

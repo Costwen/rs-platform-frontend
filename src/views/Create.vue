@@ -2,7 +2,7 @@
   <div class="el-main" >
     <div class="questionnaire" direction="vertical">
       <div>
-        <v-app style="width: 10%;float: right">
+        <div style="width: 10%;float: right">
           <v-btn
             class="white-space"
             color="primary"
@@ -10,17 +10,15 @@
             elevation="2"
             @click="back()"
           ><v-icon small>mdi-arrow-left</v-icon>    返回</v-btn>
-        </v-app>
+        </div>
         <h2 class="title" style="min-width: 800px; text-align: left">创建项目</h2>
-        <v-app>
-          <v-container style="margin: 40px auto">
-            <v-row justify="center">
-              <template v-for="(item, index) in type">
-                <v-col cols="auto" :key="index">
-                  <v-card
-                    class="mx-auto"
-                    min-width="200px"
+          <div class="contain">
+                  <div
+                  v-for="(item, index) in type"
+                  :key="index"
+                  class="mx-auto"
                   >
+                  <v-card>
                     <v-img class="img"
                            :src="item.src"
                            max-height="120px"
@@ -38,48 +36,43 @@
                       <v-btn
                         color="#3F87DA"
                         text
-                        @click="Create(item)"
+                        @click="create(item)"
                       >
                         create
                       </v-btn>
                       <v-spacer></v-spacer>
-<!--                      <v-btn-->
-<!--                        icon-->
-<!--                        @click="item.show = !item.show"-->
-<!--                      >-->
-<!--                        <v-icon>{{ item.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
-<!--                      </v-btn>-->
+                      <v-btn
+                        icon
+                        @click="change(item)"
+                      >
+                        <v-icon>{{ item.show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                      </v-btn>
                     </v-card-actions>
+
                     <v-expand-transition>
-                      <div v-show="item.show">
-                        <v-divider></v-divider>
-                        <v-card-text>
-                          {{ item.content }}
-                        </v-card-text>
-                      </div>
-                    </v-expand-transition>
+                          <div v-show="item.show">
+                            <v-divider></v-divider>
+
+                            <v-card-text>
+                              {{ item.content }}
+                            </v-card-text>
+                          </div>
+                        </v-expand-transition>
                   </v-card>
-                </v-col>
-                <!--            <v-responsive-->
-                <!--                v-if="index === 2"-->
-                <!--                :key="`width-${index}`"-->
-                <!--                width="100%"-->
-                <!--            ></v-responsive>-->
-              </template>
-            </v-row>
-          </v-container>
-        </v-app>
+                  </div>
+          </div>
       </div>
     </div>
+      <creat-project-dialog ref="create" @upload="toProject"></creat-project-dialog>
   </div>
+
 </template>
 
 <script>
-// import axios from 'axios'
-// import authorization from '../utils/authorization'
-// import { Base64 } from 'js-base64'
-// import Header from '@/components/Header'
+import CreatProjectDialog from '../components/CreatProjectDialog.vue'
+
 export default {
+  components: { CreatProjectDialog },
   data () {
     return {
       type: [
@@ -123,8 +116,17 @@ export default {
     back () {
       this.$router.push({ path: '/home' })
     },
-    Create (item) {
-      this.$router.push({ path: '/project' })
+    create (item) {
+      this.$refs.create.init(item)
+    },
+    change (item) {
+      item.show = !item.show
+    },
+    toProject (data) {
+      this.$router.push({
+        name: 'Project',
+        params: { id: data.id }
+      })
     }
   },
   mounted () {
@@ -151,8 +153,13 @@ export default {
   margin:auto !important;
   /*padding: 30px 0 !important;*/
 }
+.contain{
+  display: flex;
+}
 .mx-auto{
   padding-top: 20px;
+  margin: 5px;
+  width: 220px;
 }
 .white-space {
   white-space:pre
@@ -189,10 +196,4 @@ export default {
   font-size: 12px;
 }
 
-</style>
-
-<style>
-.v-application--wrap {
-  min-height: 0 !important;
-}
 </style>

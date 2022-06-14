@@ -6,7 +6,7 @@
     >
       <v-card>
         <v-card-title class="text-h5 title">
-          上传文件
+          创建项目
             <v-icon right @click="close">
                 mdi-close
             </v-icon>
@@ -14,14 +14,11 @@
 
         <v-card-text class="contain">
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px">
+            <el-form-item label="项目类型" prop="type">
+              <el-input type="text" v-model="ruleForm.type" autocomplete="off" disabled></el-input>
+            </el-form-item>
             <el-form-item label="名称" prop="name">
                 <el-input type="text" v-model="ruleForm.name" autocomplete="off" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="文件" prop="file">
-                  <v-file-input
-                    accept="image/png, image/jpeg, image/bmp"
-                    v-model="ruleForm.file"
-                    ></v-file-input>
             </el-form-item>
             </el-form>
         </v-card-text>
@@ -38,7 +35,7 @@
             <v-icon>
                 mdi-upload
             </v-icon>
-            上传服务器
+            确认
             </v-btn>
 
         </v-card-actions>
@@ -48,7 +45,14 @@
 </template>
 
 <script>
+var name = {
+  目标检测: 'detection',
+  目标提取: 'retrieval',
+  地物分类: 'sort',
+  变化检测: 'contrast'
+}
 export default {
+
   data () {
     var checkName = (rule, value, callback) => {
       if (!value) {
@@ -56,60 +60,48 @@ export default {
       }
       return callback()
     }
-    var checkFile = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('文件不能为空'))
-      }
-
-      return callback()
-    }
     return {
       ruleForm: {
         name: '',
-        file: null
+        type: ''
       },
       rules: {
         name: [
           { validator: checkName, trigger: 'blur' }
-        ],
-        file: [
-          {
-            validator: checkFile, trigger: 'blur'
-          }
         ]
       },
       dialog: false
     }
   },
   methods: {
-    init () {
+    init (item) {
+      this.ruleForm.type = item.title
       this.ruleForm.name = ''
-      this.ruleForm.file = null
       this.dialog = true
     },
     close () {
       this.dialog = false
-      this.$refs.ruleForm.resetFields()
+      this.ruleForm.name = ''
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var form = new FormData()
-          form.append('name', this.ruleForm.name)
-          form.append('file', this.ruleForm.file)
-          this.$api.image.putImage(form).then(res => {
+          var data = {
+            name: this.ruleForm.name,
+            type: name[this.ruleForm.type]
+          }
+          console.log(data)
+          this.$api.project.postProject(data).then(res => {
             this.$notify.success({
-              message: '上传成功'
+              message: '创建成功'
             })
-            this.close()
+            this.dialog = false
             this.$emit('upload', res.data)
           }).catch(
             err => {
-              this.$notify({
-                title: '错误',
-                message: err.message,
-                type: 'error',
-                duration: 2000
+              console.log(err)
+              this.$notify.error({
+                message: '创建失败'
               })
             })
         } else {
@@ -118,8 +110,7 @@ export default {
       })
     },
     resetForm (formName) {
-      console.log(this.ruleForm)
-    //   this.$refs[formName].resetFields()
+      this.$refs[formName].resetFields()
     }
   }
 }
