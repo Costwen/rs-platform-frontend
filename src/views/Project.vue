@@ -66,7 +66,7 @@
         <i :class="leftshow ? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
       </div>
       <el-main v-loading="!midshow">
-        <map-card ref="map" class="mid" />
+        <map-card ref="map" @addTask="addTask" class="mid" />
       </el-main>
 
       <div @click="rightdisappear" class="button-right">
@@ -82,6 +82,7 @@
         <div class="no-task" v-if="project.tasks.length===0">
           暂无任务
         </div>
+        <el-main class="detail">
         <div v-for="(item, index) in project.tasks" :key="index">
           <div class="task">
           <div class="task-id">
@@ -101,10 +102,13 @@
               @change="setVisible(index)">
           </el-switch>
         </div>
+        </el-main>
         </div>
+
         <div class="right-bottom">
           <v-btn class="submit" color="primary" @click="submit">提交任务</v-btn>
         </div>
+
       </el-aside>
     </el-container>
     <choose-dialog ref="choose" @save="refresh"></choose-dialog>
@@ -128,10 +132,56 @@ export default {
       mode: null,
       fileList: [],
       url: null,
-      visible: []
+      visible: [],
+      websocket: null
     }
   },
   methods: {
+    initWebSocket () {
+    // 初始化websocket
+    // var wsuri = "ws://127.0.0.1:8080";
+      var wsScheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
+      var wsOnLine = wsScheme + '://' + window.location.host + '/ws/chat/'
+      var token = localStorage.getItem('access')
+      wsOnLine = wsOnLine + '?token=' + token
+      // var ws_scheme = window.location.protocol==="https:"?"wss":"ws"
+      this.websock = new WebSocket(wsOnLine)
+      this.websock.onopen = this.websocketonopen
+      this.websock.onmessage = this.websocketonmessage
+      this.websock.onerror = this.websocketonerror
+      this.websock.onclose = this.websocketclose
+    },
+    websocketonopen () {
+    // 连接建立之后执行send方法发送数据
+      console.log('建立连接')
+      var actions = {
+        message: '连接测试'
+      }
+      this.websocketsend(JSON.stringify(actions))
+    },
+    websocketonerror (e) {
+      this.initWebSocket()
+    },
+    websocketonmessage (e) {
+      var data = JSON.parse(e.data)
+      var i
+      for (i = 0; i < this.project.tasks.length; i++) {
+        if (this.project.tasks[i].id === data.id) {
+          this.project.tasks[i].status = 'finished'
+          break
+        }
+      }
+      this.$notify.success({
+        message: '任务' + (i + 1) + '完成'
+      })
+    },
+    websocketsend (Data) {
+      this.websock.send(Data)
+    },
+    websocketclose (e) { // 关闭
+      console.log('断开连接', e)
+    },
+
     leftdisappear () {
       this.leftshow = !this.leftshow
       this.$nextTick(() => {
@@ -175,6 +225,13 @@ export default {
       // 重新刷新页面
       window.location.reload()
     },
+    addTask (data) {
+      var task = {
+        id: data.id,
+        status: 'pending'
+      }
+      this.project.tasks.push(task)
+    },
     submit () {
       this.$refs.map.submit(this.$route.params.id)
     }
@@ -191,6 +248,7 @@ export default {
         this.visible.push(true)
       }
     })
+    this.initWebSocket()
   }
 }
 </script>
@@ -221,6 +279,11 @@ export default {
   background: #2f3238;
   color: aliceblue;
   align-items: center;
+}
+.detail{
+  display: flex;
+  flex-direction: column;
+  max-height: 550px;
 }
 .no-task{
   text-align: center;

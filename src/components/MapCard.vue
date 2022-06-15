@@ -56,6 +56,7 @@ export default {
       }
       this.$api.task.postTask(data).then(res => {
         this.$notify.success('提交成功')
+        this.$emit('addTask', res.data)
       }).catch(_ => {
         this.$notify.error('提交失败')
       })
