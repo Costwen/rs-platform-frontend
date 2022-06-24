@@ -144,9 +144,9 @@ export default {
       this.layers['mask' + idx].setVisible(visible)
     },
     mapInit (project, mode) {
+      if (!project) return
       var image = project.imageA
       const extent = [0, 0, image.H, image.W]
-      console.log(project)
       const projection = new Projection({
         code: 'xkcd-image',
         units: 'pixels',
@@ -161,10 +161,14 @@ export default {
       for (var i = 0; i < project.tasks.length; i++) {
         this.task_image_list.push(project.tasks[i].mask.url)
         var coordinate = project.tasks[i].coordinate
-        var tl = [coordinate.tl[0], coordinate.tl[1]]
-        var br = [coordinate.br[0], coordinate.br[1]]
-        var _extent = [tl[0], tl[1], br[0], br[1]]
-        this.task_image_extent.push(_extent)
+        if (coordinate) {
+          var tl = [coordinate.tl[0], coordinate.tl[1]]
+          var br = [coordinate.br[0], coordinate.br[1]]
+          var _extent = [tl[0], tl[1], br[0], br[1]]
+          this.task_image_extent.push(_extent)
+        } else {
+          this.task_image_extent.push(extent)
+        }
       }
       this.map = new Map({
         target: 'map',

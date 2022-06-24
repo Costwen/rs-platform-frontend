@@ -48,8 +48,9 @@
       <v-card class="image"  v-for="item, idx in imageList.slice(page_size*(page-1), page_size*page)" :key="item.id" >
       <div class="image-item">
           <el-image
-            :src="item.url"
+            :src="thumbnail(item.url)"
             :preview-src-list="srcList.slice(page_size*(page-1), page_size*page)">
+            {{thumbnail(item.url)}}
           </el-image>
       </div>
         <v-card-title>
@@ -121,6 +122,9 @@ export default {
     }
   },
   methods: {
+    thumbnail (url) {
+      return url.replace('/images/', '/thumbnail/images/')
+    },
     getImages () {
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images

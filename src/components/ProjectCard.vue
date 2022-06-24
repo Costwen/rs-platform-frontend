@@ -3,7 +3,7 @@
   <div>
     <div class="container" >
       <div class="left">
-          <img :src="project.imageA.url" alt="" class="project_image" />
+          <img :src="thumbnail(project.imageA.url)" alt="" class="project_image" />
       </div>
 
       <div class="middle">
@@ -50,6 +50,9 @@ export default {
     }
   },
   methods: {
+    thumbnail (url) {
+      return url.replace('/images/', '/thumbnail/images/')
+    },
     projectEdit (id) {
       this.$router.push({
         name: 'Project',

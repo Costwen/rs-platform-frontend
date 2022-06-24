@@ -45,28 +45,52 @@
       <div class="data" v-if="project">
         <span class="left-title">图片信息</span>
         <v-divider class="divider"></v-divider>
+        <div class="little-title">
+          图片A
+        </div>
         <v-card class="left-image">
           <v-img
-          width="300px"
-          height="200px"
-          :src="project.imageA.url"
+          width="250px"
+          :height="getHeight()"
+          :src="thumbnail(project.imageA.url)"
           ></v-img>
         </v-card>
         <div class="subtitle">
           <span>图像尺寸: &nbsp;</span>
           <span>H: {{project.imageA.H}}&nbsp; W: {{project.imageA.W}} </span>
         </div>
+        <div v-if="mode==='contrast'">
+          <v-card class="left-image">
+            <div class="little-title">
+              图片B
+            </div>
+              <v-img
+              width="250px"
+              height="150px"
+              :src="thumbnail(project.imageB.url)"
+              ></v-img>
+            </v-card>
+            <div class="subtitle">
+              <span>图像尺寸: &nbsp;</span>
+              <span>H: {{project.imageB.H}}&nbsp; W: {{project.imageB.W}} </span>
+            </div>
+        </div>
       </div>
         </div>
-      <div class="left-bottom">
-        <v-btn class="choose" color="primary" @click="choose">选择图像</v-btn>
+      <div class="left-bottom" v-if="mode !=='contrast'">
+        <v-btn class="choose" color="primary" @click="choose('A')">选择图像</v-btn>
+      </div>
+      <div class="left-bottom2" v-else>
+        <v-btn class="choose2" color="primary" @click="choose('A')">选择图像A</v-btn>
+        <v-btn class="choose2" color="primary" @click="choose('B')">选择图像B</v-btn>
       </div>
       </el-aside>
       <div @click="leftdisappear" class="button-left">
         <i :class="leftshow ? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
       </div>
       <el-main v-loading="!midshow">
-        <map-card ref="map" @addTask="addTask" class="mid" />
+        <double-map-card ref="doublemap" class="mid" v-if="mode==='contrast'"></double-map-card>
+        <map-card ref="map" @addTask="addTask" class="mid" v-else/>
       </el-main>
 
       <div @click="rightdisappear" class="button-right">
@@ -97,10 +121,21 @@
             </span>
           </div>
           </div>
+          <div>
+              <v-img
+              class="image"
+                :src="thumbnail(item.mask.url)"
+                >
               <el-switch
+              class="switch"
+              active-color="#1976d2"
+              v-show="item.status!=='pending'"
               v-model="visible[index]"
               @change="setVisible(index)">
           </el-switch>
+                </v-img>
+
+          </div>
         </div>
         </el-main>
         </div>
@@ -115,13 +150,15 @@
   </el-container>
 </template>
 <script>
+import DoubleMapCard from '../components/DoubleMapCard.vue'
 import ChooseDialog from '../components/ChooseDialog.vue'
 import MapCard from '../components/MapCard.vue'
 export default {
   name: 'Project',
   components: {
     MapCard,
-    ChooseDialog
+    ChooseDialog,
+    DoubleMapCard
   },
   data () {
     return {
@@ -137,6 +174,19 @@ export default {
     }
   },
   methods: {
+    thumbnail (url) {
+      if (!url) {
+        return ''
+      }
+      return url.replace('/images/', '/thumbnail/images/')
+    },
+    getHeight () {
+      console.log(this.project.type)
+      if (this.project.type === 'contrast') {
+        return '150px'
+      }
+      return '200px'
+    },
     initWebSocket () {
     // 初始化websocket
     // var wsuri = "ws://127.0.0.1:8080";
@@ -185,17 +235,27 @@ export default {
     leftdisappear () {
       this.leftshow = !this.leftshow
       this.$nextTick(() => {
-        this.$refs.map.map.updateSize()
+        if (this.mode === 'contrast') {
+          this.$refs.doublemap.map.map1.updateSize()
+          this.$refs.doublemap.map.map2.updateSize()
+        } else {
+          this.$refs.map.map.updateSize()
+        }
       })
     },
     rightdisappear () {
       this.rightshow = !this.rightshow
       this.$nextTick(() => {
-        this.$refs.map.map.updateSize()
+        if (this.mode === 'contrast') {
+          this.$refs.doublemap.map.map1.updateSize()
+          this.$refs.doublemap.map.map2.updateSize()
+        } else {
+          this.$refs.map.map.updateSize()
+        }
       })
     },
-    choose () {
-      this.$refs.choose.init()
+    choose (type) {
+      this.$refs.choose.init(type)
     },
     back () {
       this.$router.push('/home')
@@ -243,12 +303,19 @@ export default {
       var project = res.data.project
       this.project = project
       this.midshow = true
-      this.$refs.map.mapInit(project, 'move')
-      for (var i = 0; i < project.tasks.length; i++) {
-        this.visible.push(true)
+      if (project.type === 'contrast') {
+        this.mode = 'contrast'
+        this.$nextTick(() => {
+          this.$refs.doublemap.init(project)
+        })
+      } else {
+        this.$refs.map.mapInit(project, 'move')
+        for (var i = 0; i < project.tasks.length; i++) {
+          this.visible.push(true)
+        }
       }
     })
-    this.initWebSocket()
+    // this.initWebSocket()
   }
 }
 </script>
@@ -265,11 +332,17 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
 }
 .divider{
-  margin: 20px 0 20px 0;
+  margin: 10px 0 10px 0;
   border-color: skyblue;
 }
 .task{
   margin: 20px 0 20px 0;
+}
+.little-title{
+  position: absolute;
+  z-index: 1;
+  font-size: 20pt;
+  margin: 10px;
 }
 .header {
   display: flex;
@@ -301,7 +374,7 @@ export default {
   border-radius: 8px;
 }
 .left {
-  width: 200px;
+  width: 280px !important;
   background-color: #2f3238;
   justify-content: space-between;
   display: flex;
@@ -309,6 +382,10 @@ export default {
 }
 .choose{
   width: 200px;
+}
+.choose2{
+  width: 100px;
+  margin: 10px;
 }
 .left-bottom{
   align-self: center;
@@ -391,5 +468,17 @@ export default {
 .el-icon-back {
   font-size: 20px;
   cursor: pointer;
+}
+.image{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(66, 62, 62);
+}
+.switch{
+  float: left;
+}
+.left-bottom2{
+  align-self: center;
+  margin-bottom: 15px;
 }
 </style>

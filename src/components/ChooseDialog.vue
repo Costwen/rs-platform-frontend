@@ -6,7 +6,7 @@
     >
       <v-card>
         <v-card-title class="text-h5 title">
-          选择图像
+          选择图像{{mode}}
             <v-icon right @click="close">
                 mdi-close
             </v-icon>
@@ -106,7 +106,8 @@ export default {
       dialog: false,
       show: true,
       radio: null,
-      srcList: []
+      srcList: [],
+      mode: ''
     }
   },
   methods: {
@@ -122,8 +123,15 @@ export default {
         })
         return
       }
-      var data = {
-        imageA: this.radio
+      var data
+      if (this.mode === 'B') {
+        data = {
+          imageB: this.radio
+        }
+      } else {
+        data = {
+          imageA: this.radio
+        }
       }
       var id = this.$route.params.id
       this.$api.project.putProject(id, data).then(res => {
@@ -143,7 +151,8 @@ export default {
       console.log(url)
       this.dialog = true
     },
-    init () {
+    init (mode) {
+      this.mode = mode
       this.dialog = true
       this.$api.image.getImages().then(res => {
         this.imageList = res.data.images

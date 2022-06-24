@@ -11,7 +11,7 @@
 
 <script>
 
-import BeforeAfterSlider from '../components/BeforeAfterSlider.vue'
+import BeforeAfterSlider from '../components/DoubleMapCard.vue'
 import UploadPics from '../components/UploadPics.vue'
 
 export default {
