@@ -3,13 +3,12 @@
     <div class="contain">
       <div id="map" class="map">
         <div class="ol-mouse-position">
-        <span> 经度: {{ lon }}</span>
-        <span> 维度: {{ lat }}</span>
+        <span> X: {{ lon }}</span>
+        <span> Y: {{ lat }}</span>
         </div>
       </div>
     </div>
     <div id="popup" class="ol-popup" v-show="map">
-       <div id="popup-content" class="popup-content"></div>
       <div id="popup-closer" class="ol-popup-closer">
         <el-button size="small" type="primary">取消</el-button>
       </div>

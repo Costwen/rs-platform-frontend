@@ -45,7 +45,7 @@
       <div class="data" v-if="project">
         <span class="left-title">图片信息</span>
         <v-divider class="divider"></v-divider>
-        <div class="little-title">
+        <div class="little-title" v-if="mode==='contrast'">
           图片A
         </div>
         <v-card class="left-image">
@@ -315,7 +315,7 @@ export default {
         }
       }
     })
-    // this.initWebSocket()
+    this.initWebSocket()
   }
 }
 </script>

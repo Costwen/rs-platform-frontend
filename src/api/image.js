@@ -1,8 +1,10 @@
 import axios from 'axios'
 
 export default {
-  async getImages () {
-    return axios.get('/api/image/')
+  async getImages (query) {
+    return axios.get('/api/image/', {
+      params: query
+    })
   },
   async postImage (form) {
     return axios.post('/api/image/', form)

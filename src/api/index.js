@@ -8,6 +8,7 @@ import image from './image'
 import task from './task'
 
 axios.interceptors.request.use(function (config) {
+  config.headers.common['Access-Control-Allow-Origin'] = '*'
   if (localStorage.getItem('access')) {
     const token = localStorage.getItem('access')
     if (!config.headers) {

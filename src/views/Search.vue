@@ -4,7 +4,7 @@
   <el-container class="contain">
         <el-container v-loading="is_loading">
             <el-card class="card">
-                <el-form ref="form" :model="center" label-width="50px" class="form">
+                <el-form ref="form" :model="center" label-width="60px" class="form">
                     <el-form-item label="经度" prop="longitude" :rules="[
                     { required: true, message: '请输入经度' },
                     { pattern: /^[-\+]?\d+(\.\d+)?$/, message: '请输入正确的经度' },
@@ -20,7 +20,10 @@
                         <el-input v-model="center.latitude" placeholder="请输入纬度"></el-input>
                     </el-form-item>
                 </el-form>
+                <div class="bottom">
+                <div class="text">数据来源: 高德地图</div>
                 <el-button @click="search" type="primary" >搜索</el-button>
+                </div>
             </el-card>
             <div id="map" class="map">
 
@@ -37,6 +40,7 @@
                 </div>
 
             </div>
+            <image-name-dialog ref="dialog"></image-name-dialog>
     </el-container>
   </div>
 </template>
@@ -53,8 +57,9 @@ import Draw, {
 } from 'ol/interaction/Draw'
 import TileDebug from 'ol/source/TileDebug'
 import ProjectHeader from '../components/ProjectHeader.vue'
+import ImageNameDialog from '../components/ImageNameDialog.vue'
 export default {
-  components: { ProjectHeader },
+  components: { ProjectHeader, ImageNameDialog },
   data () {
     return {
       view: null,
@@ -108,14 +113,7 @@ export default {
       })
     },
     uploadCoordinate () {
-      var data = new FormData()
-      data.append('coordinate', JSON.stringify(this.coordinate))
-      this.$api.image.postImage(data).then(res => {
-        this.$notify.success('上传成功')
-      }).catch(err => {
-        console.log(err)
-        this.$notify.error('上传失败')
-      })
+      this.$refs.dialog.init(JSON.stringify(this.coordinate))
     },
     popUpInit () {
       // 获取到弹框的节点DOM
@@ -313,5 +311,15 @@ export default {
     margin-left: 10px;
     background-color: rgba(255, 255, 255, 0.95);
     width: 300px;
+}
+.bottom{
+  display: flex;
+  justify-content: space-between;
+  text-align: center  ;
+}
+.text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
