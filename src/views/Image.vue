@@ -317,8 +317,8 @@ export default {
 }
 .image-item{
   display: flex;
-  height: 168px;
-  margin: 10px;
+  height: 165px;
+  margin: 5px;
   border: 1.5px solid rgb(126, 12, 12);
   padding: 2px;
   justify-content: center;

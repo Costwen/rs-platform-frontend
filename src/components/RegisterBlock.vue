@@ -58,7 +58,7 @@ export default {
       }
     }
     return {
-      bg: require('../assets/logo.png'),
+      bg: require('../assets/logo3.png'),
       form: {
         user: '',
         pass: '',
@@ -127,7 +127,7 @@ h2{
 }
 
 h2>figure{
-  background-image: url("../assets/logo.png");
+  background-image: url("../assets/logo3.png");
   height: 130px;
   background-size: 220px;
   background-position: center;

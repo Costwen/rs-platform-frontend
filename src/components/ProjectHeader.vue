@@ -1,7 +1,7 @@
 <template>
   <div class="header" v-if="pathMatch">
     <div class="left">
-        <img src="../assets/logo2.png" class="logo" @click="toHome"/>
+        <img src="../assets/logo3.png" class="logo" @click="toHome"/>
       <v-tabs v-model="tab" @change="change" class="item">
       <v-tab>
           我的项目
@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       tab: 0,
-      bg: require('../assets/logo2.png'),
+      bg: require('../assets/logo3.png'),
       activeIndex: 1,
       hasLogin: false,
       username: 'admin',
@@ -113,9 +113,10 @@ export default {
 }
 .logo{
   margin-right: 20px;
+  cursor: pointer;
 }
 .left{
-  margin-left: 50px;
+  margin-left: 20px;
   display: flex;
 }
 .user{

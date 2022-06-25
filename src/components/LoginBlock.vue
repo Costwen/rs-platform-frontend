@@ -45,7 +45,7 @@ export default {
       }
     }
     return {
-      bg: require('../assets/logo.png'),
+      bg: require('../assets/logo3.png'),
       form: {
         username: '',
         password: ''

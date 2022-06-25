@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="left">
-        <img src="../assets/logo2.png" class="logo" @click="toHome"/>
+        <img src="../assets/logo3.png" class="logo" @click="toHome"/>
     </div>
       <div class="user">
         <span>
@@ -17,7 +17,7 @@ export default {
   data () {
     return {
       tab: 0,
-      bg: require('../assets/logo2.png')
+      bg: require('../assets/logo3.png')
     }
   },
   methods: {
@@ -42,9 +42,10 @@ export default {
 }
 .logo{
   margin-right: 20px;
+  cursor: pointer;
 }
 .left{
-  margin-left: 50px;
+  margin-left: 20px;
   display: flex;
 }
 .user{

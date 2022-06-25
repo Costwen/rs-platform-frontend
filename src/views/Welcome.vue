@@ -2,7 +2,7 @@
   <div>
       <div class="header">
         <div class="left">
-            <img src="../assets/logo2.png" class="logo" @click="toHome"/>
+            <img src="../assets/logo3.png" class="logo" @click="toHome"/>
         </div>
           <div class="right">
               <span class="item" @click="toLogin">现在开始</span>
@@ -247,9 +247,10 @@ export default {
 }
 .logo{
   margin-right: 20px;
+  cursor: pointer;
 }
 .left{
-  margin-left: 50px;
+  margin-left: 20px;
   display: flex;
 }
 .right{
