@@ -179,7 +179,9 @@ export default {
   padding: 0px !important;
   /* background-color: antiquewhite; */
 }
-
+.el-main{
+  padding-top: 0;
+}
 .main {
   width: calc(100% - 300px);
   height: 100%;

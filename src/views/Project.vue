@@ -78,7 +78,7 @@
       </div>
         </div>
       <div class="left-bottom" v-if="mode !=='contrast'">
-        <v-btn class="choose" color="primary" @click="choose('A')">选择图像</v-btn>
+        <v-btn class="choose" color="primary" @click="choose()">选择图像</v-btn>
       </div>
       <div class="left-bottom2" v-else>
         <v-btn class="choose2" color="primary" @click="choose('A')">选择图像A</v-btn>

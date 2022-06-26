@@ -13,7 +13,7 @@
         </v-card-title>
         <el-container>
             <el-aside class="aside">
-          <v-tabs vertical>
+<v-tabs vertical @change="change">
           <v-tab>
             <v-icon left>
               mdi-account
@@ -63,7 +63,7 @@
                 width="180">
                  <template slot-scope="scope">
                   <el-image
-                      :src="scope.row.url"
+                      :src="thumbnail(scope.row.url)"
                       class="image-item"
                     >
                     </el-image>
@@ -116,6 +116,31 @@ export default {
       this.dialog = false
       this.radio = null
     },
+    change (type) {
+      this.show = true
+      switch (type) {
+        case 0:
+          this.getImages({
+            type: 'all'
+          })
+          break
+        case 1:
+          this.getImages({
+            type: 'public'
+          })
+          break
+        case 2:
+          this.getImages({
+            type: 'custom'
+          })
+          break
+        case 3:
+          this.getImages({
+            type: 'mask'
+          })
+          break
+      }
+    },
     save () {
       if (!this.radio) {
         this.$notify.error({
@@ -147,6 +172,12 @@ export default {
         })
       })
     },
+    thumbnail (url) {
+      if (!url) {
+        return ''
+      }
+      return url.replace('/images/', '/thumbnail/images/')
+    },
     chooseImage (url) {
       console.log(url)
       this.dialog = true
@@ -154,7 +185,12 @@ export default {
     init (mode) {
       this.mode = mode
       this.dialog = true
-      this.$api.image.getImages().then(res => {
+      this.getImages({
+        type: 'all'
+      })
+    },
+    getImages (query) {
+      this.$api.image.getImages(query).then(res => {
         this.imageList = res.data.images
         this.show = false
       })
