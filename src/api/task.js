@@ -9,5 +9,8 @@ export default {
   },
   async postTask (data) {
     return axios.post('/api/task/', data)
+  },
+  async deleteTask (id) {
+    return axios.delete('/api/task/' + id + '/')
   }
 }

@@ -42,9 +42,9 @@ export default {
       source: null,
       coordinate: null,
       overlay: null,
-      task_image_list: [],
-      task_image_extent: [],
-      layers: {}
+      layers: {},
+      projection: null,
+      raw_extent: null
     }
   },
   methods: {
@@ -56,6 +56,9 @@ export default {
       this.$api.task.postTask(data).then(res => {
         this.$notify.success('提交成功')
         this.$emit('addTask', res.data)
+        this.coordinate = null
+        this.overlay.setPosition(null)
+        this.source.clear()
       }).catch(_ => {
         this.$notify.error('提交失败')
       })
@@ -108,8 +111,9 @@ export default {
         var event = e.feature.getGeometry().getExtent()
         const mid = [(event[0] + event[2]) / 2, (event[1] + event[3]) / 2]
         // get tile coordinate for click event
-        var tl = [Math.min(event[0], event[2]), Math.min(event[1], event[3])]
-        var br = [Math.max(event[0], event[2]), Math.max(event[1], event[3])]
+        var maxH = _that.raw_extent[3]
+        var tl = [Math.min(event[0], event[2]), Math.min(maxH - event[1], maxH - event[3])]
+        var br = [Math.max(event[0], event[2]), Math.max(maxH - event[1], maxH - event[3])]
         var coordinate = {
           tl: tl,
           br: br
@@ -126,6 +130,7 @@ export default {
       this.map.on('pointermove', (e) => {
       // 获取瓦片坐标)
         var lonlat = this.map.getCoordinateFromPixel(e.pixel)
+        lonlat[1] = this.raw_extent[3] - lonlat[1]
         this.lon = lonlat[0].toFixed(6)
         this.lat = lonlat[1].toFixed(6)
       })
@@ -139,36 +144,48 @@ export default {
       this.source = source
       this.addInteraction()
     },
-    setVisibility (idx, visible) {
-      this.layers['mask' + idx].setVisible(visible)
+    setVisibility (task, visible) {
+      this.layers['mask' + task.id].setVisible(visible)
+    },
+    addLayer (task) {
+      var coordinate = task.coordinate
+      var extent = this.raw_extent
+      if (coordinate) {
+        var maxH = extent[3]
+        var tl = [coordinate.tl[0], maxH - coordinate.br[1]]
+        var br = [coordinate.br[0], maxH - coordinate.tl[1]]
+        extent = [tl[0], tl[1], br[0], br[1]]
+      }
+      this.layers['mask' + task.id] = new ImageLayer({
+        source: new Static({
+          url: task.mask.url,
+          projection: this.projection,
+          imageExtent: extent
+        }),
+        opacity: 0.5
+      })
+      this.map.addLayer(this.layers['mask' + task.id])
+    },
+    removeLayer (task) {
+      this.map.removeLayer(this.layers['mask' + task.id])
     },
     mapInit (project, mode) {
       if (!project) return
       var image = project.imageA
       const extent = [0, 0, image.H, image.W]
+      this.raw_extent = extent
       const projection = new Projection({
         code: 'xkcd-image',
         units: 'pixels',
         extent: extent
       })
+      this.projection = projection
       var view = new View({
         projection: projection,
         center: getCenter(extent),
         zoom: 2,
         maxZoom: 8
       })
-      for (var i = 0; i < project.tasks.length; i++) {
-        this.task_image_list.push(project.tasks[i].mask.url)
-        var coordinate = project.tasks[i].coordinate
-        if (coordinate) {
-          var tl = [coordinate.tl[0], coordinate.tl[1]]
-          var br = [coordinate.br[0], coordinate.br[1]]
-          var _extent = [tl[0], tl[1], br[0], br[1]]
-          this.task_image_extent.push(_extent)
-        } else {
-          this.task_image_extent.push(extent)
-        }
-      }
       this.map = new Map({
         target: 'map',
         view: view
@@ -180,16 +197,8 @@ export default {
           imageExtent: extent
         })
       }))
-      for (i = 0; i < this.task_image_list.length; i++) {
-        this.layers['mask' + i] = new ImageLayer({
-          source: new Static({
-            url: this.task_image_list[i],
-            projection: projection,
-            imageExtent: this.task_image_extent[i]
-          }),
-          opacity: 0.5
-        })
-        this.map.addLayer(this.layers['mask' + i])
+      for (var i = 0; i < project.tasks.length; i++) {
+        this.addLayer(project.tasks[i])
       }
       // 是否能够裁剪
       if (mode === 'move') {

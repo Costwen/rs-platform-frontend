@@ -20,12 +20,13 @@ module.exports = {
       '/ws': {
         timeout: 60000,
         changeOrigin: true,
-        target: 'ws://127.0.0.1:8000/',
+        target: 'http://101.43.134.156:80/',
         ws: true,
         pathRewrite: {
           '^/ws': '/ws'
         }
       }
+
     }
   }
 }

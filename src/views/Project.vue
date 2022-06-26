@@ -121,7 +121,7 @@
             </span>
           </div>
           </div>
-          <div>
+          <div v-if="item.status !=='pending'">
               <v-img
               class="image"
                 :src="thumbnail(item.mask.url)"
@@ -133,6 +133,10 @@
               v-model="visible[index]"
               @change="setVisible(index)">
           </el-switch>
+          <v-icon class="delete" @click="removeTask(index)">
+            <!-- mdiTrashCanOutline -->
+            mdi-trash-can-outline
+          </v-icon>
                 </v-img>
 
           </div>
@@ -217,7 +221,12 @@ export default {
       var i
       for (i = 0; i < this.project.tasks.length; i++) {
         if (this.project.tasks[i].id === data.id) {
-          this.project.tasks[i].status = 'finished'
+          this.$api.task.getTask(data.id).then(res => {
+            var task = res.data.task
+            this.project.tasks.splice(i, 1, task)
+            this.$refs.map.addLayer(task)
+            this.visible.push(true)
+          })
           break
         }
       }
@@ -271,7 +280,8 @@ export default {
       }
     },
     setVisible (index) {
-      this.$refs.map.setVisibility(index, this.visible[index])
+      var task = this.project.tasks[index]
+      this.$refs.map.setVisibility(task, this.visible[index])
     },
     toTask (item) {
       if (item.status === 'pending') {
@@ -291,6 +301,22 @@ export default {
         status: 'pending'
       }
       this.project.tasks.push(task)
+    },
+    removeTask (index) {
+      var task = this.project.tasks[index]
+      this.$api.task.deleteTask(task.id).then(res => {
+        this.project.tasks.splice(index, 1)
+        this.$refs.map.removeLayer(task)
+        this.visible.splice(index, 1)
+        this.$notify.success({
+          message: '任务删除成功'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          message: '任务删除失败'
+        })
+      })
     },
     submit () {
       this.$refs.map.submit(this.$route.params.id)
@@ -336,7 +362,7 @@ export default {
   border-color: skyblue;
 }
 .task{
-  margin: 20px 0 20px 0;
+  margin: 10px 0 10px 0;
 }
 .little-title{
   position: absolute;
@@ -357,6 +383,21 @@ export default {
   display: flex;
   flex-direction: column;
   max-height: 550px;
+}
+.detail::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+.detail::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+}
+.detail:hover::-webkit-scrollbar-thumb {
+  background: hsla(232, 73%, 84%, 0.4);
+}
+.detail:hover::-webkit-scrollbar-track {
+  background: hsla(209, 82%, 60%, 0.1);
 }
 .no-task{
   text-align: center;
@@ -405,7 +446,6 @@ export default {
   height: 100%;
 }
 .right-data{
-  padding: 10px;
   border: 1px solid skyblue;
   margin: 15px;
   border-radius: 8px;
@@ -470,8 +510,7 @@ export default {
   cursor: pointer;
 }
 .image{
-  width: 100%;
-  height: 100%;
+  margin: 10px;
   background-color: rgb(66, 62, 62);
 }
 .switch{
@@ -480,5 +519,9 @@ export default {
 .left-bottom2{
   align-self: center;
   margin-bottom: 15px;
+}
+.delete{
+  float: right;
+  color: skyblue;
 }
 </style>
