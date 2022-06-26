@@ -133,6 +133,10 @@
               v-model="visible[index]"
               @change="setVisible(index)">
           </el-switch>
+          <v-icon class="information" @click="showDetail(task)">
+            <!-- mdiInformationVariant -->
+            mdi-information-variant
+          </v-icon>
           <v-icon class="delete" @click="removeTask(index)">
             <!-- mdiTrashCanOutline -->
             mdi-trash-can-outline
@@ -320,6 +324,9 @@ export default {
     },
     submit () {
       this.$refs.map.submit(this.$route.params.id)
+    },
+    showDetail (task) {
+
     }
   },
   mounted () {
@@ -521,6 +528,10 @@ export default {
   margin-bottom: 15px;
 }
 .delete{
+  float: left;
+  color: skyblue;
+}
+.information{
   float: right;
   color: skyblue;
 }

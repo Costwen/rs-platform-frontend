@@ -211,6 +211,7 @@ export default {
       const imgLayer = new TileLayer({
         source: new XYZ({
           url: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}&scl=1',
+          // url: 'http://mt2.google.cn/vt/lyrs=s&hl=zh-hk&g0=hk&x={x}&y={y}&z={z}',
           wrapX: true
         })
       })

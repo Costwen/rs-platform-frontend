@@ -3,7 +3,11 @@
   <div>
     <div class="container" >
       <div class="left">
-          <img :src="thumbnail(project.imageA.url)" alt="" class="project_image" />
+          <el-image :src="thumbnail(project.imageA)" alt="" class="project_image">
+          <div slot="error" class="slot">
+              暂未设置图片
+          </div>
+          </el-image>
       </div>
 
       <div class="middle">
@@ -50,8 +54,11 @@ export default {
     }
   },
   methods: {
-    thumbnail (url) {
-      return url.replace('/images/', '/thumbnail/images/')
+    thumbnail (image) {
+      if (!image.url) {
+        return ''
+      }
+      return image.url.replace('/images/', '/thumbnail/images/')
     },
     projectEdit (id) {
       this.$router.push({
@@ -145,6 +152,8 @@ export default {
 .project_image {
   width: 90%;
   margin: 0 auto;
+  text-align: center;
+  font-size: 15pt;
 }
 
 .rab{
@@ -155,5 +164,4 @@ export default {
   width:110px;
   margin: 8px;
 }
-
 </style>

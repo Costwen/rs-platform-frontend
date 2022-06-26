@@ -112,8 +112,21 @@ export default {
         const mid = [(event[0] + event[2]) / 2, (event[1] + event[3]) / 2]
         // get tile coordinate for click event
         var maxH = _that.raw_extent[3]
+        var maxW = _that.raw_extent[2]
         var tl = [Math.min(event[0], event[2]), Math.min(maxH - event[1], maxH - event[3])]
         var br = [Math.max(event[0], event[2]), Math.max(maxH - event[1], maxH - event[3])]
+        if (tl[0] < 0) {
+          tl[0] = 0
+        }
+        if (tl[1] < 0) {
+          tl[1] = 0
+        }
+        if (br[0] > maxW) {
+          br[0] = maxW
+        }
+        if (br[1] > maxH) {
+          br[1] = maxH
+        }
         var coordinate = {
           tl: tl,
           br: br
