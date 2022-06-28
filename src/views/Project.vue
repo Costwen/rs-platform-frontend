@@ -21,76 +21,87 @@
     <el-container>
       <el-aside class="left" v-if="leftshow">
         <div>
-        <div class="data" v-if="project">
-        <span class="left-title">项目信息</span>
-        <v-divider class="divider"></v-divider>
-        <div class="subtitle">
-          <span>项目名称: &nbsp;</span>
-          <span>{{ project.name }}</span>
-        </div>
-        <div class="subtitle">
-          <span>项目种类: &nbsp;</span>
-          <span>{{ project.type }}</span>
-        </div>
-        <div class="subtitle">
-          <span>创建信息: &nbsp;</span>
-          <span>{{ project.create_time }}</span>
-        </div>
-
-        <div class="subtitle">
-          <span>修改时间: &nbsp;</span>
-          <span>{{ project.modify_time }}</span>
-        </div>
-      </div>
-      <div class="data" v-if="project">
-        <span class="left-title">图片信息</span>
-        <v-divider class="divider"></v-divider>
-        <div class="little-title" v-if="mode==='contrast'">
-          图片A
-        </div>
-        <v-card class="left-image">
-          <v-img
-          width="250px"
-          :height="getHeight()"
-          :src="thumbnail(project.imageA.url)"
-          ></v-img>
-        </v-card>
-        <div class="subtitle">
-          <span>图像尺寸: &nbsp;</span>
-          <span>H: {{project.imageA.H}}&nbsp; W: {{project.imageA.W}} </span>
-        </div>
-        <div v-if="mode==='contrast'">
-          <v-card class="left-image">
-            <div class="little-title">
-              图片B
+          <div class="data" v-if="project">
+            <span class="left-title">项目信息</span>
+            <v-divider class="divider"></v-divider>
+            <div class="subtitle">
+              <span>项目名称: &nbsp;</span>
+              <span>{{ project.name }}</span>
             </div>
+            <div class="subtitle">
+              <span>项目种类: &nbsp;</span>
+              <span>{{ project.type }}</span>
+            </div>
+            <div class="subtitle">
+              <span>创建信息: &nbsp;</span>
+              <span>{{ project.create_time }}</span>
+            </div>
+
+            <div class="subtitle">
+              <span>修改时间: &nbsp;</span>
+              <span>{{ project.modify_time }}</span>
+            </div>
+          </div>
+          <div class="data" v-if="project">
+            <span class="left-title">图片信息</span>
+            <v-divider class="divider"></v-divider>
+            <div class="little-title" v-if="mode === 'contrast'">图片A</div>
+            <v-card class="left-image">
               <v-img
-              width="250px"
-              height="150px"
-              :src="thumbnail(project.imageB.url)"
+                width="250px"
+                :height="getHeight()"
+                :src="thumbnail(project.imageA.url)"
               ></v-img>
             </v-card>
             <div class="subtitle">
               <span>图像尺寸: &nbsp;</span>
-              <span>H: {{project.imageB.H}}&nbsp; W: {{project.imageB.W}} </span>
+              <span
+                >H: {{ project.imageA.H }}&nbsp; W: {{ project.imageA.W }}
+              </span>
             </div>
+            <div v-if="mode === 'contrast'">
+              <v-card class="left-image">
+                <div class="little-title">图片B</div>
+                <v-img
+                  width="250px"
+                  height="150px"
+                  :src="thumbnail(project.imageB.url)"
+                ></v-img>
+              </v-card>
+              <div class="subtitle">
+                <span>图像尺寸: &nbsp;</span>
+                <span
+                  >H: {{ project.imageB.H }}&nbsp; W: {{ project.imageB.W }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="left-bottom" v-if="mode !== 'contrast'">
+          <v-btn class="choose" color="primary" @click="choose()"
+            >选择图像</v-btn
+          >
         </div>
-      <div class="left-bottom" v-if="mode !=='contrast'">
-        <v-btn class="choose" color="primary" @click="choose()">选择图像</v-btn>
-      </div>
-      <div class="left-bottom2" v-else>
-        <v-btn class="choose2" color="primary" @click="choose('A')">选择图像A</v-btn>
-        <v-btn class="choose2" color="primary" @click="choose('B')">选择图像B</v-btn>
-      </div>
+        <div class="left-bottom2" v-else>
+          <v-btn class="choose2" color="primary" @click="choose('A')"
+            >选择图像A</v-btn
+          >
+          <v-btn class="choose2" color="primary" @click="choose('B')"
+            >选择图像B</v-btn
+          >
+        </div>
       </el-aside>
       <div @click="leftdisappear" class="button-left">
         <i :class="leftshow ? 'el-icon-caret-left' : 'el-icon-caret-right'"></i>
       </div>
       <el-main v-loading="!midshow">
-        <double-map-card ref="doublemap" class="mid" v-if="mode==='contrast'"></double-map-card>
-        <map-card ref="map" @addTask="addTask" class="mid" v-else/>
+        <double-map-card
+          @addTask="addTask"
+          ref="doublemap"
+          class="mid"
+          v-if="mode === 'contrast'"
+        ></double-map-card>
+        <map-card ref="map" @addTask="addTask" class="mid" v-else />
       </el-main>
 
       <div @click="rightdisappear" class="button-right">
@@ -101,72 +112,75 @@
 
       <el-aside class="right" v-if="rightshow && project">
         <div class="right-data" v-if="project">
-        <span class="right-title">任务信息</span>
-        <v-divider class="divider"></v-divider>
-        <div class="no-task" v-if="project.tasks.length===0">
-          暂无任务
-        </div>
-        <el-main class="detail">
-        <div v-for="(item, index) in project.tasks" :key="index">
-          <div class="task">
-          <div class="task-id">
-            <span>任务序号: &nbsp;</span>
-            <span>{{ index+1 }}</span>
-          </div>
-          <div>
-            <span>任务状态: &nbsp;</span>
-            <span>
-              <i class="el-icon-loading" v-if="item.status==='pending'"></i>
-              <i class="el-icon-check" v-else></i>
-            </span>
-          </div>
-          </div>
-          <div v-if="item.status !=='pending'">
-              <v-img
-              class="image"
-                :src="thumbnail(item.mask.url)"
-                >
-              <el-switch
-              class="switch"
-              active-color="#1976d2"
-              v-show="item.status!=='pending'"
-              v-model="visible[index]"
-              @change="setVisible(index)">
-          </el-switch>
-          <v-icon class="information" @click="showDetail(task)">
-            <!-- mdiInformationVariant -->
-            mdi-information-variant
-          </v-icon>
-          <v-icon class="delete" @click="removeTask(index)">
-            <!-- mdiTrashCanOutline -->
-            mdi-trash-can-outline
-          </v-icon>
+          <span class="right-title">任务信息</span>
+          <v-divider class="divider"></v-divider>
+          <div class="no-task" v-if="project.tasks.length === 0">暂无任务</div>
+          <el-main class="detail">
+            <div v-for="(item, index) in project.tasks" :key="index">
+              <div class="task">
+                <div class="task-id">
+                  <span>任务序号: &nbsp;</span>
+                  <span>{{ index + 1 }}</span>
+                </div>
+                <div>
+                  <span>任务状态: &nbsp;</span>
+                  <span>
+                    <i
+                      class="el-icon-loading"
+                      v-if="item.status === 'pending'"
+                    ></i>
+                    <i class="el-icon-check" v-else></i>
+                  </span>
+                </div>
+              </div>
+              <div v-if="item.status !== 'pending'">
+                <v-img class="image" :src="thumbnail(item.mask.url)">
+                  <el-switch
+                    class="switch"
+                    active-color="#1976d2"
+                    v-show="item.status !== 'pending'"
+                    v-model="visible[index]"
+                    @change="setVisible(index)"
+                  >
+                  </el-switch>
+                  <v-icon class="information" @click="showDetail(item)">
+                    <!-- mdiInformationVariant -->
+                    mdi-information-variant
+                  </v-icon>
+                  <v-icon class="delete" @click="removeTask(index)">
+                    <!-- mdiTrashCanOutline -->
+                    mdi-trash-can-outline
+                  </v-icon>
                 </v-img>
-
-          </div>
-        </div>
-        </el-main>
+              </div>
+            </div>
+          </el-main>
         </div>
 
         <div class="right-bottom">
           <v-btn class="submit" color="primary" @click="submit">提交任务</v-btn>
         </div>
-
       </el-aside>
     </el-container>
     <choose-dialog ref="choose" @save="refresh"></choose-dialog>
+    <retrieval-detail-dialog ref="retrieval"></retrieval-detail-dialog>
+    <contrast-detail-dialog ref="contrast"></contrast-detail-dialog>
   </el-container>
 </template>
 <script>
 import DoubleMapCard from '../components/DoubleMapCard.vue'
 import ChooseDialog from '../components/ChooseDialog.vue'
 import MapCard from '../components/MapCard.vue'
+import RetrievalDetailDialog from '../components/RetrievalDetailDialog.vue'
+import ContrastDetailDialog from '../components/ContrastDetailDialog.vue'
 export default {
   name: 'Project',
   components: {
     MapCard,
     ChooseDialog,
-    DoubleMapCard
+    DoubleMapCard,
+    RetrievalDetailDialog,
+    ContrastDetailDialog
   },
   data () {
     return {
@@ -178,7 +192,8 @@ export default {
       fileList: [],
       url: null,
       visible: [],
-      websocket: null
+      websocket: null,
+      map: 'map'
     }
   },
   methods: {
@@ -186,7 +201,7 @@ export default {
       if (!url) {
         return ''
       }
-      return url.replace('/images/', '/thumbnail/images/')
+      return url.replace('/images/', '/thumbnail/')
     },
     getHeight () {
       console.log(this.project.type)
@@ -194,6 +209,10 @@ export default {
         return '150px'
       }
       return '200px'
+    },
+    showDetail (task) {
+      console.log(this.mode)
+      this.$refs[this.mode].init(task)
     },
     initWebSocket () {
     // 初始化websocket
@@ -228,7 +247,7 @@ export default {
           this.$api.task.getTask(data.id).then(res => {
             var task = res.data.task
             this.project.tasks.splice(i, 1, task)
-            this.$refs.map.addLayer(task)
+            this.$refs[this.map].addLayer(task)
             this.visible.push(true)
           })
           break
@@ -285,7 +304,7 @@ export default {
     },
     setVisible (index) {
       var task = this.project.tasks[index]
-      this.$refs.map.setVisibility(task, this.visible[index])
+      this.$refs[this.map].setVisibility(task, this.visible[index])
     },
     toTask (item) {
       if (item.status === 'pending') {
@@ -310,7 +329,7 @@ export default {
       var task = this.project.tasks[index]
       this.$api.task.deleteTask(task.id).then(res => {
         this.project.tasks.splice(index, 1)
-        this.$refs.map.removeLayer(task)
+        this.$refs[this.map].removeLayer(task)
         this.visible.splice(index, 1)
         this.$notify.success({
           message: '任务删除成功'
@@ -323,10 +342,7 @@ export default {
       })
     },
     submit () {
-      this.$refs.map.submit(this.$route.params.id)
-    },
-    showDetail (task) {
-
+      this.$refs[this.map].submit(this.$route.params.id)
     }
   },
   mounted () {
@@ -336,17 +352,16 @@ export default {
       var project = res.data.project
       this.project = project
       this.midshow = true
+      this.mode = project.type
       if (project.type === 'contrast') {
-        this.mode = 'contrast'
-        this.$nextTick(() => {
-          this.$refs.doublemap.init(project)
-        })
-      } else {
-        this.$refs.map.mapInit(project, 'move')
+        this.map = 'doublemap'
+      }
+      this.$nextTick(() => {
+        this.$refs[this.map].init(project)
         for (var i = 0; i < project.tasks.length; i++) {
           this.visible.push(true)
         }
-      }
+      })
     })
     this.initWebSocket()
   }
@@ -354,24 +369,24 @@ export default {
 </script>
 
 <style scoped>
-.left-title{
+.left-title {
   color: skyblue;
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
 }
-.right-title{
+.right-title {
   color: skyblue;
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
 }
-.divider{
+.divider {
   margin: 10px 0 10px 0;
   border-color: skyblue;
 }
-.task{
+.task {
   margin: 10px 0 10px 0;
 }
-.little-title{
+.little-title {
   position: absolute;
   z-index: 1;
   font-size: 20pt;
@@ -386,7 +401,7 @@ export default {
   color: aliceblue;
   align-items: center;
 }
-.detail{
+.detail {
   display: flex;
   flex-direction: column;
   max-height: 550px;
@@ -406,16 +421,16 @@ export default {
 .detail:hover::-webkit-scrollbar-track {
   background: hsla(209, 82%, 60%, 0.1);
 }
-.no-task{
+.no-task {
   text-align: center;
 }
-.header-right{
+.header-right {
   margin-right: 30px;
 }
-.left-image{
+.left-image {
   margin-bottom: 10px;
 }
-.data{
+.data {
   padding: 10px;
   border: 1px solid skyblue;
   margin: 15px;
@@ -428,22 +443,22 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.choose{
+.choose {
   width: 200px;
 }
-.choose2{
+.choose2 {
   width: 100px;
   margin: 10px;
 }
-.left-bottom{
+.left-bottom {
   align-self: center;
   margin-bottom: 15px;
 }
-.right-bottom{
+.right-bottom {
   align-self: center;
   margin-bottom: 15px;
 }
-.submit{
+.submit {
   width: 150px;
 }
 /* 过渡动画 */
@@ -452,7 +467,7 @@ export default {
   width: 100%;
   height: 100%;
 }
-.right-data{
+.right-data {
   border: 1px solid skyblue;
   margin: 15px;
   border-radius: 8px;
@@ -516,22 +531,22 @@ export default {
   font-size: 20px;
   cursor: pointer;
 }
-.image{
+.image {
   margin: 10px;
   background-color: rgb(66, 62, 62);
 }
-.switch{
+.switch {
   float: left;
 }
-.left-bottom2{
+.left-bottom2 {
   align-self: center;
   margin-bottom: 15px;
 }
-.delete{
+.delete {
   float: left;
   color: skyblue;
 }
-.information{
+.information {
   float: right;
   color: skyblue;
 }

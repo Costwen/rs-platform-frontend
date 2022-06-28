@@ -33,18 +33,16 @@ import Static from 'ol/source/ImageStatic'
 export default {
   data () {
     return {
-      view: null,
-      lon: 0,
-      lat: 0,
-      map: null,
-      container: null,
-      draw: null,
-      source: null,
-      coordinate: null,
-      overlay: null,
-      layers: {},
-      projection: null,
-      raw_extent: null
+      lon: 0, // 经度
+      lat: 0, // 纬度
+      map: null, // 地图
+      draw: null, // 绘制矩形
+      source: null, // 显示图层
+      coordinate: null, // 坐标
+      overlay: null, // 弹出框
+      layers: {}, // 图层
+      projection: null, // 地图投影
+      raw_extent: null // 尺寸
     }
   },
   methods: {
@@ -57,9 +55,12 @@ export default {
         this.$notify.success('提交成功')
         this.$emit('addTask', res.data)
         this.coordinate = null
-        this.overlay.setPosition(null)
-        this.source.clear()
-      }).catch(_ => {
+        if (this.overlay) {
+          this.overlay.setPosition(null)
+          this.source.clear()
+        }
+      }).catch(err => {
+        console.log(err)
         this.$notify.error('提交失败')
       })
     },
@@ -182,7 +183,15 @@ export default {
     removeLayer (task) {
       this.map.removeLayer(this.layers['mask' + task.id])
     },
-    mapInit (project, mode) {
+    selectAdd () {
+      this.drawInit()
+      this.popUpInit()
+    },
+    selectRemove () {
+      this.map.removeInteraction(this.draw)
+      this.map.removeOverlay(this.overlay)
+    },
+    init (project) {
       if (!project) return
       var image = project.imageA
       const extent = [0, 0, image.H, image.W]
@@ -212,11 +221,6 @@ export default {
       }))
       for (var i = 0; i < project.tasks.length; i++) {
         this.addLayer(project.tasks[i])
-      }
-      // 是否能够裁剪
-      if (mode === 'move') {
-        this.drawInit()
-        this.popUpInit()
       }
     }
   }

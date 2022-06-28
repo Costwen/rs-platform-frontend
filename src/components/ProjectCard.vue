@@ -58,7 +58,7 @@ export default {
       if (!image.url) {
         return ''
       }
-      return image.url.replace('/images/', '/thumbnail/images/')
+      return image.url.replace('/images/', '/thumbnail/')
     },
     projectEdit (id) {
       this.$router.push({

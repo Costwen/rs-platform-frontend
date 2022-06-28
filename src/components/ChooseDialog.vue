@@ -176,7 +176,7 @@ export default {
       if (!url) {
         return ''
       }
-      return url.replace('/images/', '/thumbnail/images/')
+      return url.replace('/images/', '/thumbnail/')
     },
     chooseImage (url) {
       console.log(url)

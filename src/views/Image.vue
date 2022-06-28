@@ -164,7 +164,7 @@ export default {
       if (!url) {
         return ''
       }
-      return url.replace('/images/', '/thumbnail/images/')
+      return url.replace('/images/', '/thumbnail/')
     },
     getImages (query) {
       this.$api.image.getImages(query).then(res => {
