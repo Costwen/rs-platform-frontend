@@ -8,7 +8,11 @@ import image from './image'
 import task from './task'
 
 axios.interceptors.request.use(function (config) {
+  // Skip authorization for login and register
   config.headers.common['Access-Control-Allow-Origin'] = '*'
+  if (config.url.indexOf('/api/account/') === 0) {
+    return config
+  }
   if (localStorage.getItem('access')) {
     const token = localStorage.getItem('access')
     if (!config.headers) {

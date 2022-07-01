@@ -165,14 +165,18 @@
     <choose-dialog ref="choose" @save="refresh"></choose-dialog>
     <retrieval-detail-dialog ref="retrieval"></retrieval-detail-dialog>
     <contrast-detail-dialog ref="contrast"></contrast-detail-dialog>
+    <sort-detail-dialog ref="sort"></sort-detail-dialog>
+    <detection-detail-dialog ref="detection"></detection-detail-dialog>
   </el-container>
 </template>
 <script>
 import DoubleMapCard from '../components/DoubleMapCard.vue'
-import ChooseDialog from '../components/ChooseDialog.vue'
+import ChooseDialog from '../components/Dialog/ChooseDialog.vue'
 import MapCard from '../components/MapCard.vue'
-import RetrievalDetailDialog from '../components/RetrievalDetailDialog.vue'
-import ContrastDetailDialog from '../components/ContrastDetailDialog.vue'
+import RetrievalDetailDialog from '../components/Dialog/RetrievalDetailDialog.vue'
+import ContrastDetailDialog from '../components/Dialog/ContrastDetailDialog.vue'
+import SortDetailDialog from '../components/Dialog/SortDetailDialog.vue'
+import DetectionDetailDialog from '../components/Dialog/DetectionDetailDialog.vue'
 export default {
   name: 'Project',
   components: {
@@ -180,7 +184,9 @@ export default {
     ChooseDialog,
     DoubleMapCard,
     RetrievalDetailDialog,
-    ContrastDetailDialog
+    ContrastDetailDialog,
+    SortDetailDialog,
+    DetectionDetailDialog
   },
   data () {
     return {
@@ -247,7 +253,11 @@ export default {
           this.$api.task.getTask(data.id).then(res => {
             var task = res.data.task
             this.project.tasks.splice(i, 1, task)
-            this.$refs[this.map].addLayer(task)
+            if (this.project.type === 'detection') {
+              this.$refs[this.map].addLayer(task, 1.0)
+            } else {
+              this.$refs[this.map].addLayer(task, 0.5)
+            }
             this.visible.push(true)
           })
           break

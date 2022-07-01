@@ -111,16 +111,16 @@
     ></v-pagination>
 
     </el-main>
-  <upload-dialog ref="dialog" @upload="getImages"></upload-dialog>
+  <upload-dialog ref="dialog" @upload="addImages"></upload-dialog>
   <image-create-project-dialog ref="create" @upload="toProject"></image-create-project-dialog>
   </el-container>
   </div>
 </template>
 
 <script>
-import ImageCreateProjectDialog from '../components/ImageCreateProjectDialog.vue'
+import ImageCreateProjectDialog from '../components/Dialog/ImageCreateProjectDialog.vue'
 import ProjectHeader from '../components/ProjectHeader.vue'
-import UploadDialog from '../components/UploadDialog.vue'
+import UploadDialog from '../components/Dialog/UploadDialog.vue'
 import axios from 'axios'
 export default {
   components: { UploadDialog, ProjectHeader, ImageCreateProjectDialog },
@@ -143,6 +143,10 @@ export default {
       const afterPicArr = this.rowList.slice(index)
       const beforePicArr = this.rowList.slice(0, index)
       this.srcList = afterPicArr.concat(beforePicArr)
+    },
+    addImages (image) {
+      this.imageList.push(image)
+      this.page_num = Math.ceil(this.imageList.length / this.page_size)
     },
     downloadIamge (imgsrc, name) { // 下载图片地址和图片名
       var idx = imgsrc.lastIndexOf('/images')
@@ -176,7 +180,6 @@ export default {
         for (let i = 0; i < this.imageList.length; i++) {
           this.rowList.push(this.imageList[i].url)
         }
-        console.log(this.imageList)
       })
     },
     deleteImage (id, idx) {

@@ -106,11 +106,11 @@ export default {
       this.$api.user.register(this.form)
         .then(function (response) {
           that.Response = response.data
-          alert('用户注册成功，快去登录吧！')
+          that.$notify.success('用户注册成功，快去登录吧！')
           that.$router.push({ path: '/login' })
         })
         .catch(function (error) {
-          console.log(error.response)
+          console.log(error)
           that.$notify.error({
             title: '好像发生什么错误'
           })

@@ -5,6 +5,7 @@ export default {
     return axios.post('/api/account/token/', form)
   },
   async register (form) {
-    return axios.post('/api/account/user/', form)
+    console.log(form)
+    return axios.post('/api/account/register/', form)
   }
 }

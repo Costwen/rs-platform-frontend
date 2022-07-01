@@ -8,7 +8,22 @@
         </div>
       </div>
     </div>
-    <div id="popup" class="ol-popup" v-show="map">
+      <div class="select">
+        <div></div>
+        <div class="icon">
+      <el-tooltip class="item" effect="dark" content="放大" placement="top-start">
+        <v-icon @click="zoomin">mdi-magnify-plus-outline</v-icon>
+    </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="缩小" placement="top-start">
+        <v-icon @click="zoomout">mdi-magnify-minus-outline</v-icon>
+      </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="popShow ? '取消选取':'选取区域' " placement="top-start">
+        <v-icon @click="select"> mdi-select-search</v-icon>
+    </el-tooltip>
+
+        </div>
+      </div>
+    <div id="popup" class="ol-popup" v-show="popShow">
       <div id="popup-closer" class="ol-popup-closer">
         <el-button size="small" type="primary">取消</el-button>
       </div>
@@ -30,6 +45,7 @@ import Projection from 'ol/proj/Projection'
 import { getCenter } from 'ol/extent'
 import ImageLayer from 'ol/layer/Image'
 import Static from 'ol/source/ImageStatic'
+import { ScaleLine, defaults as defaultControls } from 'ol/control'
 export default {
   data () {
     return {
@@ -42,7 +58,8 @@ export default {
       overlay: null, // 弹出框
       layers: {}, // 图层
       projection: null, // 地图投影
-      raw_extent: null // 尺寸
+      raw_extent: null, // 尺寸
+      popShow: false // 弹出框显示
     }
   },
   methods: {
@@ -91,11 +108,22 @@ export default {
         // 刷新地图
       })
     },
+    zoomin () {
+      var zoom = this.map.getView().getZoom()
+      if (zoom < 18) {
+        this.map.getView().setZoom(zoom + 1)
+      }
+    },
+    zoomout () {
+      var zoom = this.map.getView().getZoom()
+      if (zoom > 1) {
+        this.map.getView().setZoom(zoom - 1)
+      }
+    },
     popUpInit () {
       // 获取到弹框的节点DOM
       var container = document.getElementById('popup')
       var closer = document.getElementById('popup-closer')
-
       // 创建一个弹窗 Overlay 对象
       this.overlay = new Overlay({
         element: container, // 绑定 Overlay 对象和 DOM 对象的
@@ -149,6 +177,17 @@ export default {
         this.lat = lonlat[1].toFixed(6)
       })
     },
+    select () {
+      this.popShow = !this.popShow
+      this.$nextTick(() => {
+        if (this.popShow) {
+          this.drawInit()
+          this.popUpInit()
+        } else {
+          this.map.removeInteraction(this.draw)
+        }
+      })
+    },
     drawInit () {
       const source = new VectorSource({ wrapX: false })
       const vector = new VectorLayer({
@@ -161,7 +200,7 @@ export default {
     setVisibility (task, visible) {
       this.layers['mask' + task.id].setVisible(visible)
     },
-    addLayer (task) {
+    addLayer (task, opacity = 0.5) {
       var coordinate = task.coordinate
       var extent = this.raw_extent
       if (coordinate) {
@@ -176,7 +215,7 @@ export default {
           projection: this.projection,
           imageExtent: extent
         }),
-        opacity: 0.5
+        opacity: opacity
       })
       this.map.addLayer(this.layers['mask' + task.id])
     },
@@ -210,7 +249,17 @@ export default {
       })
       this.map = new Map({
         target: 'map',
-        view: view
+        view: view,
+        controls: defaultControls({
+          zoom: false,
+          rotate: false,
+          attribution: false
+        }).extend([
+          new ScaleLine({
+            // 设置比例尺单位，degrees、imperial、us、nautical、metric（度量单位）
+            units: 'metric'
+          })
+        ])
       })
       this.map.addLayer(new ImageLayer({
         source: new Static({
@@ -231,7 +280,7 @@ export default {
 .map {
   width: 100%;
   height: 100%;
-    overflow: hidden;
+  overflow: hidden;
 }
 .contain{
   height: 100%;
@@ -253,7 +302,6 @@ export default {
 }
 .ol-mouse-position {
   position: relative;
-
   float: right;
   bottom: 10px;
   right: 10px;
@@ -261,10 +309,28 @@ export default {
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 9;
 }
-.ol-zoom ol-unselectable ol-control{
-  position: absolute;
-  bottom: 10px !important;
-  right: 10px !important;
-  z-index: 9 !important;
+.ol-control {
+  display: none;
+}
+.select{
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  justify-content: space-between;
+}
+.icon{
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px 0;
+}
+.item{
+  cursor: pointer;
+  width: 22pt;
+  height: 22pt;
+  margin: 1px 0 0 1px;
+  border-radius: 3px;
+  background-color: rgba(0,60,136,0.7);
+  color: rgb(242, 250, 250);
 }
 </style>

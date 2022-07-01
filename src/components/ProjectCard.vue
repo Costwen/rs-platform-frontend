@@ -12,7 +12,7 @@
 
       <div class="middle">
         <div>项目名称：{{project.name}}</div>
-        <div>项目类型：{{project.type}}</div>
+        <div>项目类型：{{typeMap[project.type]}}</div>
         <div>任务数量：{{project.task_num}}</div>
         <div>创建时间：{{project.create_time}}</div>
         <div>最后编辑时间：{{project.modify_time}}</div>
@@ -50,7 +50,13 @@ export default {
   },
   data () {
     return {
-      status: 'normal'
+      status: 'normal',
+      typeMap: {
+        detection: '目标检测',
+        sort: '地物分类',
+        retrieval: '目标提取',
+        contrast: '变化检测'
+      }
     }
   },
   methods: {
@@ -148,9 +154,15 @@ export default {
   text-align: left;
   /* display: flex; */
 }
-
+.right{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .project_image {
+  /*长宽比: 1:1 */
   width: 90%;
+  height: 90%;
   margin: 0 auto;
   text-align: center;
   font-size: 15pt;

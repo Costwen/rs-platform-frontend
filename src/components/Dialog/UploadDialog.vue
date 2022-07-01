@@ -102,7 +102,7 @@ export default {
               message: '上传成功'
             })
             this.close()
-            this.$emit('upload', res.data)
+            this.$emit('upload', res.data.image)
           }).catch(
             err => {
               this.$notify({

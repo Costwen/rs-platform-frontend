@@ -30,14 +30,16 @@
           </el-menu>
       </el-aside>
       <el-main class="main" v-loading="show">
-        <el-dropdown @command="sort" style="float: right; margin-right: 7px; margin-top: 7px">
+        <el-dropdown @command="filter" style="float: right; margin-right: 7px; margin-top: 7px">
             <span class="el-dropdown-link" style="color: grey; float: left; font-size: 15px">
-              选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+              项目类别<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command = '-create_time'>创建时间</el-dropdown-item>
-            <el-dropdown-item command = '-task_num'>任务数量</el-dropdown-item>
-            <el-dropdown-item command = '-modify_time'>最后编辑时间</el-dropdown-item>
+            <el-dropdown-item command="all">全部</el-dropdown-item>
+            <el-dropdown-item command = 'retrieval'>目标提取</el-dropdown-item>
+            <el-dropdown-item command = 'sort'>地物分类</el-dropdown-item>
+            <el-dropdown-item command = 'contrast'>变化检测</el-dropdown-item>
+            <el-dropdown-item command = 'detection'>目标检测</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div v-if="status === 'normal'" class="title">项目列表</div>
@@ -74,6 +76,7 @@ export default {
   },
   data () {
     return {
+      raw_projects: [],
       projects: [],
       status: 'normal',
       show: true,
@@ -96,6 +99,7 @@ export default {
       }
       this.status = _status
       this.$api.project.getProjects(_status).then(res => {
+        this.raw_projects = res.data.projects
         this.projects = res.data.projects
         this.show = false
         this.page_num = Math.ceil(this.projects.length / this.page_size)
@@ -123,8 +127,28 @@ export default {
         }
       })
     },
-    sort (command) {
-      console.log(command)
+    filter (command) {
+      switch (command) {
+        case 'all':
+          this.projects = this.raw_projects
+          break
+        case 'retrieval':
+          this.projects = this.raw_projects.filter(item => item.type === 'retrieval')
+          this.page_num = Math.ceil(this.projects.length / this.page_size)
+          break
+        case 'sort':
+          this.projects = this.raw_projects.filter(item => item.type === 'sort')
+          this.page_num = Math.ceil(this.projects.length / this.page_size)
+          break
+        case 'contrast':
+          this.projects = this.raw_projects.filter(item => item.type === 'contrast')
+          this.page_num = Math.ceil(this.projects.length / this.page_size)
+          break
+        case 'detection':
+          this.projects = this.raw_projects.filter(item => item.type === 'detection')
+          this.page_num = Math.ceil(this.projects.length / this.page_size)
+          break
+      }
     },
     createProject () {
       this.$router.push({
@@ -164,7 +188,7 @@ export default {
 }
 
 .project{
-  padding: 10px;
+  padding: 5px;
 }
 .no-project{
   font-size: 22px;

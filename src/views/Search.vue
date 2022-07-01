@@ -57,7 +57,7 @@ import Draw, {
 } from 'ol/interaction/Draw'
 import TileDebug from 'ol/source/TileDebug'
 import ProjectHeader from '../components/ProjectHeader.vue'
-import ImageNameDialog from '../components/ImageNameDialog.vue'
+import ImageNameDialog from '../components/Dialog/ImageNameDialog.vue'
 export default {
   components: { ProjectHeader, ImageNameDialog },
   data () {

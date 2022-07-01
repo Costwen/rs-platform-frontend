@@ -7,11 +7,12 @@
           我的项目
       </v-tab>
       <v-tab>
-        检索数据
-      </v-tab>
-      <v-tab>
         我的数据
       </v-tab>
+      <v-tab>
+        检索数据
+      </v-tab>
+
     </v-tabs>
   </div>
       <div class="user">
@@ -40,7 +41,7 @@ export default {
       username: 'admin',
       avatar: '',
       id: '',
-      paths: ['/home', '/search', '/dataset']
+      paths: ['/home', '/dataset', '/search']
     }
   },
   methods: {
@@ -61,10 +62,10 @@ export default {
           to = '/home'
           break
         case 1:
-          to = '/search'
+          to = '/dataset'
           break
         case 2:
-          to = '/dataset'
+          to = '/search'
           break
       }
       if (cur !== to) {

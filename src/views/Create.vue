@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import CreatProjectDialog from '../components/CreatProjectDialog.vue'
+import CreatProjectDialog from '../components/Dialog/CreatProjectDialog.vue'
 
 export default {
   components: { CreatProjectDialog },
