@@ -159,7 +159,7 @@
           class="text-center"
           cols="12"
         >
-          {{ new Date().getFullYear() }} — <strong>Group No.19</strong> FISHING QUESTIONNAIRE
+          {{ new Date().getFullYear() }} — <strong>Fishing Remote Sensing</strong>
         </v-col>
       </v-footer>
   </div>
@@ -188,13 +188,13 @@ export default {
       btnWidth: 228,
       items: [
         {
-          src: 'https://img.alicdn.com/imgextra/i1/O1CN01KT6iWh1zJRaNMoEFE_!!6000000006693-0-tps-2393-1347.jpg',
+          src: require('@/assets/earth1.png'),
           title: '简约好用的遥感系统',
           subtitle: '简约好用，轻松开启在线调试',
           img: 'https://wj.qq.com/image/index_slider_p1.png?v=@version'
         },
         {
-          src: 'https://img.alicdn.com/imgextra/i3/O1CN01BoXywB1owru1FG5CX_!!6000000005290-0-tps-1989-1306.jpg',
+          src: require('@/assets/city.jpg'),
           title: '数据实时统计在线分析',
           subtitle: '数据实时在线统计，图表化展示，清晰直观',
           img: 'https://wj.qq.com/image/index_slider_p2.png?v=@version'

@@ -24,11 +24,6 @@ const routes = [
     component: () => import('../views/AnalysisTools.vue')
   },
   {
-    path: '/task/:id',
-    name: 'Task',
-    component: () => import('../views/Result.vue')
-  },
-  {
     path: '/create',
     name: 'Create',
     component: () => import('../views/Create.vue')

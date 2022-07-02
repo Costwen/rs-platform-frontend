@@ -80,34 +80,33 @@ export default {
           src: 'https://img.alicdn.com/imgextra/i2/O1CN01yUuD2623wbuKi994q_!!6000000007320-55-tps-48-48.svg',
           title: '目标提取',
           subtitle: '点击 CREATE 创建',
-          type: 'normal',
+          type: 'retrieval',
           show: false,
-          content: '最基础的问卷类型，包含单选、多选、填空及评分题型。简约好用是我们的初衷，能够满足大部分问卷的需求'
+          content: '目标提取能够提交图片之中的道路部分。简约好用是我们的初衷，能够精确识别图片道路部分'
         },
         {
           src: 'https://img.alicdn.com/imgextra/i4/O1CN01KsWWBg1CT8mkcfYg1_!!6000000000081-55-tps-48-48.svg',
           title: '变化检测',
           subtitle: '点击 CREATE 创建',
-          type: 'vote',
+          type: 'contrast',
           show: false,
-          content: '无需人工计票，实时更新和展示选项对应的票数和结果'
+          content: '提交两张图片, 识别图片之中变化部分。'
         },
         {
           src: 'https://img.alicdn.com/imgextra/i3/O1CN01h1WOBX1Fif3YcjbVS_!!6000000000521-55-tps-48-48.svg',
           title: '目标检测',
           subtitle: '点击 CREATE 创建',
-          type: 'signup',
+          type: 'detection',
           show: false,
-          content: '对问卷和问题选项进行限额，踊跃报名活动，机会先到先得'
+          content: '准确统计图片中的目标部分。使用DOTA1.5数据集, 准确分辨目标'
         },
         {
           src: 'https://img.alicdn.com/imgextra/i3/O1CN01TOtzDB1LIS5R21sx2_!!6000000001276-55-tps-48-48.svg',
           title: '地物分类',
           subtitle: '点击 CREATE 创建',
-          type: 'exam',
+          type: 'sort',
           show: false,
-          content: '“考试开始，请考生开始答题”，系统自动评分，答案解析一键生成\n' +
-            '\n'
+          content: '识别遥感地图中不同地区, 快速分析不同区域'
         }
       ]
     }
