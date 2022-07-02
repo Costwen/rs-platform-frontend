@@ -213,7 +213,8 @@ export default {
         source: new Static({
           url: task.mask.url,
           projection: this.projection,
-          imageExtent: extent
+          imageExtent: extent,
+          crossOrigin: 'anonymous'
         }),
         opacity: opacity
       })
@@ -265,7 +266,8 @@ export default {
         source: new Static({
           url: image.url,
           projection: projection,
-          imageExtent: extent
+          imageExtent: extent,
+          crossOrigin: 'anonymous'
         })
       }))
       for (var i = 0; i < project.tasks.length; i++) {

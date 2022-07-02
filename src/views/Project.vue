@@ -30,7 +30,7 @@
             </div>
             <div class="subtitle">
               <span>项目种类: &nbsp;</span>
-              <span>{{ project.type }}</span>
+              <span>{{ typeMap[project.type] }}</span>
             </div>
             <div class="subtitle">
               <span>创建信息: &nbsp;</span>
@@ -158,6 +158,7 @@
         </div>
 
         <div class="right-bottom">
+          <v-btn class="submit" color="primary" @click="download"> 下载图片</v-btn>
           <v-btn class="submit" color="primary" @click="submit">提交任务</v-btn>
         </div>
       </el-aside>
@@ -167,6 +168,7 @@
     <contrast-detail-dialog ref="contrast"></contrast-detail-dialog>
     <sort-detail-dialog ref="sort"></sort-detail-dialog>
     <detection-detail-dialog ref="detection"></detection-detail-dialog>
+    <a id="image-download" download="map.png"></a>
   </el-container>
 </template>
 <script>
@@ -199,7 +201,13 @@ export default {
       url: null,
       visible: [],
       websocket: null,
-      map: 'map'
+      map: 'map',
+      typeMap: {
+        detection: '目标检测',
+        sort: '地物分类',
+        retrieval: '目标提取',
+        contrast: '变化检测'
+      }
     }
   },
   methods: {
@@ -334,6 +342,67 @@ export default {
         status: 'pending'
       }
       this.project.tasks.push(task)
+    },
+    download () {
+      var map = this.$refs[this.map].map
+      map.once('rendercomplete', function () {
+        const mapCanvas = document.createElement('canvas')
+        const size = map.getSize()
+        mapCanvas.width = size[0]
+        mapCanvas.height = size[1]
+        const mapContext = mapCanvas.getContext('2d')
+        Array.prototype.forEach.call(
+          map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer'),
+          function (canvas) {
+            if (canvas.width > 0) {
+              const opacity =
+            canvas.parentNode.style.opacity || canvas.style.opacity
+              mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity)
+
+              const backgroundColor = canvas.parentNode.style.backgroundColor
+              if (backgroundColor) {
+                mapContext.fillStyle = backgroundColor
+                mapContext.fillRect(0, 0, canvas.width, canvas.height)
+              }
+
+              let matrix
+              const transform = canvas.style.transform
+              if (transform) {
+                // Get the transform parameters from the style's transform matrix
+                matrix = transform
+                  .match(/^matrix\(([^\\(]*)\)$/)[1]
+                  .split(',')
+                  .map(Number)
+              } else {
+                matrix = [
+                  parseFloat(canvas.style.width) / canvas.width,
+                  0,
+                  0,
+                  parseFloat(canvas.style.height) / canvas.height,
+                  0,
+                  0
+                ]
+              }
+              // Apply the transform to the export map context
+              CanvasRenderingContext2D.prototype.setTransform.apply(
+                mapContext,
+                matrix
+              )
+              mapContext.drawImage(canvas, 0, 0)
+            }
+          }
+        )
+        mapContext.globalAlpha = 1
+        if (navigator.msSaveBlob) {
+          // link download attribute does not work on MS browsers
+          navigator.msSaveBlob(mapCanvas.msToBlob(), 'map.png')
+        } else {
+          const link = document.getElementById('image-download')
+          link.href = mapCanvas.toDataURL()
+          link.click()
+        }
+      })
+      map.renderSync()
     },
     removeTask (index) {
       var task = this.project.tasks[index]
@@ -470,6 +539,7 @@ export default {
 }
 .submit {
   width: 150px;
+  margin: 10px;
 }
 /* 过渡动画 */
 .mid {
