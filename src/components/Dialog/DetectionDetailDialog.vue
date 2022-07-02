@@ -38,9 +38,9 @@
 <script>
 // f94144, f3722c, f8961e, f9844a, f9c74f, 90be6d,43aa8b, 4d908e,577590,277da1, 0d3082, 88dae7, 76cd65, ffc247, ff8133, eb5133
 var colorList = ['#f94144', '#f3722c', '#f8961e', '#f9844a', '#f9c74f', '#90be6d', '#43aa8b', '#4d908e', '#577590', '#277da1', '#0d3082', '#88dae7', '#76cd65', '#ffc247', '#ff8133', '#eb5133']
-// plane, ship, storage tank, baseball diamond, tennis court, basketball court, ground track field, harbor, bridge, large vehicle, small vehicle, helicopter, roundabout, soccer ball field, swimming pool , container crane
-// 飞机、船舶、储罐、棒球场、网球场、篮球场、地面田径场、港口、桥梁、大型车辆、小型车辆、直升机、环岛、足球场、游泳池、集装箱起重机]
-var nameList = ['飞机', '船舶', '储罐', '棒球场', '网球场', '篮球场', '地面田径场', '港口', '桥梁', '大型车辆', '小型车辆', '直升机', '环岛', '足球场', '游泳池', '集装箱起重机']
+// plane baseball-diamond bridge ground-track-field small-vehicle large-vehicle ship tennis-court basketball-court storage-tank soccer-ball-field roundabout harbor swimming-pool helicopter container-crane
+// 飞机 棒球场 桥 地面田径场 小型车辆 大型车辆 船 网球场 篮球场 储罐 足球场 交通环岛 港口 游泳池 直升机 集装箱起重机
+var nameList = ['飞机', '棒球场', '桥', '地面田径场', '小型车辆', '大型车辆', '船', '网球场', '篮球场', '储罐', '足球场', '交通环岛', '港口', '游泳池', '直升机', '集装箱起重机']
 export default {
   data () {
     return {
