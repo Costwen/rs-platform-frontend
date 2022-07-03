@@ -43,9 +43,9 @@ export default {
       dialog: false,
       task: null,
       cnName: {
-        'Bare soil': '裸土',
+        'Bare soil': '裸地',
         Building: '建筑',
-        Pavement: '路面',
+        Pavement: '人行道',
         Road: '道路',
         Vegetation: '植被', //
         Water: '水体' // #409EFF

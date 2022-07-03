@@ -145,7 +145,8 @@ export default {
       this.srcList = afterPicArr.concat(beforePicArr)
     },
     addImages (image) {
-      this.imageList.push(image)
+      // 添加到第一个
+      this.imageList.unshift(image)
       this.page_num = Math.ceil(this.imageList.length / this.page_size)
     },
     downloadIamge (imgsrc, name) { // 下载图片地址和图片名

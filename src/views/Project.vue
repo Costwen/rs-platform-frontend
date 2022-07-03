@@ -483,7 +483,7 @@ export default {
 .detail {
   display: flex;
   flex-direction: column;
-  max-height: 550px;
+  max-height: 500px;
 }
 .detail::-webkit-scrollbar {
   width: 6px;
