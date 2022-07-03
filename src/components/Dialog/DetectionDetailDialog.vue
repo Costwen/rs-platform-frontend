@@ -66,16 +66,16 @@ export default {
     },
     genChart () {
       var data = []
-      this.task.analysis.categories.forEach(item => {
+      this.task.analysis.categories.forEach((item, index) => {
         if (item > 0) {
           data.push({
-            name: nameList[item],
+            name: nameList[index],
             value: item
           })
-          this.category[nameList[item]] = item
+          this.category[nameList[index]] = item
         }
       })
-      console.log(this.category)
+      this.$forceUpdate()
       var dom = document.getElementById('chart')
       var myChart = this.$echarts.init(dom)
       // 指定图表的配置项和数据

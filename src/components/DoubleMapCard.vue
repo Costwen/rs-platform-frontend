@@ -141,6 +141,7 @@ export default {
 .content {
   display: flex;
   height: 100vh;
+  background-color: rgb(36, 39, 47)
 }
 .left {
   width: 200px;

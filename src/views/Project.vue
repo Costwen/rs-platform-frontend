@@ -590,6 +590,7 @@ export default {
 }
 .contain {
   height: 100%;
+  background-color: rgb(36, 39, 47);
 }
 .el-icon-caret-right {
   margin-top: 50%;

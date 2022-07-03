@@ -55,7 +55,6 @@ import { Vector as VectorSource } from 'ol/source'
 import Draw, {
   createBox
 } from 'ol/interaction/Draw'
-import TileDebug from 'ol/source/TileDebug'
 import ProjectHeader from '../components/ProjectHeader.vue'
 import ImageNameDialog from '../components/Dialog/ImageNameDialog.vue'
 export default {
@@ -221,14 +220,6 @@ export default {
           wrapX: true
         })
       })
-      const debugLayer = new TileLayer({
-        source: new TileDebug({
-          template: 'x:{x} y:{y} z:{z}',
-          projection: imgLayer.getSource().getProjection(),
-          tileGrid: imgLayer.getSource().getTileGrid(),
-          zDirection: 1
-        })
-      })
       const view = new View({
         projection: 'EPSG:4326', // 使用这个坐标系
         center: [lon, lan], // 北京
@@ -239,8 +230,7 @@ export default {
         target: 'map',
         layers: [
           imgLayer,
-          labelLayer,
-          debugLayer
+          labelLayer
         ],
         view: view
       })
@@ -249,7 +239,8 @@ export default {
     }
   },
   mounted () {
-    this.init(116.397468, 39.908816)
+    // center: [116.350564, 39.983056], // BUAA
+    this.init(116.350564, 39.983056)
     this.drawInit()
     this.popUpInit()
   }

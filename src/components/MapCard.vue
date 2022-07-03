@@ -46,6 +46,8 @@ import { getCenter } from 'ol/extent'
 import ImageLayer from 'ol/layer/Image'
 import Static from 'ol/source/ImageStatic'
 import { ScaleLine, defaults as defaultControls } from 'ol/control'
+import { asArray } from 'ol/color'
+import { Fill, Style } from 'ol/style'
 export default {
   data () {
     return {
@@ -213,8 +215,8 @@ export default {
         source: new Static({
           url: task.mask.url,
           projection: this.projection,
-          imageExtent: extent,
-          crossOrigin: 'anonymous'
+          imageExtent: extent
+          // crossOrigin: 'anonymous'
         }),
         opacity: opacity
       })
@@ -248,6 +250,12 @@ export default {
         zoom: 2,
         maxZoom: 8
       })
+      const style = new Style({
+        fill: new Fill({
+          color: '#eeeeee'
+        })
+      })
+
       this.map = new Map({
         target: 'map',
         view: view,
@@ -260,18 +268,29 @@ export default {
             // 设置比例尺单位，degrees、imperial、us、nautical、metric（度量单位）
             units: 'metric'
           })
-        ])
+        ]),
+        background: 'gray',
+        style: function (feature) {
+          const color = asArray(feature.get('COLOR_NNH') || '#eeeeee')
+          color[3] = 0.75
+          style.getFill().setColor(color)
+          return style
+        }
       })
       this.map.addLayer(new ImageLayer({
         source: new Static({
           url: image.url,
           projection: projection,
-          imageExtent: extent,
-          crossOrigin: 'anonymous'
+          imageExtent: extent
+          // crossOrigin: 'anonymous'
         })
       }))
+      var opacity = 0.5
+      if (project.type === 'detection') {
+        opacity = 1
+      }
       for (var i = 0; i < project.tasks.length; i++) {
-        this.addLayer(project.tasks[i])
+        this.addLayer(project.tasks[i], opacity)
       }
     }
   }
@@ -283,10 +302,15 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* background-color:black; */
 }
 .contain{
   height: 100%;
   width: 100%;
+  background-color:rgb(36, 39, 47);
+  /* background: url("../assets/bg.png"); */
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 /*隐藏ol的一些自带元素*/
 .popup-content {

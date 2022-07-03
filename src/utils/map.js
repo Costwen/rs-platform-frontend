@@ -8,7 +8,6 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import XYZ from 'ol/source/XYZ'
 import { Tile as TileLayer } from 'ol/layer'
-import TileDebug from 'ol/source/TileDebug'
 import ImageLayer from 'ol/layer/Image'
 import Static from 'ol/source/ImageStatic'
 import Projection from 'ol/proj/Projection'
@@ -26,24 +25,15 @@ export function gaodeMapInit () {
       wrapX: true
     })
   })
-  const debugLayer = new TileLayer({
-    source: new TileDebug({
-      template: 'x:{x} y:{y} z:{z}',
-      projection: imgLayer.getSource().getProjection(),
-      tileGrid: imgLayer.getSource().getTileGrid(),
-      zDirection: 1
-    })
-  })
   const map = new Map({
     target: 'imgA',
     layers: [
       imgLayer,
-      labelLayer,
-      debugLayer
+      labelLayer
     ],
     view: new View({
       projection: 'EPSG:4326', // 使用这个坐标系
-      center: [116.397468, 39.908816], // 北京
+      center: [116.350564, 39.983056], // BUAA
       maxZoom: 18,
       zoom: 17
     })
