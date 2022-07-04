@@ -343,8 +343,7 @@ export default {
       }
       this.project.tasks.push(task)
     },
-    download () {
-      var map = this.$refs[this.map].map
+    _download (map) {
       map.once('rendercomplete', function () {
         const mapCanvas = document.createElement('canvas')
         const size = map.getSize()
@@ -403,6 +402,14 @@ export default {
         }
       })
       map.renderSync()
+    },
+    download () {
+      if (this.mode === 'contrast') {
+        this._download(this.$refs.doublemap.map.map1)
+        this._download(this.$refs.doublemap.map.map2)
+      } else {
+        this._download(this.$refs.map.map)
+      }
     },
     removeTask (index) {
       var task = this.project.tasks[index]
