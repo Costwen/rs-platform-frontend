@@ -8,19 +8,19 @@ export default {
       }
     })
   },
-  async postProject (data) {
-    return axios.post('/api/project/', data)
+  async putProject (data) {
+    return axios.put('/api/project/', data)
   },
-  async putProject (id, data) {
-    return axios.put('/api/project/' + id + '/', data)
+  async postProject (id, data) {
+    return axios.post('/api/project/' + id + '/', data)
   },
   async deleteProject (id) {
-    return axios.put('/api/project/' + id + '/', {
+    return axios.post('/api/project/' + id + '/', {
       status: 'delete'
     })
   },
   async recoveryProject (id) {
-    return axios.put('/api/project/' + id + '/', {
+    return axios.post('/api/project/' + id + '/', {
       status: 'normal'
     })
   },

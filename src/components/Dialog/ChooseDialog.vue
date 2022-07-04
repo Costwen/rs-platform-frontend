@@ -159,7 +159,7 @@ export default {
         }
       }
       var id = this.$route.params.id
-      this.$api.project.putProject(id, data).then(res => {
+      this.$api.project.postProject(id, data).then(res => {
         this.$notify.success({
           message: '保存成功'
         })
@@ -174,7 +174,7 @@ export default {
     },
     thumbnail (url) {
       if (!url) {
-        return ''
+        return require('@/assets/default.png')
       }
       return url.replace('/images/', '/thumbnail/')
     },

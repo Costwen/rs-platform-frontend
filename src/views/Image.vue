@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="total">
     <project-header></project-header>
   <el-container class="main">
 
@@ -10,7 +10,7 @@
           <span>选取文件</span>
           </v-btn>
       </div>
-    <v-tabs vertical @change="change">
+    <v-tabs class="tabs" vertical @change="change">
           <v-tab>
             <v-icon left>
               mdi-account
@@ -57,7 +57,18 @@
           </el-image>
       </div>
         <v-card-title>
-         {{item.name}}
+          <div class="image-title" v-if="!editMap[item.id]">
+            <div style="margin-right: 10px">
+            {{item.name}}
+            </div>
+            <div>
+              <i @click="changeName(item.id)" class="el-icon-edit"></i>
+            </div>
+          </div>
+          <div class="actions" v-if="editMap[item.id]">
+          <el-input v-model="item.name" placeholder="请输入内容" ></el-input>
+          <v-icon class="icon" @click="changeName(item.id, item.name)"> mdi-content-save-edit </v-icon>
+          </div>
         </v-card-title>
         <v-card-subtitle class="subtitle">
             <span>创建时间:</span>
@@ -126,6 +137,7 @@ export default {
   components: { UploadDialog, ProjectHeader, ImageCreateProjectDialog },
   data () {
     return {
+      editMap: {},
       srcList: [],
       rowList: [],
       imageList: [],
@@ -139,6 +151,27 @@ export default {
     }
   },
   methods: {
+    changeName (id, name) {
+      // 响应式修改
+      this.editMap[id] = !this.editMap[id]
+      if (!this.editMap[id]) {
+        this.$api.image.postImage(id, {
+          name: name
+        }).then(res => {
+          this.$notify({
+            message: '修改成功',
+            type: 'success'
+          })
+        }).catch(err => {
+          console.log(err)
+          this.$notify.error({
+            message: '修改失败',
+            type: 'error'
+          })
+        })
+      }
+      this.$forceUpdate()
+    },
     setIdx (index) {
       const afterPicArr = this.rowList.slice(index)
       const beforePicArr = this.rowList.slice(0, index)
@@ -146,6 +179,7 @@ export default {
     },
     addImages (image) {
       // 添加到第一个
+      this.editMap[image.id] = false
       this.imageList.unshift(image)
       this.page_num = Math.ceil(this.imageList.length / this.page_size)
     },
@@ -168,7 +202,7 @@ export default {
     },
     thumbnail (url) {
       if (!url) {
-        return ''
+        return require('../assets/default.png')
       }
       return url.replace('/images/', '/thumbnail/')
     },
@@ -181,6 +215,7 @@ export default {
         this.page_num = Math.ceil(this.imageList.length / this.page_size)
         for (let i = 0; i < this.imageList.length; i++) {
           this.rowList.push(this.imageList[i].url)
+          this.editMap[this.imageList[i].id] = false
         }
       })
     },
@@ -210,22 +245,6 @@ export default {
     },
     upload () {
       this.$refs.dialog.init()
-    },
-    postProject (id) {
-      var data = {
-        imageA: id
-      }
-      this.$api.project.postProject(data).then(res => {
-        console.log(res)
-        this.$notify.success({
-          message: '创建成功'
-        })
-      }).catch(err => {
-        console.log(err)
-        this.$notify.error({
-          message: '创建失败'
-        })
-      })
     },
     create (id) {
       this.$refs.create.init(id)
@@ -266,6 +285,9 @@ export default {
 </script>
 
 <style scoped>
+/* .total{
+  background: linear-gradient(to top, #c6e2f9, #f2faff);
+} */
 .up{
   text-align: center;
   margin: 50px 0 20px 0 ;
@@ -274,11 +296,12 @@ export default {
   height: 100%;
   margin: 0px !important;
   padding: 0px !important;
+
 }
 .main {
   margin: 20px auto;
   width: 95%;
-  background-color: whitesmoke;
+  /* background: #e9fdff; */
 }
 .no-image{
     font-size: 22px;
@@ -319,12 +342,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: rgba(255, 255, 255, 0.5);
 }
 .image-item{
   display: flex;
   height: 165px;
   margin: 5px;
-  border: 1.5px solid rgb(126, 12, 12);
+  border: 2px solid #13459c;
+  border-radius: 5px;
   padding: 2px;
   justify-content: center;
 }
@@ -340,5 +365,18 @@ export default {
 }
 .v-card__subtitle, .v-card__text, .v-card__title{
   padding: 10px;
+}
+.image-title{
+  display: flex;
+}
+.el-icon-edit{
+  cursor: pointer;
+}
+.icon{
+  margin-left: 20px;
+  color: #618e1a;
+}
+.tabs{
+  background: #5829a7;
 }
 </style>

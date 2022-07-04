@@ -147,7 +147,6 @@ export default {
 </script>
 
 <style scoped>
-@import url("../assets/common.css");
 .img{
   margin:auto !important;
   /*padding: 30px 0 !important;*/

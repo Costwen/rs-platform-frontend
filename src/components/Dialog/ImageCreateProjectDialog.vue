@@ -92,7 +92,7 @@ export default {
             imageA: this.imageA
           }
           console.log(data)
-          this.$api.project.postProject(data).then(res => {
+          this.$api.project.putProject(data).then(res => {
             this.$notify.success({
               message: '创建成功'
             })

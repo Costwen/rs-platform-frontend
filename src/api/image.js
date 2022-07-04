@@ -6,8 +6,9 @@ export default {
       params: query
     })
   },
-  async postImage (form) {
-    return axios.post('/api/image/', form)
+  async postImage (id, form) {
+    console.log(form)
+    return axios.post('/api/image/' + id + '/', form)
   },
   async putImage (form) {
     return axios.put('/api/image/', form)

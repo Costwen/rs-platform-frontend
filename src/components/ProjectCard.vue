@@ -62,7 +62,7 @@ export default {
   methods: {
     thumbnail (image) {
       if (!image.url) {
-        return ''
+        return require('../assets/default.png')
       }
       return image.url.replace('/images/', '/thumbnail/')
     },

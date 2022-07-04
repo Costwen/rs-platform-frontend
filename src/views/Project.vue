@@ -97,11 +97,12 @@
       <el-main v-loading="!midshow">
         <double-map-card
           @addTask="addTask"
-          ref="doublemap"
           class="mid"
-          v-if="mode === 'contrast'"
+          ref="doublemap"
+          v-if="hasImage() && mode === 'contrast'"
         ></double-map-card>
-        <map-card ref="map" @addTask="addTask" class="mid" v-else />
+        <map-card ref="map" class="mid" @addTask="addTask" v-if="hasImage() && mode !== 'contrast'" />
+        <div v-if="!hasImage()"> 暂无图片 </div>
       </el-main>
 
       <div @click="rightdisappear" class="button-right">
@@ -213,14 +214,13 @@ export default {
   methods: {
     thumbnail (url) {
       if (!url) {
-        return ''
+        return require('../assets/default.png')
       }
       return url.replace('/images/', '/thumbnail/')
     },
     getHeight () {
-      console.log(this.project.type)
       if (this.project.type === 'contrast') {
-        return '150px'
+        return '140px'
       }
       return '200px'
     },
@@ -422,6 +422,14 @@ export default {
     },
     submit () {
       this.$refs[this.map].submit(this.$route.params.id)
+    },
+    hasImage () {
+      if (!this.project) return false
+      if (this.project.imageA || this.project.imageB) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   mounted () {
@@ -543,6 +551,7 @@ export default {
 }
 /* 过渡动画 */
 .mid {
+  margin-top: 0!important;
   z-index: -1;
   width: 100%;
   height: 100%;
@@ -603,7 +612,8 @@ export default {
   transform: translateX(-10%);
 }
 .el-main {
-  padding: 0;
+  padding: 0!important;
+  margin: 0 !important;
 }
 .el-dropdown {
   cursor: pointer;
