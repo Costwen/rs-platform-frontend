@@ -81,7 +81,7 @@ export default {
           data.append('name', this.ruleForm.name)
           data.append('coordinate', this.coordinate)
           console.log(this.coordinate)
-          this.$api.image.postImage(data).then(res => {
+          this.$api.image.addImage(data).then(res => {
             this.$notify.success('上传成功')
             this.close()
           }).catch(err => {

@@ -10,6 +10,9 @@ export default {
     console.log(form)
     return axios.post('/api/image/' + id + '/', form)
   },
+  async addImage (form) {
+    return axios.post('/api/image/', form)
+  },
   async putImage (form) {
     return axios.put('/api/image/', form)
   },
