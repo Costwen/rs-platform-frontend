@@ -90,6 +90,8 @@ export default {
           this.$router.push('/home')
           break
         case 'logout':
+          localStorage.removeItem('access')
+          localStorage.removeItem('username')
           this.$router.push('/login')
           break
       }
@@ -98,7 +100,7 @@ export default {
   mounted () {
     var path = this.$route.path
     this.tab = this.paths.indexOf(path)
-    console.log(this.tab)
+    this.username = localStorage.getItem('username')
   }
 }
 </script>

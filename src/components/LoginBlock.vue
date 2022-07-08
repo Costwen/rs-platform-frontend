@@ -88,6 +88,7 @@ export default {
         const storage = localStorage
         storage.setItem('access', res.data.access)
         storage.setItem('refresh', res.data.refresh)
+        storage.setItem('username', this.form.username)
         _that.$notify.success({
           title: '成功',
           message: '登录成功'

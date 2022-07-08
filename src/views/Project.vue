@@ -316,6 +316,8 @@ export default {
           this.$router.push('/home')
           break
         case 'logout':
+          localStorage.removeItem('access')
+          localStorage.removeItem('username')
           this.$router.push('/login')
           break
       }
