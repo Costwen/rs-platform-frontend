@@ -181,6 +181,7 @@ export default {
       // 添加到第一个
       this.editMap[image.id] = false
       this.imageList.unshift(image)
+      this.s
       this.page_num = Math.ceil(this.imageList.length / this.page_size)
     },
     downloadIamge (imgsrc, name) { // 下载图片地址和图片名
