@@ -1,31 +1,30 @@
 <template>
   <div class="header" v-if="pathMatch">
     <div class="left">
-        <img src="../assets/logo3.png" class="logo" @click="toHome"/>
-      <v-tabs v-model="tab" @change="change" class="item">
-      <v-tab>
-          我的项目
-      </v-tab>
-      <v-tab>
-        我的数据
-      </v-tab>
-      <v-tab>
-        检索数据
-      </v-tab>
-
-    </v-tabs>
-  </div>
-      <div class="user">
-        <el-dropdown @command="handleCommand">
-          <span class="el-dropdown-link">
-            <el-avatar>{{username}}</el-avatar>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>
-            <el-dropdown-item command="logout">注销登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
+      <img src="../assets/logo3.png" class="logo" @click="toHome"/>
+      <v-tabs v-model="tab" @change="change" class="item" id="headerTab">
+        <v-tab>
+            我的项目
+        </v-tab>
+        <v-tab>
+          我的数据
+        </v-tab>
+        <v-tab>
+          检索数据
+        </v-tab>
+      </v-tabs>
+    </div>
+    <div class="user">
+      <el-dropdown @command="handleCommand">
+        <span class="el-dropdown-link">
+          <el-avatar :size="avatarSize">{{username}}</el-avatar>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="toCenter">个人空间</el-dropdown-item>
+          <el-dropdown-item command="logout">注销登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
@@ -41,7 +40,8 @@ export default {
       username: 'admin',
       avatar: '',
       id: '',
-      paths: ['/home', '/dataset', '/search']
+      paths: ['/home', '/dataset', '/search'],
+      avatarSize: 35
     }
   },
   methods: {
@@ -106,16 +106,19 @@ export default {
 </script>
 
 <style scoped>
+
 .header{
   z-index: 5;
   background-color: white;
-  height: 50px !important;
+  height: 48px !important;
   justify-content: space-between;
   display: flex;
-  ;
+  box-shadow: #ccc 0px 1px;
 }
 .logo{
   margin-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   cursor: pointer;
 }
 .left{

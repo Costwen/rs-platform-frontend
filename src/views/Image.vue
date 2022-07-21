@@ -1,6 +1,6 @@
 <template>
   <div class="total">
-    <project-header></project-header>
+    <project-header id="header"></project-header>
   <el-container class="main">
 
     <el-aside class="aside">
@@ -289,6 +289,9 @@ export default {
 /* .total{
   background: linear-gradient(to top, #c6e2f9, #f2faff);
 } */
+.total{
+  height: 100%;
+}
 .up{
   text-align: center;
   margin: 50px 0 20px 0 ;
@@ -297,11 +300,11 @@ export default {
   height: 100%;
   margin: 0px !important;
   padding: 0px !important;
-
 }
 .main {
   margin: 20px auto;
   width: 95%;
+  height: calc(100% - 70px);
   /* background: #e9fdff; */
 }
 .no-image{

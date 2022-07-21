@@ -533,7 +533,7 @@ export default {
   border-radius: 8px;
 }
 .left {
-  width: 280px !important;
+  width: 140px !important;
   background-color: #2f3238;
   justify-content: space-between;
   display: flex;

@@ -21,7 +21,7 @@
                     </el-form-item>
                 </el-form>
                 <div class="bottom">
-                <div class="text">数据来源: 高德地图</div>
+                <div class="text" style="fontSize:10px;opacity: 0.5;">数据来源: 高德地图</div>
                 <el-button @click="search" type="primary" >搜索</el-button>
                 </div>
             </el-card>
@@ -29,14 +29,14 @@
 
             </div>
             <div class="ol-mouse-position">
-                <span> 经度: {{ lon }}</span>
-                <span> 维度: {{ lat }}</span>
+                <span style="margin-right: 10px"> 经度: {{ lon }}</span>
+                <span> 纬度: {{ lat }}</span>
             </div>
         </el-container>
             <div id="popup" class="ol-popup" v-show="show">
                 <div id="popup-content" class="popup-content">
-                    <el-button @click="uploadCoordinate">上传</el-button>
-                    <el-button type="primary" @click="cancle">取消</el-button>
+                    <el-button type="primary" @click="uploadCoordinate" size="mini">上传</el-button>
+                    <el-button  @click="cancle" size="mini">取消</el-button>
                 </div>
 
             </div>
@@ -267,18 +267,23 @@ export default {
   z-index: 0;
   position: fixed;
 }
-.popup{
-    position: fixed;
+#popup{
+    transform: translate(-50%,-50%);
 }
 .ol-mouse-position {
   position: absolute;
   float: right;
   bottom: 10px;
   right: 10px;
-  height: 20px;
+  height: 30px;
   margin-top: 60px;
-  background-color: rgba(255, 255, 255, 0.85);
+  padding: 3px 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 9;
+}
+.ol-selectable{
+  transform: translate(-50%,-50%);
 }
 .ol-zoom ol-unselectable ol-control{
   position: absolute;
@@ -301,7 +306,7 @@ export default {
     margin-top: 60px;
     z-index: 1;
     margin-left: 10px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.8);
     width: 300px;
 }
 .bottom{

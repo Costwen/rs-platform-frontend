@@ -10,28 +10,40 @@
           </el-image>
       </div>
 
-      <div class="middle">
-        <div>项目名称：{{project.name}}</div>
-        <div>项目类型：{{typeMap[project.type]}}</div>
-        <div>任务数量：{{project.task_num}}</div>
-        <div>创建时间：{{project.create_time}}</div>
-        <div>最后编辑时间：{{project.modify_time}}</div>
+      <div class="middle-box">
+        <div class="middle-name">{{project.name}}</div>
+        <div class="middle-attr">
+          <span style="fontSize:12px;color:gray">项目类型：</span>
+          <span style="fontSize:13px">{{typeMap[project.type]}}</span>
+        </div>
+        <div class="middle-attr">
+          <span style="fontSize:12px;color:gray">任务数量：</span>
+          <span style="fontSize:13px">{{project.task_num}}</span>
+        </div>
+        <div class="middle-attr">
+          <span style="fontSize:12px;color:gray">创建时间：</span>
+          <span style="fontSize:13px">{{project.create_time}}</span>
+        </div>
+        <div class="middle-attr">
+          <span style="fontSize:12px;color:gray">最后编辑：</span>
+          <span style="fontSize:13px">{{project.modify_time}}</span>
+        </div>
       </div>
 
       <div class="right">
         <div v-if="project.status === 'normal' " @click="projectEdit(project.id)">
-          <el-button  type="primary" icon="el-icon-edit" size="medium">编辑</el-button>
+          <el-button  type="primary" icon="el-icon-edit" size="small">编辑</el-button>
         </div>
         <div v-if="project.status === 'normal' " @click="projectDelete(project.id)">
-          <el-button type="danger" icon="el-icon-delete" size="medium">删除</el-button>
+          <el-button type="info" icon="el-icon-delete" size="small">删除</el-button>
         </div>
 
         <div v-if="project.status === 'delete' " style="rab" @click="projectRecovery(project.id)">
-          <el-button type="primary" icon="el-icon-success" size="medium">恢复</el-button>
+          <el-button type="primary" icon="el-icon-success" size="small">恢复</el-button>
         </div>
 
         <div v-if="project.status === 'delete' " style="rab" @click="entireDelete(project.id)">
-          <el-button type="danger" icon="el-icon-delete" size="medium">彻底删除</el-button>
+          <el-button type="info" icon="el-icon-delete" size="small">彻底删除</el-button>
         </div>
 
       </div>
@@ -131,12 +143,13 @@ export default {
 .container {
   display: flex;
   /* justify-content: flex-start; */
-  min-height: 140px;
+  height: 160px;
   padding-top: 10px;
   padding-right: 10px;
   justify-content: space-between;
   background-color: #fff;
   box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
 }
 
 .container:hover {
@@ -146,14 +159,30 @@ export default {
 
 .left {
   width: 20%;
+  padding: 10px;
   /* background-color:gray; */
 }
 
-.middle {
-  font-size: 17px;
+.middle-box {
+  width:50%;
+
+  padding: 10px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.middle-attr {
   text-align: left;
   /* display: flex; */
 }
+
+.middle-name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
 .right{
   display: flex;
   flex-direction: column;
@@ -161,8 +190,7 @@ export default {
 }
 .project_image {
   /*长宽比: 1:1 */
-  width: 90%;
-  height: 90%;
+  height: 100%;
   margin: 0 auto;
   text-align: center;
   font-size: 15pt;
