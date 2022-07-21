@@ -47,7 +47,8 @@ import ImageLayer from 'ol/layer/Image'
 import Static from 'ol/source/ImageStatic'
 import { ScaleLine, defaults as defaultControls } from 'ol/control'
 import { asArray } from 'ol/color'
-import { Fill, Style } from 'ol/style'
+import { Fill, Style, Stroke } from 'ol/style'
+import GeoJSON from 'ol/format/GeoJSON'
 export default {
   data () {
     return {
@@ -229,6 +230,72 @@ export default {
       this.drawInit()
       this.popUpInit()
     },
+    addFeatures () {
+      var style = new Style({
+        stroke: new Stroke({
+          color: 'red',
+          width: 3
+        }),
+        fill: new Fill({
+          color: 'rgba(0, 0, 0, 0)'
+        })
+      })
+      var data = {
+        type: 'FeatureCollection',
+        features: []
+      }
+      const vectorLayer = new VectorLayer({
+        source: new VectorSource({
+          features: (new GeoJSON()).readFeatures(data)
+        }),
+        style: function (feature) {
+          const color = feature.get('COLOR') || 'rgba(0, 0, 0, 0)'
+          style.getFill().setColor(color)
+          return style
+        }
+      })
+      var map = this.map
+      map.addLayer(vectorLayer)
+      let highlight
+      const featureOverlay = new VectorLayer({
+        source: new VectorSource(),
+        map: map,
+        style: new Style({
+          stroke: new Stroke({
+            color: 'rgba(255, 255, 255, 0.7)',
+            width: 2
+          })
+        })
+      })
+
+      const displayFeatureInfo = function (pixel) {
+        const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+          return feature
+        })
+
+        if (feature !== highlight) {
+          if (highlight) {
+            featureOverlay.getSource().removeFeature(highlight)
+          }
+          if (feature) {
+            featureOverlay.getSource().addFeature(feature)
+          }
+          highlight = feature
+        }
+      }
+
+      map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+          return
+        }
+        const pixel = map.getEventPixel(evt.originalEvent)
+        displayFeatureInfo(pixel)
+      })
+
+      map.on('click', function (evt) {
+        displayFeatureInfo(evt.pixel)
+      })
+    },
     selectRemove () {
       this.map.removeInteraction(this.draw)
       this.map.removeOverlay(this.overlay)
@@ -292,6 +359,7 @@ export default {
       for (var i = 0; i < project.tasks.length; i++) {
         this.addLayer(project.tasks[i], opacity)
       }
+      this.addFeatures()
     }
   }
 }

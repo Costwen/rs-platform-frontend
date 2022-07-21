@@ -19,11 +19,6 @@ const routes = [
     component: Home
   },
   {
-    path: '/AnalysisTools',
-    name: 'AnalysisTools',
-    component: () => import('../views/AnalysisTools.vue')
-  },
-  {
     path: '/create',
     name: 'Create',
     component: () => import('../views/Create.vue')
@@ -52,6 +47,11 @@ const routes = [
     path: '/dataset',
     name: 'Image',
     component: () => import('../views/Image.vue')
+  },
+  {
+    path: '/userbook',
+    name: 'UserBook',
+    component: () => import('../views/UserBook.vue')
   }
 ]
 
