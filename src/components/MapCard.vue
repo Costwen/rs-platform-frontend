@@ -3,7 +3,7 @@
     <div class="contain">
       <div id="map" class="map">
         <div class="ol-mouse-position">
-        <span> X: {{ lon }}</span>
+        <span style="margin-right: 10px"> X: {{ lon }}</span>
         <span> Y: {{ lat }}</span>
         </div>
       </div>
@@ -399,10 +399,13 @@ export default {
   float: right;
   bottom: 10px;
   right: 10px;
-  height: 20px;
+  height: 30px;
+  padding: 3px 10px;
+  border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.85);
   z-index: 9;
 }
+
 .ol-control {
   display: none;
 }

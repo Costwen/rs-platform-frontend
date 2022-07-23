@@ -140,7 +140,7 @@ export default {
 }
 .content {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background-color: rgb(36, 39, 47)
 }
 .left {

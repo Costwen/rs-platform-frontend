@@ -16,7 +16,7 @@
     </v-tabs>
   </div>
   <div class="right">
-      <div class="userbook" @click="toUserBook">用户手册</div>
+      <el-button type="plain" @click="toUserBook" icon="el-icon-info" style="fontSize:20px;padding:0px;margin-right:20px" size="small" circle plain></el-button>
       <div class="user">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
@@ -138,6 +138,8 @@ export default {
 }
 .right{
   display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .userbook{
   margin-right: 15px;

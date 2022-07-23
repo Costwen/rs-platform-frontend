@@ -2,15 +2,14 @@
   <div class="total">
     <project-header id="header"></project-header>
   <el-container class="main">
-
     <el-aside class="aside">
       <div class="up">
         <v-btn @click="upload" color="primary">
           <v-icon >mdi-image-size-select-actual</v-icon>
           <span>选取文件</span>
-          </v-btn>
+        </v-btn>
       </div>
-    <v-tabs class="tabs" vertical @change="change">
+      <v-tabs class="tabs" vertical @change="change">
           <v-tab>
             <v-icon left>
               mdi-account
@@ -35,8 +34,7 @@
             </v-icon>
             <span>分析结果</span>
           </v-tab>
-    </v-tabs>
-
+      </v-tabs>
     </el-aside>
     <v-divider vertical style="margin: 2px"></v-divider>
 
@@ -62,7 +60,7 @@
             {{item.name}}
             </div>
             <div>
-              <i @click="changeName(item.id)" class="el-icon-edit"></i>
+              <i @click="changeName(item.id)" class="el-icon-edit" style="fontSize:15px;color:gray;opacity:0.5"></i>
             </div>
           </div>
           <div class="actions" v-if="editMap[item.id]">
@@ -71,49 +69,57 @@
           </div>
         </v-card-title>
         <v-card-subtitle class="subtitle">
-            <span>创建时间:</span>
-            <span>{{item.create_time}}</span>
+            <span style="fontSize:12px;color:gray;margin-right: 5px;">创建时间：</span>
+            <span style="fontSize:13px">{{item.create_time}}</span>
           </v-card-subtitle>
-        <v-card-actions class="actions">
+          <v-divider></v-divider>
+        <v-card-actions class="actions" style="opacity: 0.5">
           <v-btn v-if="mode!==3"
-          color="orange"
+            color="#13459c"
             text
             @click=create(item.id)
+            class="btn-content"
+            plain
           >
           <v-icon>mdi-pencil-outline</v-icon>
             创建项目
           </v-btn>
           <v-btn v-else
-            color="orange"
+            color="#13459c"
             text
             @click=toProject({id:item.project})
+            class="btn-content"
+            plain
           >
           <v-icon>mdi-pencil-outline</v-icon>
             查看项目
           </v-btn>
 
           <v-btn
-          color="deep-purple lighten-2"
+            color="#13459c"
             text
             @click="downloadIamge(item.url, item.name)"
+            class="btn-content"
+            plain
           >
           <v-icon> mdi-download</v-icon>
-          下载
+            下载
           </v-btn>
           <v-btn text
-          class="btn1"
-          @click="deleteImage(item.id, idx)"
+            color="gray"
+            class="btn1 btn-content"
+            @click="deleteImage(item.id, idx)"
+            plain
           >
-        <v-icon left >
-          mdi-delete
-        </v-icon>
-            删除
+          <v-icon left >
+            mdi-delete
+          </v-icon>
+              删除
           </v-btn>
         </v-card-actions>
       </v-card>
-      </div>
-      <v-divider></v-divider>
-      <v-pagination
+    </div>
+    <v-pagination
       v-model="page"
       :length="page_num"
       prev-icon="mdi-menu-left"
@@ -145,7 +151,7 @@ export default {
       fileList: [],
       show: true,
       page_num: 1,
-      page_size: 6,
+      page_size: 8,
       mode: 0,
       cur_idx: 0
     }
@@ -291,6 +297,7 @@ export default {
 } */
 .total{
   height: 100%;
+  overflow-y: hidden;
 }
 .up{
   text-align: center;
@@ -298,14 +305,22 @@ export default {
 }
 .mid{
   height: 100%;
+  width: calc(100% - 200px);
   margin: 0px !important;
   padding: 0px !important;
 }
 .main {
-  margin: 20px auto;
+  margin: 5px;
   width: 95%;
-  height: calc(100% - 70px);
+  height: calc(100% - 58px);
   /* background: #e9fdff; */
+}
+.el-main{
+  overflow-y:hidden;
+}
+
+.btn-content{
+  font-size:12px;
 }
 .no-image{
     font-size: 22px;
@@ -319,7 +334,7 @@ export default {
   border-bottom: 1.5px solid gray;
 }
 .aside{
-  width: 200px;
+  width: 200px !important;
 }
 .subtitle{
   text-align: left;
@@ -331,27 +346,24 @@ export default {
   display: -webkit-box;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 30px;
   margin: 0 auto;
-  min-height: 300px;
 }
 
 .image {
   position: absoulte;
-  width: 30%;
-  min-width: 300px;
-  min-height: 300px;
-  margin: 1%;
-  height: 40%;
+  padding: 5px;
+  width: 23%;
+  margin: 12px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   background: rgba(255, 255, 255, 0.5);
 }
 .image-item{
   display: flex;
-  height: 165px;
-  margin: 5px;
+  height: 160px;
+  margin: 0px;
   border: 2px solid #13459c;
   border-radius: 5px;
   padding: 2px;
@@ -361,14 +373,14 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.btn1{
-  color: #b68712 !important;
-}
-.btn2{
-  color: #a2741d !important;
-}
 .v-card__subtitle, .v-card__text, .v-card__title{
   padding: 10px;
+}
+.v-card__actions{
+  padding:0px !important;
+}
+.v-icon{
+  font-size: 15px;
 }
 .image-title{
   display: flex;

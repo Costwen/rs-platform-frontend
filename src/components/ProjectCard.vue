@@ -140,6 +140,9 @@ export default {
 
 <style scoped>
 
+.el-button{
+  font-size: 12px;
+}
 .container {
   display: flex;
   /* justify-content: flex-start; */
@@ -158,15 +161,15 @@ export default {
 }
 
 .left {
-  width: 20%;
+  width: 30%;
   padding: 10px;
   /* background-color:gray; */
 }
 
 .middle-box {
-  width:50%;
+  width:40%;
 
-  padding: 10px 0px;
+  padding: 20px 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="total">
     <project-header></project-header>
     <el-container class="home">
       <el-aside class="aside">
@@ -22,16 +22,17 @@
               <i class="el-icon-folder-opened"></i>
               <span slot="title"> 历史项目</span>
             </el-menu-item>
-            <v-divider></v-divider>
+            <!-- <v-divider></v-divider> -->
             <el-menu-item index='delete' @click="getDelete" class="history-project">
               <i class="el-icon-delete"></i>
               <span slot="title">回收站</span>
             </el-menu-item>
           </el-menu>
       </el-aside>
+      <v-divider vertical style="margin: 2px"></v-divider>
       <el-main class="main" v-loading="show">
         <el-dropdown @command="filter" style="float: right; margin-right: 7px; margin-top: 7px">
-            <span class="el-dropdown-link" style="color: grey; float: left; font-size: 15px">
+            <span class="el-dropdown-link" style="color: grey; float: left; font-size: 15px; padding-right: 20px;">
               项目类别<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
           <el-dropdown-menu slot="dropdown">
@@ -44,19 +45,21 @@
         </el-dropdown>
         <div v-if="status === 'normal'" class="title">项目列表</div>
         <div v-else class="title" >回收站</div>
-        <div v-for=" item, idx in projects.slice(page_size*(page-1), page_size*page)" :key="item.id" class="project">
+        <div class="cards">
+          <div v-for=" item, idx in projects.slice(page_size*(page-1), page_size*page)" :key="item.id" class="project">
           <project-card @remove="remove" :project="item" :idx="idx"/>
+          </div>
+          <div v-if="page_num===0" class="no-project">
+            暂无项目
+          </div>
         </div>
-        <div v-if="page_num===0" class="no-project">
-          暂无项目
-        </div>
-        <v-divider class="divider"></v-divider>
         <v-pagination
         v-model="page"
         :length="page_num"
         prev-icon="mdi-menu-left"
         next-icon="mdi-menu-right"
         v-if="page_num !== 0"
+        style="margin-top:10px"
       ></v-pagination>
       </el-main>
     </el-container>
@@ -81,7 +84,7 @@ export default {
       status: 'normal',
       show: true,
       page_num: 1,
-      page_size: 3,
+      page_size: 6,
       page: 1
     }
   },
@@ -160,6 +163,11 @@ export default {
 </script>
 
 <style scoped>
+
+.total{
+  height: 100%;
+  overflow-y: hidden;
+}
 .class {
   background-color: white;
   /*opacity: 0.9;*/
@@ -169,10 +177,11 @@ export default {
   justify-content: center;
 }
 .home {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   margin-top: 1%;
+  height: calc(100% - 60px);
 }
 .divider{
   margin: 10px 0 10px 0;
@@ -187,8 +196,19 @@ export default {
   /*border-radius : 50%;*/
 }
 
+.cards{
+  align-items: center;
+  display: -webkit-box;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
 .project{
   padding: 5px;
+  width: 45%;
+  margin-right: 2.5%;
+  margin-left: 2.5%;
 }
 .no-project{
   font-size: 22px;
@@ -199,18 +219,19 @@ export default {
   background-color: #d43f8d;
 }
 .aside {
-  min-width: 200px;
+  width: 200px !important;
   padding: 0px !important;
+  height: 100%;
   /* background-color: antiquewhite; */
 }
 .el-main{
   padding-top: 0;
 }
 .main {
-  width: calc(100% - 300px);
+  width: calc(100% - 200px);
   height: 100%;
   margin-left: 1%;
-  padding: 12px;
+  padding: 12px 0px;
   min-height: 500px;
 }
 
@@ -234,12 +255,13 @@ export default {
 
 .history-project {
   text-align: center;
-  font-size: 18px;
+  font-size: 15px;
 }
 .el-menu{
   padding: 0px !important;
-    background-color: #fff;
-  box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border: 0 !important;
+  /* box-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.1); */
 }
 .title {
   font-size: 25px;
