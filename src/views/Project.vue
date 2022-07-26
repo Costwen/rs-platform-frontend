@@ -3,25 +3,23 @@
     <el-container>
     <el-header class="header">
       <div class="header-left" v-if="project">
-        <i class="el-icon-back" @click="back" style="margin-right:50px"/>
-            <div class="description-item">
-              <span class="description-name">名称</span><span class="description-content">{{ project.name }}</span>
-            </div>
-            <div class="description-item">
-              <span class="description-name">种类</span><span class="description-content">{{ typeMap[project.type] }}</span>
-            </div>
-            <div class="description-item">
-              <span class="description-name">创建时间</span><span class="description-content">{{ project.create_time }}</span>
-            </div>
-            <div class="description-item">
-              <span class="description-name">修改时间</span><span class="description-content">{{ project.modify_time }}</span>
+          <i class="el-icon-back" @click="back" style="margin-right:30px"/>
+            <div class="description">
+              <div class="actions" v-if="isEdited">
+                <el-input v-model="project.name" placeholder="请输入内容" ></el-input>
+                <v-icon class="icon" @click="changeName(project.id, project.name)"> mdi-content-save-edit </v-icon>
+              </div>
+              <span class="description-content" v-if="!isEdited">{{ project.name }}</span>
+              <div @click="isEdited=true" v-if="!isEdited">
+              <i class="el-icon-edit" style="fontSize:15px;color:white;opacity:1"></i>
+              </div>
             </div>
       </div>
 
       <div class="header-right">
         <el-dropdown @command="handleCommand" trigger="click" >
           <span class="el-dropdown-link">
-            <el-avatar size="medium">用户名</el-avatar>
+            <el-avatar size="medium">{{username}}</el-avatar>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="toHome">个人空间</el-dropdown-item>
@@ -35,29 +33,50 @@
       <div class="left" v-if="leftshow">
         <div class="left-upper">
           <div class="data" v-if="project">
+            <span class="left-title">项目信息</span>
+            <v-divider class="divider"></v-divider>
+            <div class="subtitle">
+              <span>项目名称: &nbsp;</span>
+              <span>{{ project.name }}</span>
+            </div>
+            <div class="subtitle">
+              <span>项目种类: &nbsp;</span>
+              <span>{{ typeMap[project.type] }}</span>
+            </div>
+            <div class="subtitle">
+              <span>创建信息: &nbsp;</span>
+              <span>{{ project.create_time }}</span>
+            </div>
+
+            <div class="subtitle">
+              <span>修改时间: &nbsp;</span>
+              <span>{{ project.modify_time }}</span>
+            </div>
+          </div>
+          <div class="data" v-if="project">
             <span class="left-title">图片信息</span>
             <v-divider class="divider"></v-divider>
-            <v-card class="left-image">
+            <div class="left-image">
               <div class="little-title" v-if="mode === 'contrast'">图片A</div>
-              <v-img
-                width="100%"
-                :height="getHeight()"
+              <el-image
+                :style="mode !== 'contrast'?'width: 200px; height: 180px;':'width: 160px; height: 140px;'"
                 :src="thumbnail(project.imageA.url)"
-              ></v-img>
-            </v-card>
+                fit="fill">
+                </el-image>
+            </div>
             <div class="subtitle">
               <span style="fontSize: 15px;">H: {{ project.imageA.H }}&nbsp; W: {{ project.imageA.W }}
               </span>
             </div>
             <div v-if="mode === 'contrast'">
-              <v-card class="left-image">
+              <div class="left-image">
                 <div class="little-title">图片B</div>
-                <v-img
-                  width="250px"
-                  height="150px"
+                <el-image
+                  style="width: 160px; height: 140px;"
                   :src="thumbnail(project.imageB.url)"
-                ></v-img>
-              </v-card>
+                  fit="fill">
+                </el-image>
+              </div>
               <div class="subtitle">
                 <span style="fontSize: 15px;">H: {{ project.imageB.H }}&nbsp; W: {{ project.imageB.W }}
                 </span>
@@ -106,7 +125,7 @@
           <div class="no-task" v-if="project.tasks.length === 0">暂无任务</div>
           <el-main class="detail">
             <div v-for="(item, index) in project.tasks" :key="index">
-              <div class="task" style="fontSize:13px">
+              <div class="task">
                 <div class="task-id" >
                   <span>任务序号: &nbsp;</span>
                   <span>{{ index + 1 }}</span>
@@ -124,7 +143,7 @@
               </div>
               <div v-if="item.status !== 'pending'">
                 <v-img class="image" :src="thumbnail(item.mask.url)">
-                  <el-switch
+                  <el-checkbox
                     class="switch"
                     active-color="#1976d2"
                     :width="switchWidth"
@@ -132,7 +151,7 @@
                     v-model="visible[index]"
                     @change="setVisible(index)"
                   >
-                  </el-switch>
+                  </el-checkbox>
                   <v-icon class="information" @click="showDetail(item)">
                     <!-- mdiInformationVariant -->
                     mdi-information-variant
@@ -184,6 +203,7 @@ export default {
   },
   data () {
     return {
+      username: '',
       project: null,
       leftshow: true,
       rightshow: true,
@@ -194,6 +214,7 @@ export default {
       visible: [],
       websocket: null,
       map: 'map',
+      isEdited: false,
       switchWidth: 40,
       typeMap: {
         detection: '目标检测',
@@ -213,7 +234,7 @@ export default {
     },
     getHeight () {
       if (this.project.type === 'contrast') {
-        return '100%'
+        return '140px'
       }
       return '100%'
     },
@@ -327,6 +348,23 @@ export default {
       } else {
       }
     },
+    changeName (id, name) {
+      this.$api.project.postProject(id, {
+        name: name
+      }).then(res => {
+        this.$notify({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.isEdited = false
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
+    },
     refresh () {
       // 重新刷新页面
       window.location.reload()
@@ -436,6 +474,7 @@ export default {
   },
   mounted () {
     // 获取url的最后一个
+    this.username = localStorage.getItem('username')
     var id = this.$route.params.id
     this.$api.project.getProject(id).then((res) => {
       var project = res.data.project
@@ -474,9 +513,11 @@ export default {
 }
 .task {
   margin: 10px 0 10px 0;
+  font-size: 14px;
 }
 .little-title {
   position: absolute;
+  color: white;
   z-index: 1;
   font-size: 20pt;
   margin: 10px;
@@ -526,6 +567,10 @@ export default {
 }
 .left-image {
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .data {
   padding: 10px;
@@ -541,14 +586,11 @@ export default {
   font-size:15px;
 }
 .left {
-  width: 180px !important;
-  height: 100%;
   background-color: #2f3238;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden;
 }
 
 .el-container{
@@ -567,9 +609,7 @@ export default {
   width: 100px;
   margin: 10px;
 }
-.left-upper{
-  width:180px;
-}
+
 .left-bottom {
   margin-bottom: 15px;
 }
@@ -666,7 +706,6 @@ export default {
 }
 .switch {
   float: left;
-  font-size:12px;
 }
 .left-bottom2 {
   align-self: center;
@@ -675,12 +714,12 @@ export default {
 .delete {
   float: left;
   color: skyblue;
-  font-size: 15px;
+  font-size: 20px;
 }
 .information {
   float: right;
   color: skyblue;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .descriptions{
@@ -688,8 +727,9 @@ export default {
   width:50%;
   background-color:rgba(0,0,0,0);
 }
-.description-item{
+.description{
   margin-right:10px;
+  display: flex;
 }
 .description-name{
   margin-right:5px;
@@ -698,5 +738,16 @@ export default {
 }
 .description-content{
   color:white;
+}
+.el-icon-edit{
+  cursor: pointer;
+  margin-left: 10px;
+}
+.actions{
+  display: flex
+}
+.icon{
+  margin-left:20px;
+  color: white;
 }
 </style>

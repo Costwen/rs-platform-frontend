@@ -1,3 +1,33 @@
-.table-of-contents{
+.table-of-contents {
     margin-top: 50px;
+}
+.el-checkbox__inner{
+    background-color: rgba(255,255,255,0.5);
+    margin-right: 5px;
+}
+.el-input__inner{
+    background-color: transparent;
+    border: white 1px solid;
+    color: white !important;
+}
+.el-input__inner:focus{
+    border: rgb(209, 176, 176) 1px solid;
+}
+html::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+}
+
+html:hover::-webkit-scrollbar-thumb {
+    background: hsla(240, 2%, 19%, 0.4);
+}
+
+html:hover::-webkit-scrollbar-track {
+    background: hsla(210, 3%, 15%, 0.1);
 }

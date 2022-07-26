@@ -21,7 +21,7 @@
                     </el-form-item>
                 </el-form>
                 <div class="bottom">
-                <div class="text" style="fontSize:10px;opacity: 0.5;">数据来源: 高德地图</div>
+                <div class="text" style="fontSize:10px;opacity: 0.8;">数据来源: 高德地图</div>
                 <el-button @click="search" type="primary" >搜索</el-button>
                 </div>
             </el-card>

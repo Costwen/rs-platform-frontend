@@ -198,17 +198,13 @@ export default {
 
 .cards{
   align-items: center;
-  display: -webkit-box;
+  display: grid;
+  grid-template-columns: 45% 45%;
   justify-content: center;
-  flex-wrap: wrap;
-  margin: 0 auto;
 }
 
 .project{
-  padding: 5px;
-  width: 45%;
-  margin-right: 2.5%;
-  margin-left: 2.5%;
+  padding: 10px 5px 10px 10px;
 }
 .no-project{
   font-size: 22px;
@@ -219,9 +215,10 @@ export default {
   background-color: #d43f8d;
 }
 .aside {
-  width: 200px !important;
+  width: 210px !important;
   padding: 0px !important;
   height: 100%;
+  margin-left: 10px;
   /* background-color: antiquewhite; */
 }
 .el-main{
@@ -268,6 +265,7 @@ export default {
   text-align: left;
   border-bottom: 2px solid purple;
   padding-bottom: 13px;
+  margin: 0 5% 0 5%;
   font-weight: 550;
 }
 .add{

@@ -73,9 +73,9 @@
             <span style="fontSize:13px">{{item.create_time}}</span>
           </v-card-subtitle>
           <v-divider></v-divider>
-        <v-card-actions class="actions" style="opacity: 0.5">
+        <v-card-actions class="actions">
           <v-btn v-if="mode!==3"
-            color="#13459c"
+            color="#1976d2"
             text
             @click=create(item.id)
             class="btn-content"
@@ -85,7 +85,7 @@
             创建项目
           </v-btn>
           <v-btn v-else
-            color="#13459c"
+            color="#1976d2"
             text
             @click=toProject({id:item.project})
             class="btn-content"
@@ -96,7 +96,7 @@
           </v-btn>
 
           <v-btn
-            color="#13459c"
+            color="#9575cd"
             text
             @click="downloadIamge(item.url, item.name)"
             class="btn-content"
@@ -320,7 +320,7 @@ export default {
 }
 
 .btn-content{
-  font-size:12px;
+  font-size:13px;
 }
 .no-image{
     font-size: 22px;
