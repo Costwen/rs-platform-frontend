@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     back () {
-      this.$router.go(-1)
+      this.$router.push({ path: '/home' })
     }
   },
   mounted () {
