@@ -20,7 +20,7 @@
                 类型: &nbsp;  地物分类
               </div>
               <div  class="subsubtitle" v-for="item, idx in task.analysis.categories" :key="idx">
-                {{cnName[item.name]}}像素: {{item.value}}
+                {{item.name}}像素: {{item.value}}
               </div>
               <div class="subtitle">
                 推理用时: {{toFixed(task.analysis.time, 2)}}s
@@ -41,15 +41,7 @@ export default {
   data () {
     return {
       dialog: false,
-      task: null,
-      cnName: {
-        'Bare soil': '裸地',
-        Building: '建筑',
-        Pavement: '人行道',
-        Road: '道路',
-        Vegetation: '植被', //
-        Water: '水体' // #409EFF
-      }
+      task: null
     }
   },
   methods: {
@@ -73,7 +65,7 @@ export default {
       var data = []
       this.task.analysis.categories.forEach(item => {
         data.push({
-          name: this.cnName[item.name],
+          name: item.name,
           value: item.value
         })
       })

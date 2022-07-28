@@ -6,7 +6,14 @@
         <span style="margin-right: 10px"> X: {{ lon }}</span>
         <span> Y: {{ lat }}</span>
         </div>
+        <div class="detail" v-if="name">
+        <span>类别: {{ name }}</span>
+        <span>区域大小: {{ area }} </span>
+        <span>区域比例: {{ ratio}}</span>
+        </div>
+
       </div>
+
     </div>
       <div class="select">
         <div></div>
@@ -49,9 +56,14 @@ import { ScaleLine, defaults as defaultControls } from 'ol/control'
 import { asArray } from 'ol/color'
 import { Fill, Style, Stroke } from 'ol/style'
 import GeoJSON from 'ol/format/GeoJSON'
+// var colorList = ['#d9a146', '#525e71', '#2ec4b6', '#343a40', '#73a942', '#90e0ef']
 export default {
   data () {
     return {
+      type: '',
+      name: '',
+      area: null,
+      ratio: null,
       lon: 0, // 经度
       lat: 0, // 纬度
       map: null, // 地图
@@ -202,6 +214,7 @@ export default {
     },
     setVisibility (task, visible) {
       this.layers['mask' + task.id].setVisible(visible)
+      this.layers['vector' + task.id].setVisible(visible)
     },
     addLayer (task, opacity = 0.5) {
       var coordinate = task.coordinate
@@ -225,35 +238,44 @@ export default {
     },
     removeLayer (task) {
       this.map.removeLayer(this.layers['mask' + task.id])
+      this.map.removeLayer(this.layers['vector' + task.id])
     },
     selectAdd () {
       this.drawInit()
       this.popUpInit()
     },
-    addFeatures () {
+    addFeatures (task) {
       var style = new Style({
         stroke: new Stroke({
           color: 'red',
-          width: 3
+          width: 2
         }),
         fill: new Fill({
           color: 'rgba(0, 0, 0, 0)'
         })
       })
-      var data = {
-        type: 'FeatureCollection',
-        features: []
+      var data = task.analysis.geojson
+      if (!data) {
+        return
       }
       const vectorLayer = new VectorLayer({
         source: new VectorSource({
           features: (new GeoJSON()).readFeatures(data)
         }),
         style: function (feature) {
-          const color = feature.get('COLOR') || 'rgba(0, 0, 0, 0)'
-          style.getFill().setColor(color)
+          const color = feature.values_.color
+          var rgba1 = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + color[3] + ')'
+          var rgba2 = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + 1 + ')'
+          if (color[0] === 255 && color[1] === 255 && color[2] === 255) {
+            rgba2 = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + 0 + ')'
+          }
+          style.getFill().setColor(rgba1)
+          style.getStroke().setColor(rgba2)
+          style.setZIndex(feature.values_.zIndex)
           return style
         }
       })
+      this.layers['vector' + task.id] = vectorLayer
       var map = this.map
       map.addLayer(vectorLayer)
       let highlight
@@ -262,17 +284,21 @@ export default {
         map: map,
         style: new Style({
           stroke: new Stroke({
-            color: 'rgba(255, 255, 255, 0.7)',
+            color: 'rgba(255, 255, 255, 1)',
             width: 2
           })
         })
       })
-
+      const _that = this
       const displayFeatureInfo = function (pixel) {
         const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
           return feature
         })
-
+        if (feature) {
+          _that.name = feature.get('name')
+          _that.area = feature.get('area')
+          _that.ratio = feature.get('ratio').toFixed(6)
+        }
         if (feature !== highlight) {
           if (highlight) {
             featureOverlay.getSource().removeFeature(highlight)
@@ -283,7 +309,6 @@ export default {
           highlight = feature
         }
       }
-
       map.on('pointermove', function (evt) {
         if (evt.dragging) {
           return
@@ -291,7 +316,6 @@ export default {
         const pixel = map.getEventPixel(evt.originalEvent)
         displayFeatureInfo(pixel)
       })
-
       map.on('click', function (evt) {
         displayFeatureInfo(evt.pixel)
       })
@@ -302,6 +326,7 @@ export default {
     },
     init (project) {
       if (!project) return
+      this.type = project.type
       var image = project.imageA
       const extent = [0, 0, image.H, image.W]
       this.raw_extent = extent
@@ -358,8 +383,8 @@ export default {
       }
       for (var i = 0; i < project.tasks.length; i++) {
         this.addLayer(project.tasks[i], opacity)
+        this.addFeatures(project.tasks[i])
       }
-      this.addFeatures()
     }
   }
 }
@@ -429,5 +454,11 @@ export default {
   border-radius: 3px;
   background-color: rgba(0,60,136,0.7);
   color: rgb(242, 250, 250);
+}
+.detail{
+  display: flex;
+  justify-content: left;
+  color: aqua;
+  gap: 15px;
 }
 </style>

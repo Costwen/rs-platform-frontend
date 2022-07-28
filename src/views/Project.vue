@@ -279,6 +279,7 @@ export default {
               this.$refs[this.map].addLayer(task, 1.0)
             } else {
               this.$refs[this.map].addLayer(task, 0.5)
+              this.$refs[this.map].addFeatures(task)
             }
             this.visible.push(true)
           })

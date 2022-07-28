@@ -20,5 +20,11 @@ npm run build
 npm run lint
 ```
 
+### build
+
+```
+scp -r dist/ costwen@101.43.134.156:/var/lib/jenkins/workspace/SoftCup/deployment/compose/nginx
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
