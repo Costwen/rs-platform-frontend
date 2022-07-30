@@ -269,6 +269,9 @@ export default {
           if (color[0] === 255 && color[1] === 255 && color[2] === 255) {
             rgba2 = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + 0 + ')'
           }
+          if (!color[3]) {
+            rgba1 = 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ',' + 0 + ')'
+          }
           style.getFill().setColor(rgba1)
           style.getStroke().setColor(rgba2)
           style.setZIndex(feature.values_.zIndex)

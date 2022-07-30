@@ -481,6 +481,7 @@ export default {
       var project = res.data.project
       this.project = project
       this.midshow = true
+      console.log(project)
       this.mode = project.type
       if (project.type === 'contrast') {
         this.map = 'doublemap'
