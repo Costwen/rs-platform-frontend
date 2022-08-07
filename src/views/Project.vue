@@ -43,6 +43,18 @@
               <span>项目种类: &nbsp;</span>
               <span>{{ typeMap[project.type] }}</span>
             </div>
+            <div class="subtitle" v-if="mode==='retrieval'">
+              <div> 提取类别:
+                <el-select class="select" v-model="project.target" @change="changeTarget(project.id, project.target)" placeholder="请选择">
+                <el-option
+                  v-for="(value, key) in target"
+                  :key="key"
+                  :label="key"
+                  :value="value">
+                </el-option>
+              </el-select>
+              </div>
+            </div>
             <div class="subtitle">
               <span>创建信息: &nbsp;</span>
               <span>{{ project.create_time }}</span>
@@ -209,7 +221,6 @@ export default {
       rightshow: true,
       midshow: false,
       mode: null,
-      fileList: [],
       url: null,
       visible: [],
       websocket: null,
@@ -222,7 +233,11 @@ export default {
         retrieval: '目标提取',
         contrast: '变化检测'
       },
-      column: 4
+      target: {
+        道路: 'road',
+        建筑: 'building',
+        水体: 'water'
+      }
     }
   },
   methods: {
@@ -366,6 +381,23 @@ export default {
         })
       })
     },
+    changeTarget (id, target) {
+      this.$api.project.postProject(id, {
+        target: target
+      }).then(res => {
+        this.$notify({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.isEdited = false
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
+    },
     refresh () {
       // 重新刷新页面
       window.location.reload()
@@ -462,6 +494,14 @@ export default {
       })
     },
     submit () {
+      if (this.mode === 'retrieval') {
+        if (!this.project.target) {
+          this.$notify.error({
+            message: '请选择目标提取类型'
+          })
+          return
+        }
+      }
       this.$refs[this.map].submit(this.$route.params.id)
     },
     hasImage () {
@@ -751,5 +791,16 @@ export default {
 .icon{
   margin-left:20px;
   color: white;
+}
+.select{
+  width: 100px;
+  color: white;
+}
+::v-deep .el-input__inner{
+  background-color: transparent !important;
+  color: skyblue;
+  border: none;
+  font-size: 16px;
+  padding: 10px;
 }
 </style>
