@@ -79,7 +79,7 @@
               color="#212121"
               dark
               depressed
-              href="https://github.com"
+              href="https://github.com/Costwen/moyu-rs-platform"
               rel="noopener"
               target="_blank"
               x-large
