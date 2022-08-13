@@ -23,7 +23,7 @@ npm run lint
 ### build
 
 ```
-scp -r dist/ costwen@101.43.134.156:/var/lib/jenkins/workspace/SoftCup/deployment/compose/nginx
+scp -r dist/ costwen@146.56.202.175:/home/costwen/softcup/rs-platform-backend/deployment/compose/nginx
 ```
 
 ### Customize configuration

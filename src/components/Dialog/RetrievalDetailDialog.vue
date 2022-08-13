@@ -19,7 +19,7 @@
                 类型: &nbsp;  目标提取
               </div>
               <div class="subtitle">
-                道路像素: {{task.analysis.fg}}
+                目标像素: {{task.analysis.fg}}
               </div>
               <div class="subtitle">
                 背景像素: {{task.analysis.bg}}
@@ -117,7 +117,7 @@ export default {
             },
             data: [
               { value: this.task.analysis.bg, name: '背景' },
-              { value: this.task.analysis.fg, name: '道路' }
+              { value: this.task.analysis.fg, name: '目标' }
             ]
           }
         ]

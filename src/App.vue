@@ -6,6 +6,9 @@
 <script>
 export default {
   methods: {
+  },
+  mounted () {
+    document.title = '摸鱼遥感平台'
   }
 }
 </script>

@@ -520,6 +520,9 @@ export default {
     this.$api.project.getProject(id).then((res) => {
       var project = res.data.project
       this.project = project
+      if (this.project.target === 'not specified') {
+        this.project.target = ''
+      }
       this.midshow = true
       console.log(project)
       this.mode = project.type
