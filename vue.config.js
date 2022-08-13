@@ -4,7 +4,8 @@ module.exports = {
     proxy: {
       '/images': {
         // target: 'http://101.43.134.156:80/',
-        target: 'https://qnnplanet.top/',
+        // target: 'https://qnnplanet.top/',
+        target: 'http://146.56.202.175:80/',
         changeOrigin: true,
         pathRewrite: {
           '^/images': '/images'
@@ -13,7 +14,8 @@ module.exports = {
       '/api': {
         // target: 'http://101.43.134.156:80/',
         // target: 'http://127.0.0.1:8000/',
-        target: 'https://qnnplanet.top/',
+        // target: 'https://qnnplanet.top/',
+        target: 'http://146.56.202.175:80/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
@@ -23,7 +25,8 @@ module.exports = {
         timeout: 60000,
         changeOrigin: true,
         // target: 'http://101.43.134.156:80/',
-        target: 'https://qnnplanet.top/',
+        // target: 'https://qnnplanet.top/',
+        target: 'http://146.56.202.175:80/',
         ws: true,
         pathRewrite: {
           '^/ws': '/ws'
